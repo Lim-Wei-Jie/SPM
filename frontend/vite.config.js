@@ -9,7 +9,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        staff: resolve(__dirname, 'staff/index.html')
+        staff: resolve(__dirname, 'staff/index.html'),
+        main: resolve(__dirname, 'learningJourneyProgress.html'),
+        main: resolve(__dirname, 'setLearningJourney.html'),
       }
     }
   }

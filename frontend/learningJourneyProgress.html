@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="pastel">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/happy.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LJPS</title>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <div class="navbar bg-base-100">
+      <div class="navbar-start">
+        <div class="dropdown">
+          <label tabindex="0" class="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+          </label>
+          <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+            <li><a>Homepage</a></li>
+            <li><a>Portfolio</a></li>
+            <li><a>About</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="navbar-center">
+        <a class="btn btn-ghost normal-case text-xl">LJPS</a>
+      </div>
+      <div class="navbar-end">
+        <!-- v-if to check if the user is logged in and what type of user-->
+        <label for="my-modal-4" class="btn modal-button">LOG IN</label>
+        <!-- <h5>Hello! Bobby Lim</h5>
+        <label for="my-modal-4" class="btn modal-button">LOG OUT</label> -->
+      </div>
+    </div>
+    <div class="mx-8 text-4xl">
+        <p class="text-4xl font-bold">Learning Journey Progress</p>
+    </div>
+    <!-- Hero Container -->
+    <div class="hero min-h-screen bg-base-200">
+      <div class="hero-content text-center">
+        <!-- v-if to be placed in the div-->
+        <div class="max-w-md">
+          <p class="py-6 font-bold text-xl">You have no learning journey currently.</p>
+          <a href="setLearningJourney.html" class="btn modal-button">Set Now</a>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+
+    <!-- Log In Modal
+    <input type="checkbox" id="my-modal-4" class="modal-toggle" />
+    <label for="my-modal-4" class="modal cursor-pointer">
+      <label class="modal-box relative" for="">
+        <h3 class="text-lg font-bold">Set Now</h3>
+        
+      </label>
+    </label> -->
+
+    <!--start of vue-->
+    <script></script>
+  </body>
+</html>
