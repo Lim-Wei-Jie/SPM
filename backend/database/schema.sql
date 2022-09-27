@@ -21,7 +21,7 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `lms` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 
-DROP TABLE IF EXISTS `lms`;
+DROP Table IF EXISTS `lms`;
 
 
 CREATE TABLE IF NOT EXISTS `sys` (
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `sys` (
 
 
 CREATE TABLE IF NOT EXISTS `staff` (
-	`Staff_ID` int NOT NULL,
+	`Staff_ID` varchar(20) NOT NULL,
     `Staff_FName` varchar(50)  NOT NULL,
     `Staff_LName` varchar(50)  NOT NULL,
     `Dept` varchar(50)  NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `role` (
 CREATE TABLE IF NOT EXISTS `registration` (
 	`Reg_ID` int(20) NOT NULL,
     `Course_ID` varchar(20)  NOT NULL,
-    `Staff_ID` int(20)  NOT NULL,
+    `Staff_ID` varchar(20)  NOT NULL,
 	`Reg_Status` varchar(20) NOT NULL,
     `Completion_Status` varchar(20) NOT NULL,
     
@@ -115,6 +115,27 @@ CREATE TABLE IF NOT EXISTS `registration` (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+INSERT INTO `sys` (`System_Role`, `System_Role_Desc` ) VALUES
+('1', 'System Admin which can have greater access functions'),
+('2', 'User which has limited functionality to only edit personalized learning journey');
+
+INSERT INTO `staff` (`Staff_ID`, `Staff_FName`,`Staff_LName`,`Dept`,`Email`,`System_Role` ) VALUES
+(123456 , 'Jordan', 'Ng', 'HR', 'jordanng@gmail.com', '1'),
+(974182, 'Ryan', 'Wong', 'Staff', 'ryanwong@yahoo.com', '2'); 
+
+INSERT INTO `course` (`Course_ID`, `Course_Name`,`Course_Desc`,`Course_Status`,`Course_Type`,`Course_Category` ) VALUES
+(123456 , 'Mechanical Engineering', 'ME', 'Retired', 'External', 'Engineering'),
+(974182, 'Computer Science', 'CE', 'Active', 'Internal', 'IT'); 
+
+INSERT INTO `skill` (`Skill_ID`, `Skill_name`,`Skill_Desc`,`Date_Created`,`Course_ID` ) VALUES
+(1234567 , 'Mechanical Engineering Skill', 'MES Desc', 'Jan-21-2022', 123456),
+(9741827, 'Computer Science Skill', 'CES Desc', 'Aug-21-2022', 974182); 
+
+INSERT INTO `role` (`Role_ID`, `Role_Name`,`Role_Desc`,`Date_Created`,`Skill_ID` ) VALUES
+(123456 , 'Mechanical Engineering Role', 'MER Desc', 'Jan-21-2022', 1234567),
+(974182, 'Computer Science Role', 'CER Desc', 'Aug-21-2022', 9741827); 
 
 
-
+INSERT INTO `registration` (`Reg_ID`, `Course_ID`,`Staff_ID`,`Reg_Status`,`Completion_Status` ) VALUES
+(12345655 , 123456, 123456, 'Waitlist', 'Incomplete'),
+(97418255, 974182, 974182, 'Registered', 'Incomplete'); 
