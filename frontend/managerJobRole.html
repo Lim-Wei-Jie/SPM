@@ -50,7 +50,7 @@
                 </button>
                 </div>
                 <div class='place-self-end mr-1'>
-                    <button class="btn">Add new</button>
+                    <a class="btn" href="newJobRole.html">Add New</a>
                 </div>
             </div>
         
@@ -61,7 +61,7 @@
                     <div class="bg-gray-200 hover:bg-red-400 hover:text-white p-3 rounded-md font-bold" v-for="jobRole in jobRoles">
                         <!--need to go to the specific job role page-->
                         <!-- <a :href=' "jobRoleDetails.php#" + jobName'> -->
-                            {{jobRole}}
+                            <a :href='"jobRoleDetails.html"'> {{jobRole}} </a>
                         <!-- </a> -->
                     </div>
                 </div>    
