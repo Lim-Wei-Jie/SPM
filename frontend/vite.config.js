@@ -10,10 +10,11 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         staff: resolve(__dirname, 'staff/index.html'),
-        learningJourneyProgress: resolve(__dirname, 'learningJourneyProgress.html'),
         setLearningJourney: resolve(__dirname, 'setLearningJourney.html'),
         staff_create: resolve(__dirname, 'staff/create_lj.html'),
-        staff_create_2: resolve(__dirname, 'staff/create_lj_2.html')
+        staff_create_2: resolve(__dirname, 'staff/create_lj_2.html'),
+        managerJobRole: resolve(__dirname, 'managerJobRole.html'),
+        jobRoleDetails: resolve(__dirname, 'jobRoleDetails.html'),
       }
     }
   }

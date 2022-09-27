@@ -5,6 +5,7 @@ module.exports = {
     "./staff/**/*.{vue,js,ts,jsx,tsx,html}",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
     "./managerJobRole.html",
+    "./jobRoleDetails.html"
   ],
   theme: {
     extend: {},

@@ -36,7 +36,7 @@
             </div>
         </div>
         <!-- end of navigation Bar -->
-        <h3 class="mx-6 my-2 font-bold text-xl">Current Job Roles ({{numOfJobRoles()}})</h3>
+        <h3 class="mx-6 my-2 font-bold text-xl" >Current Job Roles ({{numOfJobRoles}})</h3>
         <div class="form-control">
             <div class="grid grid-cols-2">
                 <div class="input-group mx-5 mb-3">
@@ -55,23 +55,31 @@
             </div>
         
         
-            <!-- display available job roles need to use v-for-->
-            <div class="bg-base-200 mx-4 my-6 p-4" v-if='hasJob'>
+            <!-- by default, display available job roles-->
+            <div class="bg-base-200 mx-4 my-6 p-4" v-if='noSearch'>
                 <div class="grid grid-cols-3 gap-6 ">
-                    <div class="bg-gray-200 hover:bg-red-400 hover:text-white p-3 rounded-md font-bold" v-for="jobRole in jobRoles" v-model="jobRole">
+                    <div class="bg-gray-200 hover:bg-red-400 hover:text-white p-3 rounded-md font-bold" v-for="jobRole in jobRoles">
                         <!--need to go to the specific job role page-->
                         <!-- <a :href=' "jobRoleDetails.php#" + jobName'> -->
                             {{jobRole}}
                         <!-- </a> -->
                     </div>
-                    <!-- <div class="bg-gray-200 hover:bg-red-400 hover:text-white p-3 rounded-md font-bold">Software Engineer</div>
-                    <div class="bg-gray-200 hover:bg-red-400 hover:text-white p-3 rounded-md font-bold">Software Engineer</div>
-                    <div class="bg-gray-200 hover:bg-red-400 hover:text-white p-3 rounded-md font-bold">Software Engineer</div> -->
                 </div>    
             </div>
-            <div class="bg-base-200 mx-4 my-6 p-4" v-else>
-                <h2 class="font-bold text-l ">There is no job role of {{queryName}}</h2>
-    
+            <!-- if there is a matched job role from search-->
+            <div class="bg-base-200 mx-4 my-6 p-4" v-if='hasJobRole'>
+                <div class="grid grid-cols-3 gap-6 ">
+                    <div class="bg-gray-200 hover:bg-red-400 hover:text-white p-3 rounded-md font-bold">
+                        <!--need to go to the specific job role page-->
+                        <!-- <a :href=' "jobRoleDetails.php#" + jobName'> -->
+                            {{queryName}}
+                        <!-- </a> -->
+                    </div>
+                </div>    
+            </div>
+            <!--invalid job role searched-->
+            <div class="bg-base-200 mx-4 my-6 p-4" v-if="noJobRole">
+                <h2 class="font-bold text-l ">There is no job role of '{{queryName}}'. Please search for something else.</h2>
             </div>
         </div>
     </div>
@@ -86,22 +94,31 @@
                     jobRoles:['Software Engineer', 'Senior Software Engineer', 'Technical Manager', 'Web Developer'],
                     jobRole: '',
                     queryName: '',
-                    hasJob: true,
+                    hasJobRole: false,
+                    noSearch: true,
+                    noJobRole: false,
 
                 }
             },
             methods:{
+                searchJob(){
+                    this.noSearch = false;
+                    console.log(this.queryName);
+                    if(!this.jobRoles.includes(this.queryName)){
+                        this.noJobRole = true;
+                    }
+                    else{
+                        this.hasJobRole = true;
+                    }
+                }
+            },
+            computed:{
                 numOfJobRoles(){
                     for (let i=0; i < this.jobRoles.length; i++){
                        this.num ++;
                     }
                     return this.num;
                 },
-                searchJob(){
-                    if(!this.jobRoles.includes(this.queryName)){
-                        hasJob = false;
-                    }
-                }
             }
         })
         const vm =app.mount('#app1');
