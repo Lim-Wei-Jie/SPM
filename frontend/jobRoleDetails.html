@@ -6,6 +6,8 @@
     <link rel="icon" type="image/svg+xml" href="/happy.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LJPS</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script type="module" src="../src/main.js"></script>
   </head>
   <body>
     <div id="app1">
@@ -17,9 +19,9 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
             </label>
             <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                <li><a>Homepage</a></li>
-                <li><a>Portfolio</a></li>
-                <li><a>About</a></li>
+                <li><a href="managerJobRole.html">Job Roles</a></li>
+                <li><a>My Learning Journey</a></li>
+                <li><a>Team Completion Status</a></li>
             </ul>
             </div>
         </div>
@@ -33,7 +35,7 @@
         <div class="text-sm breadcrumbs px-8">
             <ul>
             <li><a>Home</a></li> 
-            <li><a>Create Learning Journey</a></li> 
+            <li><a>Job Role</a></li> 
             <li>Engineer (Engineering Procurement)</li>
             </ul>
         </div>
@@ -65,69 +67,30 @@
                 </div>
                 <div id="s-info" class="space-y-3">
                     <div id="skills" class="font-bold text-2xl">Skills</div>
-                    <div class="flex flex-col w-full bg-gray-100">
-                        <h2 class="font-medium text-xl">Skill Name</h2>
-                        <div class="grid grid-cols-3 gap-4">
+
+                    <div class="flex flex-col w-full bg-gray-100" v-for="(courses, skill) in skills_and_courses">
+                        <h2 class="font-medium text-xl m-5">{{skill}}</h2>
+                        <div class="grid grid-cols-3 gap-4 ml-3 mb-5">
                             <!--Card #1 -->
-                            <div class="card w-96 bg-base-100 shadow-xl">
+                            <div class="card w-80 bg-base-100 shadow-xl" v-for="course in courses">
                                 <div class="card-body">
                                     <div id="top-card" class="flex-row">
-                                        <h2 class="card-title">Card title!</h2>
+                                        <h2 class="card-title">{{course}}</h2>
                                         
                                     </div>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div class="card-actions justify-end">
+                                    <!-- <p>If a dog chews shoes whose shoes does he choose?</p> -->
+                                    <!-- <div class="card-actions justify-end">
                                         <button class="btn btn-primary">Buy Now</button>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
-                            <!--Card #2 -->
-                            <div class="card w-96 bg-base-100 shadow-xl">
-                                <div class="card-body">
-                                    <h2 class="card-title">Card title!</h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div class="card-actions justify-end">
-                                        <button class="btn btn-primary">Buy Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Card #3 -->
-                            <div class="card w-96 bg-base-100 shadow-xl">
-                                <div class="card-body">
-                                    <h2 class="card-title">Card title!</h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div class="card-actions justify-end">
-                                        <button class="btn btn-primary">Buy Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Card #4 -->
-                            <div class="card w-96 bg-base-100 shadow-xl">
-                                <div class="card-body">
-                                    <h2 class="card-title">Card title!</h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div class="card-actions justify-end">
-                                        <button class="btn btn-primary">Buy Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Card #5 -->
-                            <div class="card w-96 bg-base-100 shadow-xl">
-                                <div class="card-body">
-                                    <h2 class="card-title">Card title!</h2>
-                                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                                    <div class="card-actions justify-end">
-                                        <button class="btn btn-primary">Buy Now</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            
+                            
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="module" src="../src/main.js"></script>
 </body>
 
 <!--start of vue-->
@@ -135,13 +98,26 @@
     const app = Vue.createApp({
         data(){
             return{
-
+                skills_and_courses:{
+                        'Web Programming':['BP101: Basic programming', 'IP101: Intermediate programming', 'AP101: Advanced Programming'],
+                        'Software Development' : ['SD100: Building software'],
+                        'Design Thinking' : ['DT101: Think like a User', 'DT102: Think out of the box']
+                    },
+                skills : '',
+                skill : '',
+                courses : '',
+                course : '',
+                // jobDes : '',
             }
         },
         methods:{
 
         },
         created(){
+            this.skills = Object.keys(this.skills_and_courses);
+            console.log(this.skills);
+            this.courses = Object.values(this.skills_and_courses);
+            console.log(this.courses);
             
         }
     })
