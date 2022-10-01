@@ -56,50 +56,29 @@
             <div class=" hero px-8 py-2">
                 <div class="auto-row-max space-y-2">
                     <div id="j-info" class="space-y-2">
-                        <div id="j-title" class="text-3xl font-bold grid grid-cols-2">
-                            <input type="text" id="job-title" name="job-title" placeholder="Software Engineer (Engineering Procurement)" style="width:700px" v-if="selected_job_title" v-model="new_job_title">
-                            <div v-on:click="job_title_selected" v-if="not_editing_job_title">Software Engineer (Engineering Procurement)</div>
+                        <h3 class="font-bold text-xl">Job Title</h3>
+                        <div id="j-title" class="font-bold grid grid-cols-2">
+                            <input type="text" id="job-title" name="job-title" class="text-3xl" placeholder="Software Engineer (Engineering Procurement)" style="width:700px"  v-model="new_job_title">
                             <div class="w-32 place-self-end">
-                                <a class="btn" href="">Save Changes</a>
-                                <!-- <input type="submit" value="Save Changes"> -->
+                                <!-- <input type="submit" value="Save Changes" > -->
+                                <!--there is something wrong with the styling of button-->
+                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                                    Save Changes
+                                </button>
                             </div>
                         </div>
                         <div id="j-des" class="space-y-2 w-4/6">
-                            <!--start of pop up-->
-                            <!-- <div class="box popup shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-800 w-64 place-self-center">
-                                <div class="w-full h-full text-center">
-                                    <div class="flex h-full flex-col justify-between">
-                                        <svg width="40" height="40" class="mt-4 w-12 h-12 m-auto text-indigo-500" fill="currentColor" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M704 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm-544-992h448l-48-117q-7-9-17-11h-317q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z">
-                                            </path>
-                                        </svg>
-                                        <p class="text-gray-800 dark:text-gray-200 text-xl font-bold mt-4">
-                                            Remove {{course}}
-                                        </p>
-                                        <p class="text-gray-600 dark:text-gray-400 text-xs py-2 px-6">
-                                            Are you sure you want to delete this course ?
-                                        </p>
-                                        <div class="flex items-center justify-between gap-4 w-full mt-8">
-                                            <button type="button" class="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
-                                                Remove
-                                            </button>
-                                            <button type="button" class="py-2 px-4  bg-white hover:bg-gray-100 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-indigo-500 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <!--end of pop up-->
-                            <h2 class="font-medium">Job Role Description</h2>
-                            <p>The Assistant Engineer / Officer (Engineering Procurement) is responsible for
-                                providing administrative support for procurement activities. He/She coordinates
-                                with internal teams to gather requirements for procurement, interfaces with
-                                vendors for managing delivery schedules, and prepares purchase orders. He
-                                maintains documents and reports schedules material purchases and deliveries
-                                and performs verification of current inventory.
-                                He is comfortable in engaging and interacting with internal and external
-                                stakeholders, and is able to multi-task in a fast-paced work environment.</p>
+                            
+                            <h3 class="font-bold text-xl">Job Description</h3>
+                            <input type="text" id="job-des" name="job-des" class="text-xl" placeholder="The Software Engineer / Officer (Engineering Procurement) is responsible for
+                            providing administrative support for procurement activities. He/She coordinates
+                            with internal teams to gather requirements for procurement, interfaces with
+                            vendors for managing delivery schedules, and prepares purchase orders. He
+                            maintains documents and reports schedules material purchases and deliveries
+                            and performs verification of current inventory.
+                            He is comfortable in engaging and interacting with internal and external
+                            stakeholders, and is able to multi-task in a fast-paced work environment." style="width:700px"  v-model="new_job_des">
+                            
                         </div>  
                     </div>
                     <div id="s-info" class="space-y-3">
@@ -107,14 +86,22 @@
                         <div id="skills" class="font-bold text-2xl">Skills</div>
 
                         <div class="flex flex-col w-full bg-gray-100" v-for="(courses, skill) in skills_and_courses">
-                            <h2 class="font-medium text-xl m-5">{{skill}}</h2>
+                            <h2 class="font-medium text-xl mx-5 mt-3">{{skill}}</h2>
+                            <div class="p-4">
+                                <!--need to check with the structure of json data to get the skill des and course des -->
+                                <!--need to bind with the particular skill des-->
+                                <input type="text" id="skill-des" name="skill-des" class="text-m" placeholder="[[skill.des]] " style="width:700px"  v-model="new_skill_des" v-bind:id="skill.des">
+                            </div>
+                            <div class="w-32">
                             <div class="grid grid-cols-3 gap-4 ml-3 mb-5">
                                 <!--Card #1 -->
-                                <div class="card w-80 bg-base-100 shadow-xl" v-for="course in courses" v-on:click="course_selected()" v-bind:id="course">
+                                <div class="card w-80 bg-base-100 shadow-xl" v-for="course in courses">
                                     <div class="card-body">
                                         <div id="top-card" class="flex-row">
                                             <h2 class="card-title">{{course}}</h2>
-                                            
+                                            <div class="card-actions justify-start">
+                                                <button class="btn btn-primary">Remove Course</button>
+                                            </div>
                                         </div>
                                         <!-- <p>If a dog chews shoes whose shoes does he choose?</p> -->
                                         <!-- <div class="card-actions justify-end">
@@ -150,24 +137,15 @@
                 skill : '',
                 courses : '',
                 course : '',
-                course_selected : '',
                 has_selected_course: false,
-                // jobDes : '',
-                selected_job_title : false,
-                not_editing_job_title : true,
                 new_job_title : '',
+                new_job_des : '',
+                new_skill_des : '',
+            
             }
         },
         methods:{
-            course_selected(event){
-                this.course_selected = document.getElementById(this.course).innerText
-                alert('You are removing' + this.course_selected);
-            },
-            job_title_selected(){
-                this.selected_job_title = true;
-                this.not_editing_job_title = false;
-                // need to have update statement
-            }
+        
         },
         created(){
             this.skills = Object.keys(this.skills_and_courses);

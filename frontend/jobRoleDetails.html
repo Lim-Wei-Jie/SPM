@@ -55,7 +55,7 @@
                     </div>
                     <div id="j-des" class="space-y-2 w-4/6">
                         <h2 class="font-medium">Job Role Description</h2>
-                        <p>The Assistant Engineer / Officer (Engineering Procurement) is responsible for
+                        <p>The Software Engineer / Officer (Engineering Procurement) is responsible for
                             providing administrative support for procurement activities. He/She coordinates
                             with internal teams to gather requirements for procurement, interfaces with
                             vendors for managing delivery schedules, and prepares purchase orders. He
@@ -69,10 +69,12 @@
                     <div id="skills" class="font-bold text-2xl">Skills</div>
 
                     <div class="flex flex-col w-full bg-gray-100" v-for="(courses, skill) in skills_and_courses">
+                        <!-- <a :href=' "skill_description.php#" + skill.name'>  -->
                         <h2 class="font-medium text-xl m-5">{{skill}}</h2>
                         <div class="grid grid-cols-3 gap-4 ml-3 mb-5">
                             <!--Card #1 -->
                             <div class="card w-80 bg-base-100 shadow-xl" v-for="course in courses">
+                                <!-- <a :href=' "course_description.php#" + course.name'>  -->
                                 <div class="card-body">
                                     <div id="top-card" class="flex-row">
                                         <h2 class="card-title">{{course}}</h2>
@@ -111,13 +113,13 @@
             }
         },
         methods:{
-
+          
         },
         created(){
             this.skills = Object.keys(this.skills_and_courses);
-            console.log(this.skills);
+            //console.log(this.skills);
             this.courses = Object.values(this.skills_and_courses);
-            console.log(this.courses);
+            //console.log(this.courses);
             
         }
     })
