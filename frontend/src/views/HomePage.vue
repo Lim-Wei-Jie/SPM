@@ -7,7 +7,8 @@
             <div class="max-w-md">
                 <h1 class="text-5xl font-bold">Hello there</h1>
                 <p class="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
-                <label for="my-modal-4" class="btn modal-button">LOG IN</label>
+                <!-- <label for="my-modal-4" class="btn modal-button">LOG IN</label> -->
+                <button @click="handleClickLogIn" class="btn">LOG IN</button>
             </div>
         </div>
     </div>
@@ -23,6 +24,13 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function handleClickLogIn() {
+    router.push('/login' )
+}
 
 </script>
 
