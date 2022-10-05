@@ -130,7 +130,7 @@ def create_role(Role_ID,Role_Name,description):
                     "Role_Name": Role_Name,
                     "Role_Name": description
                 },
-                "message": "Order already exists."
+                "message": "Role already exists."
             }
         ), 400
  
@@ -150,7 +150,7 @@ def create_role(Role_ID,Role_Name,description):
                     "Role_Name": Role_Name,
                     "description": description,
                 },
-                "message": "An error occurred creating the order."
+                "message": "An error occurred creating the Role."
             }
         ), 500
  
@@ -183,7 +183,7 @@ def deleteInventory(Role_ID):
 
 #update inventory by foodName
 @app.route('/role/update/<string:Role_ID>/<string:Role_Name>/<string:description>',methods=['PUT'])
-def updateInventory(Role_ID,Role_Name,description):
+def updateRole(Role_ID,Role_Name,description):
     role = Role.query.filter_by(Role_ID=Role_ID).first()
 
     if role:
@@ -196,7 +196,7 @@ def updateInventory(Role_ID,Role_Name,description):
             {
                 "code": 201,
                 "data": role.json(),
-                "message": "Updated sucessfully"
+                "message": "Role Updated sucessfully"
             } ), 201
     
     return jsonify(
@@ -205,7 +205,7 @@ def updateInventory(Role_ID,Role_Name,description):
                 "data": {
                     "foodName": Role_Name
                 },
-                "message": "Inventory does not exist"
+                "message": "Role does not exist"
             }
         ), 500
 
