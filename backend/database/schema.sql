@@ -7,6 +7,8 @@
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
+
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -40,7 +42,9 @@ CREATE TABLE IF NOT EXISTS `staff` (
 	`System_Role` int NOT NULL, 
 	
 
-    PRIMARY KEY (`Staff_ID`)    
+    PRIMARY KEY (`Staff_ID`),
+	FOREIGN KEY (`System_Role`) REFERENCES  sys(`System_Role`) 
+    
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -65,14 +69,16 @@ CREATE TABLE IF NOT EXISTS `course` (
 
 CREATE TABLE IF NOT EXISTS `skill` (
 	`Skill_ID` int NOT NULL,
-    `Skill_name` varchar(20)  NOT NULL,
+    `Skill_Name` varchar(20)  NOT NULL,
     `Skill_Desc` varchar(20)  NULL,
     
     
     -- extra
-    `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
     
-    PRIMARY KEY (`Skill_ID`)    
+    PRIMARY KEY (`Skill_ID`),
+    
+    
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -84,9 +90,11 @@ CREATE TABLE IF NOT EXISTS `role` (
     
 	-- extra
     `Role_Desc` varchar(20)  NOT NULL,
-    `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+    
     
     PRIMARY KEY (`Role_ID`)
+    
     
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -105,18 +113,18 @@ CREATE TABLE IF NOT EXISTS `registration` (
     
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `skill_assignment`(
+CREATE TABLE IF NOT EXISTS `Skill_Assignment`(
 `skill_assignment_id` int(11) NOT NULL,
-`course_ID` varchar(20) NOT NULL,
-`skill_ID` varchar(20) NOT NULL,
+`Course_ID` varchar(20) NOT NULL,
+`Skill_ID` varchar(20) NOT NULL,
 
 PRIMARY KEY (`skill_assignment_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `role_assignment`(
 `role_assignment_id` int(11) NOT NULL,
-`role_ID` varchar(20) NOT NULL,
-`skill_ID` varchar(20) NOT NULL,
+`Role_ID` varchar(20) NOT NULL,
+`Skill_ID` varchar(20) NOT NULL,
 
 PRIMARY KEY (`role_assignment_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
