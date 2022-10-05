@@ -15,6 +15,9 @@
         <div class="navbar-center">
             <a class="btn btn-ghost normal-case text-xl">LJPS</a>
         </div>
+        <div class="navbar-end">
+            <label for="my-modal-4" class="btn modal-button">LOG IN</label>
+        </div>
     </div>
 </template>
 
