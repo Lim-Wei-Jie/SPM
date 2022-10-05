@@ -25,6 +25,8 @@ class Staff(db.Model):
     Staff_LName = db.Column(db.String(64), nullable=False, unique=True)
     Dept = db.Column(db.String(64), nullable=False, unique=True)
     Email = db.Column(db.String(64), nullable=False, unique=True)
+    System_Role = db.Column(db.Integer, primary_key=True)
+
 
     # staff_id = db.Column(db.String(64), nullable=False, primary_key=True)
     #price = db.Column(db.Float(precision=2), nullable=False)
@@ -34,7 +36,7 @@ class Staff(db.Model):
     #username = db.Column(db.String(64), nullable=False, unique=True)
     
 
-    def __init__(self, Staff_ID, Staff_FName, Staff_LName, Dept, Email):
+    def __init__(self, Staff_ID, Staff_FName, Staff_LName, Dept, Email, System_Role):
         # self.inventoryId = inventoryId
         # self.storeName = storeName
         self.Staff_ID = Staff_ID
@@ -42,11 +44,12 @@ class Staff(db.Model):
         self.Staff_LName = Staff_LName
         self.Dept = Dept
         self.Email = Email
+        self.System_Role = System_Role
         # self.imageLink = imageLink
  
     def json(self):
         # "inventoryId": self.inventoryId,
-        return {"staffID": self.Staff_ID, "Staff_FName": self.Staff_FName, "Staff_LName": self.Staff_LName, "Department": self.Dept, "Email": self.Email}
+        return {"staffID": self.Staff_ID, "Staff_FName": self.Staff_FName, "Staff_LName": self.Staff_LName, "Department": self.Dept, "Email": self.Email, "System Role": self.System_Role}
 
 class Role(db.Model):
     __tablename__ = 'role'
@@ -83,12 +86,13 @@ class Role(db.Model):
 @app.route("/staff")
 def get_all_staff():
     staff_list = Staff.query.all()
+    print(staff_list)
     if len(staff_list):
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "inventoryList": [staff.json() for staff in staff_list]
+                    "staffList": [staff.json() for staff in staff_list]
                 }
             }
         )
