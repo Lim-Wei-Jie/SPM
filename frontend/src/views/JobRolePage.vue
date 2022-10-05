@@ -6,6 +6,7 @@
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
+import { ref } from 'vue'
 
 const props = defineProps({
     jobRole: {
@@ -13,6 +14,7 @@ const props = defineProps({
         default: ''
     }
 });
+
 </script>
 
 <style scoped>

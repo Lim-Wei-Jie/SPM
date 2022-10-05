@@ -34,8 +34,9 @@ const routes = [
     },
 
     {
-        path: '/jobRole',
-        component: JobRolePage
+        path: '/jobRole/:jobRole',
+        component: JobRolePage,
+        props: true
     },
 ]
 

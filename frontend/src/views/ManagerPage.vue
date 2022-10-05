@@ -45,18 +45,35 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getAllRoles } from "../endpoint/endpoint.js";
+import axios from "axios";
 
 const router = useRouter()
 
-const jobRoles = ['Software Engineer', 'Senior Software Engineer', 'Technical Manager', 'Web Developer']
+const jobRoles = ref([])
 const numOfJobRoles = ref(jobRoles.length)
 
-function handleClick(jobRole) {
-    // route to respective page
-    router.push({
-        path: `/jobRole/${jobRole}`
-    })
+const loadJobRoles = async () => {
+    // let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role`
+    let apiEndpoint = 'http://10.124.132.140:5004/role'
+    axios
+        .get(apiEndpoint)
+        .then((res) => {
+            console.log(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 }
+
+// const jobRoles = ['Software Engineer', 'Senior Software Engineer', 'Technical Manager', 'Web Developer']
+
+// function handleClick(jobRole) {
+//     // route to respective page
+//     router.push({
+//         path: `/jobRole/${jobRole}`
+//     })
+// }
 
 </script>
 
