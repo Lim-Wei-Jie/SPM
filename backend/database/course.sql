@@ -32,20 +32,21 @@ USE `course`;
 
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE IF NOT EXISTS `course` (
-  `course_id` int(11) NOT NULL AUTO_INCREMENT,
-  `course_name` varchar(64) NOT NULL DEFAULT 'NEW',
-  `course_desc` varchar(64) NOT NULL DEFAULT 'NEW',
-  `course_status` varchar(64) NOT NULL DEFAULT 'NEW',
-  `course_type` varchar(64) NOT NULL DEFAULT 'NEW',
-  PRIMARY KEY (`course_id`)
+  `Course_ID` varchar(20) NOT NULL,
+  `Course_Name` varchar(50)  NOT NULL,
+  `Course_Desc` varchar(255)  NOT NULL,
+  `Course_Status` varchar(15)  NOT NULL,
+  `Course_Type` varchar(10)  NOT NULL,
+  `Course_Category` varchar(50)  NOT NULL
+  PRIMARY KEY (`Course_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `order`
 --
 
-INSERT INTO `course` (`course_id`, `course_name`, `course_desc`, `course_status`, `course_type`) VALUES
-(1, 'python', 'functions', 'virtual', 'IT');
+INSERT INTO `course` (`Course_ID`, `Course_Name`, `Course_Desc`, `Course_Status`, `Course_Type`,`Course_Category`) VALUES
+("1A2B", 'python', 'functions', 'virtual', 'IT','Informatics');
 
 -- --------------------------------------------------------
 
