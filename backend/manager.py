@@ -57,7 +57,8 @@ class Role(db.Model):
     # storeName = db.Column(db.String(64), nullable=False)
     Role_ID = db.Column(db.Integer, primary_key=True)
     Role_Name = db.Column(db.String(64), nullable=False, unique=True)
-    description = db.Column(db.String(64), nullable=False, unique=True)
+    Role_Desc = db.Column(db.String(64), nullable=False, unique=True)
+    Date_Created = db.Column(db.String(64), nullable=False, unique=True)
 
 
     # staff_id = db.Column(db.String(64), nullable=False, primary_key=True)
@@ -68,18 +69,19 @@ class Role(db.Model):
     #username = db.Column(db.String(64), nullable=False, unique=True)
     
 
-    def __init__(self, Role_ID, Role_Name,description):
+    def __init__(self, Role_ID, Role_Name,Role_Desc,Date_Created):
         # self.inventoryId = inventoryId
         # self.storeName = storeName
         self.Role_ID = Role_ID
         self.Role_Name = Role_Name
-        self.description = description
+        self.Role_Desc = Role_Desc
+        self.Date_Created = Date_Created
 
         # self.imageLink = imageLink
  
     def json(self):
         # "inventoryId": self.inventoryId,
-        return {"Role_ID": self.Role_ID, "Role_Name": self.Role_Name, "description": self.description} 
+        return {"Role_ID": self.Role_ID, "Role_Name": self.Role_Name, "Role_Desc": self.Role_Desc, "Date_Created": self.Date_Created} 
 
 
 # show all inventory
@@ -122,8 +124,8 @@ def get_all_role():
         }
     ), 404
 
-@app.route("/role/<string:Role_ID>/<string:Role_Name>/<string:description>", methods=['POST'])
-def create_role(Role_ID,Role_Name,description):
+@app.route("/role/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>", methods=['POST'])
+def create_role(Role_ID,Role_Name,Role_Desc):
 
     if (Role.query.filter_by(Role_ID=Role_ID).first()):
         return jsonify(
@@ -132,7 +134,7 @@ def create_role(Role_ID,Role_Name,description):
                 "data": {
                     "Role_ID": Role_ID,
                     "Role_Name": Role_Name,
-                    "Role_Name": description
+                    "Role_Name": Role_Desc
                 },
                 "message": "Role already exists."
             }
@@ -140,7 +142,7 @@ def create_role(Role_ID,Role_Name,description):
  
     #data = request.get_json()
     #print("poopo" + data)
-    new_role = Role(Role_ID, Role_Name,description)
+    new_role = Role(Role_ID, Role_Name,Role_Desc)
  
     try:
         db.session.add(new_role)
@@ -152,7 +154,7 @@ def create_role(Role_ID,Role_Name,description):
                 "data": {
                     "Role_ID": Role_ID,
                     "Role_Name": Role_Name,
-                    "description": description,
+                    "description": Role_Desc,
                 },
                 "message": "An error occurred creating the Role."
             }
@@ -186,13 +188,13 @@ def deleteInventory(Role_ID):
                 } ), 404
 
 #update inventory by foodName
-@app.route('/role/update/<string:Role_ID>/<string:Role_Name>/<string:description>',methods=['PUT'])
-def updateRole(Role_ID,Role_Name,description):
+@app.route('/role/update/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>',methods=['PUT'])
+def updateRole(Role_ID,Role_Name,Role_Desc):
     role = Role.query.filter_by(Role_ID=Role_ID).first()
 
     if role:
 
-        Role.query.filter_by(Role_ID=Role_ID).update(dict(Role_Name=Role_Name,description=description))
+        Role.query.filter_by(Role_ID=Role_ID).update(dict(Role_Name=Role_Name,description=Role_Desc))
 
         db.session.commit()
         
