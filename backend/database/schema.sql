@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 
 CREATE DATABASE IF NOT EXISTS `lms` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
+use lms;
+
 
 DROP Table IF EXISTS `lms`;
 
@@ -35,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `sys` (
 
 
 CREATE TABLE IF NOT EXISTS `staff` (
-	`Staff_ID` int NOT NULL,
+	`Staff_ID` varchar(20) NOT NULL,
     `Staff_FName` varchar(50)  NOT NULL,
     `Staff_LName` varchar(50)  NOT NULL,
     `Dept` varchar(50)  NOT NULL,
@@ -52,12 +54,12 @@ CREATE TABLE IF NOT EXISTS `staff` (
 
 
 CREATE TABLE IF NOT EXISTS `course` (
-	`Course_ID` int NOT NULL,
-    `Course_Name` varchar(64)  NOT NULL,
+	`Course_ID` varchar(20) NOT NULL,
+    `Course_Name` varchar(50)  NOT NULL,
     `Course_Desc` varchar(255)  NOT NULL,
-    `Course_Status` varchar(64)  NOT NULL,
-    `Course_Type` varchar(64)  NOT NULL,
-    `Course_Category` varchar(64)  NOT NULL,
+    `Course_Status` varchar(15)  NOT NULL,
+    `Course_Type` varchar(10)  NOT NULL,
+    `Course_Category` varchar(50)  NOT NULL,
     
     
     
@@ -70,8 +72,8 @@ CREATE TABLE IF NOT EXISTS `course` (
 
 CREATE TABLE IF NOT EXISTS `skill` (
 	`Skill_ID` int NOT NULL,
-    `Skill_name` varchar(64)  NOT NULL,
-    `Skill_Desc` varchar(255)  NOT NULL,
+    `Skill_name` varchar(20)  NOT NULL,
+    `Skill_Desc` varchar(20)  NULL,
     
     
     -- extra
@@ -101,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `role` (
 
 
 CREATE TABLE IF NOT EXISTS `registration` (
-	`Reg_ID` int NOT NULL,
+	`Reg_ID` int(20) NOT NULL,
     `Course_ID` varchar(20)  NOT NULL,
     `Staff_ID` varchar(20)  NOT NULL,
 	`Reg_Status` varchar(20) NOT NULL,
@@ -114,6 +116,21 @@ CREATE TABLE IF NOT EXISTS `registration` (
     
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `skill_assignment`(
+`skill_assignment_id` int(11) NOT NULL,
+`course_ID` varchar(20) NOT NULL,
+`skill_ID` varchar(20) NOT NULL,
+
+PRIMARY KEY (`skill_assignment_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `role_assignment`(
+`role_assignment_id` int(11) NOT NULL,
+`role_ID` varchar(20) NOT NULL,
+`skill_ID` varchar(20) NOT NULL,
+
+PRIMARY KEY (`role_assignment_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `sys` (`System_Role`, `System_Role_Desc` ) VALUES
 ('1', 'System Admin which can have greater access functions'),
