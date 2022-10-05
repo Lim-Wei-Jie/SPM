@@ -30,7 +30,7 @@
 
             <!-- Job role component -->
             <div class="flex justify-evenly " v-for="jobRole in jobRoles">
-                <div class="btn w-64" @click="handleClick('a')">
+                <div class="btn w-64" @click="handleClick(jobRole)">
                     {{jobRole}}
                 </div>
             </div>
@@ -42,15 +42,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import NavBar from '@/components/Navbar.vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const jobRoles = ['Software Engineer', 'Senior Software Engineer', 'Technical Manager', 'Web Developer']
 const numOfJobRoles = ref(jobRoles.length)
 
-function handleClick(text) {
+function handleClick(jobRole) {
     // route to respective page
-    console.log(text);
+    router.push({
+        path: `/jobRole/${jobRole}`
+    })
 }
 
 </script>
