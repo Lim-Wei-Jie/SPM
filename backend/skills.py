@@ -13,17 +13,22 @@ db = SQLAlchemy(app)
 CORS(app)
 
 
-#association table
+#association table + basic models
 
-class Skill_Assignment(db.Model):
-    __tablename__ = 'Skill_Assignment'
-    skill_assignment_id = db.Column(db.Integer, primary_key=True)
-    Course_ID =  db.Column(db.Integer, db.ForeignKey('course.course_id'))  #tablename.id
-    Skill_ID = db.Column(db.Integer, db.ForeignKey('Skill.Skill_ID'))
+class Course(db.Model):
+    __tablename__ = 'course'
 
-    skill = relationship(Skill, backref=backref("Skill_Assignment", cascade="all, delete-orphan"))
-    course = relationship(Course, backref=backref("Skill_Assignment", cascade="all, delete-orphan"))
-
+    course_id = db.Column(db.Integer, primary_key=True)
+    course_name = db.Column(db.String(64), nullable=False)
+    course_desc = db.Column(db.String(64), nullable=False)
+    course_status = db.Column(db.String(64), nullable=False)
+    course_type = db.Column(db.String(64), nullable=False)
+  
+    skills = relationship("Skill", secondary="Skill_Assignment")
+  
+  
+    def json(self):
+        return {"course_id": self.course_id, "course_name": self.course_name, "course_desc": self.course_desc, "course_status": self.course_status}
 
 class Skill(db.Model):
     __tablename__ = 'Skill'
@@ -41,6 +46,14 @@ class Skill(db.Model):
     def json(self):
         return {"Skill_id": self.Skill_id, "Skill_name": self.Skill_name, "Skill_desc": self.Skill_desc, "Skill_status": self.Skill_status}
 
+class Skill_Assignment(db.Model):
+    __tablename__ = 'Skill_Assignment'
+    skill_assignment_id = db.Column(db.Integer, primary_key=True)
+    Course_ID =  db.Column(db.Integer, db.ForeignKey('course.course_id'))  #tablename.id
+    Skill_ID = db.Column(db.Integer, db.ForeignKey('Skill.Skill_ID'))
+
+    skill = relationship(Skill, backref=backref("Skill_Assignment", cascade="all, delete-orphan"))
+    course = relationship(Course, backref=backref("Skill_Assignment", cascade="all, delete-orphan"))
 
 
 #https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
@@ -159,20 +172,7 @@ def update_skillbook(Skill_name):
 
 
 
-class Course(db.Model):
-    __tablename__ = 'course'
-
-    course_id = db.Column(db.Integer, primary_key=True)
-    course_name = db.Column(db.String(64), nullable=False)
-    course_desc = db.Column(db.String(64), nullable=False)
-    course_status = db.Column(db.String(64), nullable=False)
-    course_type = db.Column(db.String(64), nullable=False)
-  
-    skills = relationship("Skill", secondary="Skill_Assignment")
-  
-  
-    def json(self):
-        return {"course_id": self.course_id, "course_name": self.course_name, "course_desc": self.course_desc, "course_status": self.course_status}
+#COURSE ROUTES
 
 #https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
 @app.route("/course")
