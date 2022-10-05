@@ -6,7 +6,7 @@ from datetime import datetime
 from sqlalchemy.orm import relationship,backref
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/course1'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -15,20 +15,22 @@ CORS(app)
 
 #association table + basic models
 
+
 class Course(db.Model):
     __tablename__ = 'course'
 
-    course_id = db.Column(db.Integer, primary_key=True)
-    course_name = db.Column(db.String(64), nullable=False)
-    course_desc = db.Column(db.String(64), nullable=False)
-    course_status = db.Column(db.String(64), nullable=False)
-    course_type = db.Column(db.String(64), nullable=False)
+    Course_ID = db.Column(db.String(20), primary_key=True)
+    Course_Name = db.Column(db.String(50), nullable=False)
+    Course_Desc = db.Column(db.String(255) , nullable=False)
+    Course_Status = db.Column(db.String(15), nullable=False)
+    Course_Type = db.Column(db.String(10), nullable=False)
+    Course_Category = db.Column(db.String(50), nullable=False) 
   
-    skills = relationship("Skill", secondary="Skill_Assignment")
-  
-  
+
     def json(self):
-        return {"course_id": self.course_id, "course_name": self.course_name, "course_desc": self.course_desc, "course_status": self.course_status}
+        return {"course_id": self.Course_ID, "Course_Name": self.Course_Name, "Course_Desc": self.Course_Desc, "Course_Status": self.Course_Status,"Course_Type": self.Course_Type, "Course_Category":self.Course_Category}
+
+
 
 class Skill(db.Model):
     __tablename__ = 'Skill'
@@ -38,22 +40,13 @@ class Skill(db.Model):
     Skill_Name = db.Column(db.String(64), nullable=False)
     Skill_Desc = db.Column(db.String(255), nullable=False)
     Date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    
-    #relationship statement
-    courses = relationship("Course", secondary="Skill_Assignment")
+
 
 
     def json(self):
-        return {"Skill_id": self.Skill_id, "Skill_name": self.Skill_name, "Skill_desc": self.Skill_desc, "Skill_status": self.Skill_status}
+        return {"Skill_id": self.Skill_ID , "Skill_name": self.Skill_Name, "Skill_desc": self.Skill_Desc , "Skill_status": self.Date_created}
 
-class Skill_Assignment(db.Model):
-    __tablename__ = 'Skill_Assignment'
-    skill_assignment_id = db.Column(db.Integer, primary_key=True)
-    Course_ID =  db.Column(db.Integer, db.ForeignKey('course.course_id'))  #tablename.id
-    Skill_ID = db.Column(db.Integer, db.ForeignKey('Skill.Skill_ID'))
 
-    skill = relationship(Skill, backref=backref("Skill_Assignment", cascade="all, delete-orphan"))
-    course = relationship(Course, backref=backref("Skill_Assignment", cascade="all, delete-orphan"))
 
 
 #https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
@@ -176,7 +169,7 @@ def update_skillbook(Skill_name):
 
 #https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
 @app.route("/course")
-def get_all_course():
+def get_all():
     #list
     courselist = Course.query.all()
     if len(courselist):
@@ -187,7 +180,7 @@ def get_all_course():
                 "data": {
                     
                     #turn python data into javascript object
-                    "books": [course.json() for course in courselist]
+                    "courses": [course.json() for course in courselist]
                 }
             }
         )
@@ -198,33 +191,22 @@ def get_all_course():
         }
     ), 404
     
-@app.route("/searchcourse/<string:course_name>",methods=['GET'])
-def find_by_course(course_name):
-    course = Course.query.filter_by(course_name=course_name).first()
-    if course:
-        return jsonify(
-            {
-                "code": 200,
-                "data": course.json()
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "Course not found."
-        }
-    ), 404
     
 
 @app.route("/addcourse", methods=['GET','POST'])
-def create_coursebook():
+def create_book():
     
-    course_name = "Finance"
-    course_desc = "pivot table"
-    course_status = "virtual"
-    course_type = "Sales"
     
-    course = Course(course_name = course_name,course_desc = course_desc, course_status = course_status,course_type = course_type)
+    
+    Course_ID = "F9R1C"
+    Course_Name = "Finance"
+    Course_Desc = "pivot table"
+    Course_Status = "virtual"
+    Course_Type = "Sales"
+    Course_Category = "Infomatics"
+    
+   
+    course = Course(Course_ID = Course_ID , Course_Name = Course_Name , Course_Desc = Course_Desc , Course_Status = Course_Status , Course_Type = Course_Type , Course_Category = Course_Category )
     
     try:
         db.session.add(course)
@@ -241,10 +223,10 @@ def create_coursebook():
         ), 500
 
 
-@app.route("/deletecourse/<string:course_name>", methods=['GET','DELETE'])
-def delete_coursebook(course_name):
+@app.route("/deletecourse/<string:Course_Name>", methods=['GET','DELETE'])
+def delete_book(Course_Name):
     
-    course = Course.query.filter_by(course_name=course_name).first()
+    course = Course.query.filter_by(Course_Name=Course_Name).first()
     if course:
         db.session.delete(course)
         db.session.commit()
@@ -252,7 +234,7 @@ def delete_coursebook(course_name):
             {
                 "code": 200,
                 "data": {
-                    "course_name": course_name + 'has been successfully deleted'
+                    "course_name": Course_Name + 'has been successfully deleted'
                 }
             }
         )
@@ -260,21 +242,22 @@ def delete_coursebook(course_name):
         {
             "code": 404,
             "data": {
-                 "course_name": course_name
+                 "course_name": Course_Name
             },
             "message": "Course not found."
         }
     ), 404
     
 
-@app.route("/updatecourse/<string:course_name>", methods=['GET','PUT'])
-def update_coursebook(course_name):
-    course = Course.query.filter_by(course_name=course_name).first()
+@app.route("/updatecourse/<string:Course_Name>", methods=['GET','PUT'])
+def update_book(Course_Name):
+    course = Course.query.filter_by(Course_Name=Course_Name).first()
     if course:
-        course.course_name = 'Fintech'
-        course.course_desc = 'Finance analytics'
-        course.course_status = 'F2F'
-        course.course_type = course.course_type
+        course.Course_Name = 'Fintech'
+        course.Course_Desc = 'Finance analytics'
+        course.Course_Status = 'F2F'
+        course.Course_Type = 'Sales'
+        course.Course__Category = "technology"
         #data = request.get_json()
         #if data['course_name'] != "":
         #    course.course_name = data['course_name']
@@ -297,11 +280,31 @@ def update_coursebook(course_name):
         {
             "code": 404,
             "data": {
-                "isbn13": course
+                "course": course
             },
             "message": "course not found."
         }
     ), 404
+    
+    
+    
+@app.route("/searchcourse/<string:Course_Name>",methods=['GET'])
+def find_by_course(Course_Name):
+    course = Course.query.filter_by(Course_Name = Course_Name).first()
+    if course:
+        return jsonify(
+            {
+                "code": 200,
+                "data": course.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Course not found."
+        }
+    ), 404
+ 
 
 
 if __name__ == '__main__':
