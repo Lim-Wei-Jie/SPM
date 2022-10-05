@@ -136,6 +136,26 @@ def update_book(course_name):
             "message": "course not found."
         }
     ), 404
+    
+    
+    
+@app.route("/searchcourse/<string:course_name>",methods=['GET'])
+def find_by_course(course_name):
+    course = Course.query.filter_by(course_name=course_name).first()
+    if course:
+        return jsonify(
+            {
+                "code": 200,
+                "data": course.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Course not found."
+        }
+    ), 404
+ 
 
 
 if __name__ == '__main__':
