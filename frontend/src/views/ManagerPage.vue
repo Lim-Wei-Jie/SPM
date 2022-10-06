@@ -43,7 +43,7 @@
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getAllRoles } from "../endpoint/endpoint.js";
 import axios from "axios";
@@ -53,18 +53,18 @@ const router = useRouter()
 const jobRoles = ref([])
 const numOfJobRoles = ref(jobRoles.length)
 
-const loadJobRoles = async () => {
-    // let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role`
-    let apiEndpoint = 'http://10.124.132.140:5004/role'
-    axios
+onMounted(async() => {
+    let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role`
+    await axios
         .get(apiEndpoint)
         .then((res) => {
-            console.log(res.data);
+            console.log(res.data.data.inventoryList);
         })
         .catch((err) => {
             console.log(err);
         })
-}
+})
+
 
 // const jobRoles = ['Software Engineer', 'Senior Software Engineer', 'Technical Manager', 'Web Developer']
 
