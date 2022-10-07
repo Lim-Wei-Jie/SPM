@@ -12,7 +12,7 @@
                 <!-- Search component -->
                 <div class="input-group">
                     <!--Search bar-->
-                    <input type="text" placeholder="Search Job Role" class="input input-bordered w-80" v-model='queryName'/>
+                    <input type="text" placeholder="Search Job Role" class="input input-bordered w-80"/>
                     <!-- Search button -->
                     <button class="btn btn-square">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -30,8 +30,8 @@
 
             <!-- Job role component -->
             <div class="flex justify-evenly " v-for="jobRole in jobRoles">
-                <div class="btn w-64" @click="handleClick(jobRole)">
-                    {{jobRole}}
+                <div class="btn w-64" @click="handleJobRoleClick(jobRole)">
+                    {{jobRole.Role_Name}}
                 </div>
             </div>
 
@@ -45,35 +45,32 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getAllRoles } from "../endpoint/endpoint.js";
-import axios from "axios";
+import { getAllRoles } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 
 const jobRoles = ref([])
-const numOfJobRoles = ref(jobRoles.length)
+const numOfJobRoles = ref()
 
 onMounted(async() => {
-    let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role`
-    await axios
-        .get(apiEndpoint)
-        .then((res) => {
-            console.log(res.data.data.inventoryList);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+    await getAllRoles()
+    .then((data) => {
+        // data = arr of objects, each object contains each job role details
+        for (var each of data) {
+            jobRoles.value.push(each)
+        }
+        numOfJobRoles.value = jobRoles.value.length
+    }).catch((err) => {
+        console.log(err);
+    });
 })
 
-
-// const jobRoles = ['Software Engineer', 'Senior Software Engineer', 'Technical Manager', 'Web Developer']
-
-// function handleClick(jobRole) {
-//     // route to respective page
-//     router.push({
-//         path: `/jobRole/${jobRole}`
-//     })
-// }
+function handleJobRoleClick(jobRole) {
+    // route to respective page
+    router.push({
+        path: `/jobRole/${jobRole}`
+    })
+}
 
 </script>
 
