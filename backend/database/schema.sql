@@ -74,9 +74,9 @@ CREATE TABLE IF NOT EXISTS `skill` (
     
     
     -- extra
-    `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+    `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
-    PRIMARY KEY (`Skill_ID`),
+    PRIMARY KEY (`Skill_ID`)
     
     
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `role` (
     
 	-- extra
     `Role_Desc` varchar(20)  NOT NULL,
-    `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+    `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
     
     PRIMARY KEY (`Role_ID`)
