@@ -10,31 +10,37 @@ import JobRolePage from "../views/JobRolePage.vue"
 const routes = [
     {
         path: '/',
+        name: 'home',
         component: HomePage
     },
 
     {
         path: '/login',
+        name: 'login',
         component: LogIn
     },
 
     {
         path: '/staff',
+        name: 'staff',
         component: StaffPage
     },
 
     {
         path: '/manager',
+        name: 'manager',
         component: ManagerPage
     },
 
     {
         path: '/hr',
+        name: 'hr',
         component: HrPage
     },
 
     {
         path: '/jobRole/:jobRole',
+        name: 'jobRole',
         component: JobRolePage,
         props: true
     },
