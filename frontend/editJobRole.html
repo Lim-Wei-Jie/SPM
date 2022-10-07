@@ -62,7 +62,7 @@
                             <div class="w-32 place-self-end">
                                 <!-- <input type="submit" value="Save Changes" > -->
                                 <!--there is something wrong with the styling of button-->
-                                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                                <button class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                                     Save Changes
                                 </button>
                             </div>
@@ -83,22 +83,50 @@
                     </div>
                     <div id="s-info" class="space-y-3">
             
-                        <div id="skills" class="font-bold text-2xl">Skills</div>
+                        <div id="skills">
+                            <h2 class="font-bold text-2xl">Skills</h2>
+                            <!--need to add a button for add new skills-->
+                            <div class="place-self-end">
+                                <button class="bg-sky-500 hover:bg-sky-700 font-bold btn">
+                                    Add New Skill
+                                </button>
+                            </div>
+                        </div>
 
-                        <div class="flex flex-col w-full bg-gray-100" v-for="(courses, skill) in skills_and_courses">
-                            <h2 class="font-medium text-xl mx-5 mt-3">{{skill}}</h2>
+                        <div class="flex flex-col w-full bg-gray-100" v-for="skill in skills">
+                            <div>
+                                <h4 class="font-bold text-l mx-5 mt-3">Skill Name: </h4>
+                                <!--need to insert pop up msg-->
+                                <button type="button" class="rounded-md p-2 inline-flex items-end justify-end text-read-400 hover:text-red-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" v-on:click="removeSkill()" v-bind:id="skill">
+                                    <span class="sr-only">Remove Skill</span>
+                                    <!-- Heroicon name: outline/x -->
+                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <!-- <h2 class="font-medium text-xl mx-5 mt-3">{{skill}}</h2> -->
                             <div class="p-4">
                                 <!--need to check with the structure of json data to get the skill des and course des -->
                                 <!--need to bind with the particular skill des-->
-                                <input type="text" id="skill-des" name="skill-des" class="text-m" placeholder="[[skill.des]] " style="width:700px"  v-model="new_skill_des" v-bind:id="skill.des">
+                                <input type="text"  name="skill" class="text-m  py-2 mx-5 mt-3" v-bind:placeholder="skill.Skill_name" style="width:900px"  v-model="skill.Skill_name" v-bind:id="skill.Skill_name">
+
+                                <h4 class="font-bold text-l mx-5 mt-3">Skill Description: </h4>
+                                <div class="p-4">
+                                    <!--need to check with the structure of json data to get the skill des and course des -->
+                                    <!--need to bind with the particular skill des-->
+        
+                                    <input type="text" id="skill-des" name="skill-des" class="text-m py-2" v-bind:placeholder="skill.Skill_des" style="width:900px"  v-model="skill.Skill_des" v-bind:id="skill.Skill_des">
+                                </div>
                             </div>
                             <div class="w-32">
                             <div class="grid grid-cols-3 gap-4 ml-3 mb-5">
                                 <!--Card #1 -->
-                                <div class="card w-80 bg-base-100 shadow-xl" v-for="course in courses">
+                                <div class="card w-80 bg-base-100 shadow-xl" v-for="course in skill.Skill_courses">
                                     <div class="card-body">
                                         <div id="top-card" class="flex-row">
-                                            <h2 class="card-title">{{course}}</h2>
+                                            <h2 class="card-title mb-2">{{course.course_id}}: {{course.Course_Name}}</h2>
+                                            <h4>{{course.Course_Desc}}</h4>
                                             <div class="card-actions justify-start">
                                                 <button class="btn btn-primary">Remove Course</button>
                                             </div>
@@ -133,14 +161,66 @@
                         'Software Development' : ['SD100: Building software'],
                         'Design Thinking' : ['DT101: Think like a User', 'DT102: Think out of the box']
                     },
-                skills : '',
-                skill : '',
-                courses : '',
-                course : '',
-                has_selected_course: false,
+                // skills : '',
+                // skill : '',
+                // courses : '',
+                // course : '',
+                // has_selected_course: false,
                 new_job_title : '',
                 new_job_des : '',
                 new_skill_des : '',
+                job : [
+                        {
+                            "Date_Created": null,
+                            "Role_Desc": "MER Desc",
+                            "Role_ID": 123456,
+                            "Role_Name": "Mechanical Engineeri"
+                        }
+                    ],
+
+                skills : [
+                            {
+                                "Skill_desc": "MES Desc", 
+                                "Skill_id": 1234567, 
+                                "Skill_name": "Mechanical Programmingi", 
+                                "Skill_status": null,
+                                "Skill_courses": [
+                                                    {
+                                                        "Course_Category": "Infomatics", 
+                                                        "Course_Desc": "This module introduces the basic understanding, concepts and techniques of programming.", 
+                                                        "Course_Name": "Basic Programming", 
+                                                        "Course_Status": "virtual", 
+                                                        "Course_Type": "Sales", 
+                                                        "course_id": "BP101"
+                                                    },
+                                                    {
+                                                        "Course_Category": "Informatics", 
+                                                        "Course_Desc": "Dive deeper into more technical aspects of programming languages.", 
+                                                        "Course_Name": "Intermediate Programming", 
+                                                        "Course_Status": "virtual", 
+                                                        "Course_Type": "Sales", 
+                                                        "course_id": "IP101"
+                                                    }
+                                                ]
+                            }, 
+                            {
+                                "Skill_desc": "CES Desc", 
+                                "Skill_id": 2356785, 
+                                "Skill_name": "Computer Science Programming", 
+                                "Skill_status": null,
+                                "Skill_courses": [
+                                                    {
+                                                        "Course_Category": "Informatics", 
+                                                        "Course_Desc": "There are so much more to learn in programming and this is the module for it.", 
+                                                        "Course_Name": "Advanced Programming", 
+                                                        "Course_Status": "virtual", 
+                                                        "Course_Type": "Sales", 
+                                                        "course_id": "IP101"
+                                                    }
+                                                ]
+                            }, 
+                        ],
+                        courses : '',
             
             }
         },
@@ -148,11 +228,18 @@
         
         },
         created(){
-            this.skills = Object.keys(this.skills_and_courses);
+            //this.skills = Object.keys(this.skills_and_courses);
             // console.log(this.skills);
-            this.courses = Object.values(this.skills_and_courses);
+            //this.courses = Object.values(this.skills_and_courses);
             // console.log(this.courses);
-            
+            for(var skill of this.skills){
+                this.courses = skill.Skill_courses;
+                console.log(this.courses);
+                for(var course of this.courses){
+                    console.log(course.Course_Name);
+                }
+            }
+           
         }
     })
     const vm = app.mount('#app1');

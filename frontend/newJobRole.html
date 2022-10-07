@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="bumblebee">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/happy.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LJPS</title>
+    <style>
+        .box{
+            position:absolute;
+        }
+        .popup{
+            z-index: 9;
+        }
+        .container{
+            position: relative;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script type="module" src="../src/main.js"></script>
+  </head>
+  <body>
+    <div id="app1">
+        <!-- Navigation Bar -->
+        <div class="navbar bg-base-100">
+        <div class="navbar-start">
+            <div class="dropdown">
+            <label tabindex="0" class="btn btn-ghost btn-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+            </label>
+            <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                <li><a href="managerJobRole.html">Job Roles</a></li>
+                <li><a>My Learning Journey</a></li>
+                <li><a>Team Completion Status</a></li>
+            </ul>
+            </div>
+        </div>
+        <div class="navbar-center">
+            <a class="btn btn-ghost normal-case text-xl">LJPS</a>
+        </div>
+        <div class="navbar-end px-8">
+            <a class="btn" href="staff/index.html">Log In</a>
+        </div>
+        </div>
+        <div class="text-sm breadcrumbs px-8">
+            <ul>
+            <li><a>Home</a></li> 
+            <li><a>Job Role</a></li> 
+            <li>Creating Job Role</li>
+            </ul>
+        </div>
+
+        <!-- Hero Container -->
+        <form action="">
+            <div class=" hero px-8 py-2">
+                <div class="auto-row-max space-y-2">
+                    <div id="j-info" class="space-y-2">
+                        <h1 class="font-bold text-2xl">Creating Job Role</h1>
+                        <h3 class="font-bold text-xl">Job Title</h3>
+                        <div id="j-title" class="grid grid-cols-2">
+                            <input type="text" id="job-title" name="job-title" class="text-xl bg-gray-100 py-2 " placeholder="Enter Name of Job Role" style="width:700px"  v-model="new_job_title">
+                            
+                        </div>
+                        <div id="j-des" class="space-y-2 w-4/6">
+                            
+                            <h3 class="font-bold text-xl">Job Description</h3>
+                                <input type="text" id="job-des" name="job-des" class="text-xl bg-gray-100 py-2" placeholder="Enter Job Description here..." style="width:700px"  v-model="new_job_des">
+                           
+                        </div>  
+                    </div>
+                    <div id="s-info" class="space-y-3">
+            
+                        <div id="skills">
+                            <h2 class="font-bold text-2xl">Skills</h2>
+                            <!--need to add a button for add new skills-->
+                            <!-- <div class="place-self-end">
+                                <button class="bg-sky-500 hover:bg-sky-700 font-bold btn">
+                                    Add New Skill
+                                </button>
+                            </div> -->
+                        </div>
+
+                        <div class="flex flex-col w-full bg-gray-100" v-for="skill in skills">
+                            <div class="p-4">
+                                <label for="cars" class="font-bold text-l mx-5 mt-3">Skill Name:</label>
+
+                                <select name="cars" id="cars" class="py-2" style="width:600px">
+                                <option v-for="skill in skills" value="volvo" >{{skill.Skill_name}}</option>
+                               
+                                </select>
+                                <!--need to insert pop up msg-->
+                                <div class="place-items-end">
+                                    <button type="button" class="rounded-md p-2 inline-flex items-end justify-end text-read-400 hover:text-red-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" v-on:click="removeSkill()" v-bind:id="skill">
+                                        <span class="sr-only">Remove Skill</span>
+                                        <!-- Heroicon name: outline/x -->
+                                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- <h2 class="font-medium text-xl mx-5 mt-3">{{skill}}</h2> -->
+                            <div class="p-4">
+                                <!--need to check with the structure of json data to get the skill des and course des -->
+                                <!--need to bind with the particular skill des-->
+
+
+                                <h4 class="font-bold text-l mx-5 mt-3">Skill Description: </h4>
+                                <div class="p-4">
+                                    <!--need to check with the structure of json data to get the skill des and course des -->
+                                    <!--need to bind with the particular skill des-->
+                                    
+                                    <input type="text" id="skill-des" name="skill-des" class="text-m py-2" placeholder="Enter Skill Description here..." style="width:900px"  v-model="skill.Skill_des" v-bind:id="skill.Skill_des">
+                                </div>
+                            </div>
+                            <div class="w-32">
+                            <div class="grid grid-cols-3 gap-4 ml-3 mb-5">
+                                <!--Card #1 -->
+                                <div class="card w-80 bg-base-100 shadow-xl" v-for="course in skill.Skill_courses">
+                                    <div class="card-body">
+                                        <div id="top-card" class="flex-row">
+                                            <h2 class="card-title mb-2">{{course.course_id}}: {{course.Course_Name}}</h2>
+                                            <h4>{{course.Course_Desc}}</h4>
+                                            <div class="card-actions justify-start">
+                                                <button class="btn btn-primary">Remove Course</button>
+                                            </div>
+                                        </div>
+                                        <!-- <p>If a dog chews shoes whose shoes does he choose?</p> -->
+                                        <!-- <div class="card-actions justify-end">
+                                            <button class="btn btn-primary">Buy Now</button>
+                                        </div> -->
+                                    </div>
+                                </div>   
+                        
+                        </div>
+                    </div>
+                </div>
+                <div class="w-32 place-self-center">
+                    <!--need to have v-on to delete job role from database-->
+                    <button class="btn">Create Job Role</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+<!--start of vue-->
+<script>
+    const app = Vue.createApp({
+        data(){
+            return{
+                skills_and_courses:{
+                        'Web Programming':['BP101: Basic programming', 'IP101: Intermediate programming', 'AP101: Advanced Programming'],
+                        'Software Development' : ['SD100: Building software'],
+                        'Design Thinking' : ['DT101: Think like a User', 'DT102: Think out of the box']
+                    },
+                // skills : '',
+                // skill : '',
+                // courses : '',
+                // course : '',
+                // has_selected_course: false,
+                new_job_title : '',
+                new_job_des : '',
+                new_skill_des : '',
+                job : [
+                        {
+                            "Date_Created": null,
+                            "Role_Desc": "MER Desc",
+                            "Role_ID": 123456,
+                            "Role_Name": "Mechanical Engineeri"
+                        }
+                    ],
+
+                skills : [
+                            {
+                                "Skill_desc": "MES Desc", 
+                                "Skill_id": 1234567, 
+                                "Skill_name": "Mechanical Programming", 
+                                "Skill_status": null,
+                                "Skill_courses": [
+                                                    {
+                                                        "Course_Category": "Infomatics", 
+                                                        "Course_Desc": "This module introduces the basic understanding, concepts and techniques of programming.", 
+                                                        "Course_Name": "Basic Programming", 
+                                                        "Course_Status": "virtual", 
+                                                        "Course_Type": "Sales", 
+                                                        "course_id": "BP101"
+                                                    },
+                                                    {
+                                                        "Course_Category": "Informatics", 
+                                                        "Course_Desc": "Dive deeper into more technical aspects of programming languages.", 
+                                                        "Course_Name": "Intermediate Programming", 
+                                                        "Course_Status": "virtual", 
+                                                        "Course_Type": "Sales", 
+                                                        "course_id": "IP101"
+                                                    }
+                                                ]
+                            }, 
+                            {
+                                "Skill_desc": "CES Desc", 
+                                "Skill_id": 2356785, 
+                                "Skill_name": "Computer Science Programming", 
+                                "Skill_status": null,
+                                "Skill_courses": [
+                                                    {
+                                                        "Course_Category": "Informatics", 
+                                                        "Course_Desc": "There are so much more to learn in programming and this is the module for it.", 
+                                                        "Course_Name": "Advanced Programming", 
+                                                        "Course_Status": "virtual", 
+                                                        "Course_Type": "Sales", 
+                                                        "course_id": "IP101"
+                                                    }
+                                                ]
+                            }, 
+                        ],
+                        courses : '',
+            
+            }
+        },
+        methods:{
+        
+        },
+        created(){
+            //this.skills = Object.keys(this.skills_and_courses);
+            // console.log(this.skills);
+            //this.courses = Object.values(this.skills_and_courses);
+            // console.log(this.courses);
+            for(var skill of this.skills){
+                this.courses = skill.Skill_courses;
+                console.log(this.courses);
+                for(var course of this.courses){
+                    console.log(course.Course_Name);
+                }
+            }
+           
+        }
+    })
+    const vm = app.mount('#app1');
+</script>
+</html>
