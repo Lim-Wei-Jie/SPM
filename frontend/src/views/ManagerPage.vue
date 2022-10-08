@@ -30,7 +30,7 @@
 
             <!-- Job role component -->
             <div class="flex justify-evenly " v-for="jobRole in jobRoles">
-                <div class="btn w-64" @click="handleJobRoleClick(jobRole)">
+                <div class="btn w-64" @click="handleJobRoleClick(jobRole.Role_Name)">
                     {{jobRole.Role_Name}}
                 </div>
             </div>
@@ -55,7 +55,6 @@ const numOfJobRoles = ref()
 onMounted(async() => {
     await getAllRoles()
     .then((data) => {
-        // data = arr of objects, each object contains each job role details
         for (var each of data) {
             jobRoles.value.push(each)
         }
@@ -65,10 +64,9 @@ onMounted(async() => {
     });
 })
 
-function handleJobRoleClick(jobRole) {
-    // route to respective page
+function handleJobRoleClick(jobRoleName) {
     router.push({
-        path: `/jobRole/${jobRole}`
+        path: `/jobRole/${jobRoleName}`
     })
 }
 

@@ -39,7 +39,7 @@ const routes = [
     },
 
     {
-        path: '/jobRole/:jobRole',
+        path: '/jobRole/:jobRoleName',
         name: 'jobRole',
         component: JobRolePage,
         props: true

@@ -1,19 +1,32 @@
 <template>
 <!-- eslint-disable -->
     <NavBar/>
-    {{jobRole}}
+    {{jobRoleName}}
 </template>
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
-import { ref } from 'vue'
+import { ref, toRefs, onMounted } from 'vue'
+import { getRoleDetails } from "@/endpoint/endpoint.js";
 
 const props = defineProps({
-    jobRole: {
-        type: String,
-        default: ''
+    jobRoleName: {
+        type: String
     }
 });
+
+const { jobRoleName } = toRefs(props) // to be use in script setup
+
+const roleDetails = ref() // obj to be retrieve from DB
+
+onMounted(async() => {
+    await getRoleDetails(jobRoleName)
+    .then((data) => {
+        console.log(data);
+    }).catch((err) => {
+        console.log(err);
+    });
+})
 
 </script>
 
