@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 from sqlalchemy.orm import relationship,backref
+from sqlalchemy import Column, ForeignKey, Integer, Table
+from sqlalchemy.orm import declarative_base, relationship
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
@@ -25,9 +27,10 @@ class Course(db.Model):
     Course_Status = db.Column(db.String(15), nullable=False)
     Course_Type = db.Column(db.String(10), nullable=False)
     Course_Category = db.Column(db.String(50), nullable=False) 
+    children = relationship("Skill", back_populates="parent")
   
 
-    def json(self):
+    def corsera(self):
         return {"course_id": self.Course_ID, "Course_Name": self.Course_Name, "Course_Desc": self.Course_Desc, "Course_Status": self.Course_Status,"Course_Type": self.Course_Type, "Course_Category":self.Course_Category}
 
 
@@ -40,12 +43,14 @@ class Skill(db.Model):
     Skill_Name = db.Column(db.String(64), nullable=False)
     Skill_Desc = db.Column(db.String(255), nullable=False)
     Date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    Course_ID = db.Column(db.String(20), db.ForeignKey("course.Course_ID"))
+    parent = relationship("Course", back_populates="children")
+ 
 
 
 
     def json(self):
-        return {"Skill_id": self.Skill_ID , "Skill_name": self.Skill_Name, "Skill_desc": self.Skill_Desc , "Skill_status": self.Date_created}
-
+        return {"Skill_id": self.Skill_ID , "Skill_name": self.Skill_Name, "Skill_desc": self.Skill_Desc , "Skill_status": self.Date_created,"courseid": self.Course_ID,"Course_Type":self.parent.Course_Type, "Course Name":self.parent.Course_Name}
 
 
 
@@ -63,6 +68,7 @@ def get_all_skill():
                     
                     #turn python data into javascript object
                     "books": [Skill.json() for Skill in Skilllist]
+                    
                 }
             }
         )
