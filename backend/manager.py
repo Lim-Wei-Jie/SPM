@@ -187,7 +187,7 @@ def deleteInventory(Role_ID):
                     "message": "Delete unsuccessful as role does not exist."
                 } ), 404
 
-#update inventory by foodName
+#update role by ID
 @app.route('/role/update/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>',methods=['PUT'])
 def updateRole(Role_ID,Role_Name,Role_Desc):
     role = Role.query.filter_by(Role_ID=Role_ID).first()
