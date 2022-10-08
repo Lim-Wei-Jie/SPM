@@ -57,7 +57,7 @@ class Role(db.Model):
     # storeName = db.Column(db.String(64), nullable=False)
     Role_ID = db.Column(db.Integer, primary_key=True)
     Role_Name = db.Column(db.String(64), nullable=False, unique=True)
-    Role_Desc = db.Column(db.String(64), nullable=False, unique=True)
+    Role_Desc = db.Column(db.String(512), nullable=False, unique=True)
     Date_Created = db.Column(db.String(64), nullable=False, unique=True)
 
 
@@ -113,7 +113,7 @@ def get_all_role():
             {
                 "code": 200,
                 "data": {
-                    "inventoryList": [role.json() for role in role_List]
+                    "Role": [role.json() for role in role_List]
                 }
             }
         )
@@ -215,6 +215,48 @@ def updateRole(Role_ID,Role_Name,Role_Desc):
             }
         ), 500
 
+#get role from id
+@app.route("/role/<string:Role_ID>",methods=['GET'])
+def get_role_id(Role_ID):
+    role = Role.query.filter_by(Role_ID=Role_ID).first()
+    print(role)
+    if role:
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                        "Role": [role.json()]
+                }            
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There is no such role"
+        }
+    ), 404
+
+#get role from name
+@app.route("/role/name/<string:role_Name>",methods=['GET'])
+def get_role_name(role_Name):
+    #role_List = Role.query.filter(Role.Role_Name.like(Role_Name)).all()
+    role_List = Role.query.filter(Role.Role_Name.like(f'%{role_Name}%')).all()
+    print(role_List)
+    if role_List:
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                        "Role": [role.json() for role in role_List]
+                }            
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There is no such role"
+        }
+    ), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5004, debug=True)
