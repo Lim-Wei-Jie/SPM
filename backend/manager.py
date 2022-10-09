@@ -223,7 +223,7 @@ def get_role_id(Role_ID):
     if role:
         return jsonify(
             {
-                "code": 400,
+                "code": 200,
                 "data": {
                         "Role": [role.json()]
                 }            
@@ -245,7 +245,7 @@ def get_role_name(role_Name):
     if role_List:
         return jsonify(
             {
-                "code": 400,
+                "code": 200,
                 "data": {
                         "Role": [role.json() for role in role_List]
                 }            
