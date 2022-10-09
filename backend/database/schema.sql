@@ -71,14 +71,12 @@ CREATE TABLE IF NOT EXISTS `skill` (
 	`Skill_ID` int NOT NULL,
     `Skill_Name` varchar(20)  NOT NULL,
     `Skill_Desc` varchar(20)  NULL,
-    `Course_ID` varchar(20) NOT NULL,
-   
+    
     
     -- extra
     `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
-    PRIMARY KEY (`Skill_ID`),
-    FOREIGN KEY (`Course_ID`) REFERENCES course(`Course_ID`)
+    PRIMARY KEY (`Skill_ID`)
     
     
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -140,12 +138,12 @@ INSERT INTO `staff` (`Staff_ID`, `Staff_FName`,`Staff_LName`,`Dept`,`Email`,`Sys
 (974182, 'Ryan', 'Wong', 'Staff', 'ryanwong@yahoo.com', '2'); 
 
 INSERT INTO `course` (`Course_ID`, `Course_Name`,`Course_Desc`,`Course_Status`,`Course_Type`,`Course_Category` ) VALUES
-(1, 'Mechanical Engineering', 'ME', 'Retired', 'External', 'Engineering'),
-(2, 'Computer Science', 'CE', 'Active', 'Internal', 'IT'); 
+(123456 , 'Mechanical Engineering', 'ME', 'Retired', 'External', 'Engineering'),
+(974182, 'Computer Science', 'CE', 'Active', 'Internal', 'IT'); 
 
-INSERT INTO `skill` (`Skill_ID`, `Skill_name`,`Skill_Desc`,`Course_ID`,`Date_Created` ) VALUES
-(1, 'Mechanical Engineering Skill', 'MES Desc', 1,'Jan-21-2022'),
-(2, 'Computer Science Skill', 'CES Desc', 2,'Aug-21-2022'); 
+INSERT INTO `skill` (`Skill_ID`, `Skill_name`,`Skill_Desc`,`Date_Created` ) VALUES
+(1234567 , 'Mechanical Engineering Skill', 'MES Desc', 'Jan-21-2022'),
+(9741827, 'Computer Science Skill', 'CES Desc', 'Aug-21-2022'); 
 
 INSERT INTO `role` (`Role_ID`, `Role_Name`,`Role_Desc`,`Date_Created` ) VALUES
 (123456 , 'Mechanical Engineering Role', 'MER Desc', 'Jan-21-2022'),
