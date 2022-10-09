@@ -1,18 +1,18 @@
 <template>
 <!-- eslint-disable -->
     <NavBar/>
-    <Hero :title="title" :button="button" @click="createLearningJourney"/>
+    <SearchBar :placeholder="placeholderValue" v-model="searchQuery" />
 </template>
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
-import Hero from '@/components/Hero.vue'
+import SearchBar from '@/components/SearchBar.vue'
 import { useRouter } from 'vue-router'
+
 
 const router = useRouter()
 
-const title = 'You have no learning journey'
-const button = 'Create now'
+const placeholderValue = 'Search Job Title..'
 
 function createLearningJourney() {
     router.push('/staff/create')
