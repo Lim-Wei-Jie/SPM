@@ -1,7 +1,7 @@
 <template>
 <!-- eslint-disable -->
     <NavBar/>
-    {{jobRoleName}}
+    {{roleDetails}}
 </template>
 
 <script setup>
@@ -14,19 +14,20 @@ const props = defineProps({
         type: String
     }
 });
+// props to be use in script setup, break down proxy
+const { jobRoleName } = toRefs(props)
+const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
 
-const { jobRoleName } = toRefs(props) // to be use in script setup
-
-const roleDetails = ref() // obj to be retrieve from DB
+const roleDetails = ref()
 
 onMounted(async() => {
-    await getRoleDetails(jobRoleName)
-    .then((data) => {
-        console.log(data);
+    await getRoleDetails(roleName)
+    .then((role) => {
+        roleDetails.value = role
     }).catch((err) => {
         console.log(err);
     });
-})
+});
 
 </script>
 
