@@ -1,5 +1,5 @@
 <template>
-      <body>
+<!-- eslint-disable -->
     <div id="app1">
         <NavBar/>
         <!-- Hero Container -->
@@ -100,7 +100,6 @@
             </div>
         </form>
     </div>
-</body>
 
 </template>
 
