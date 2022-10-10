@@ -97,6 +97,7 @@
                 <button class="btn" v-on:click="handleDeleteJob">Delete Job Role</button>
             </div>
             </div>
+        </div></div>
         </form>
     </div>
 
