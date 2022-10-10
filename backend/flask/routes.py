@@ -13,118 +13,11 @@ def hello():
     ), 404
  """
 
+
+
+
+
 #https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
-@app.route("/Skill")
-def get_all_skill():
-    #list
-    Skilllist = Skill.query.all()
-    if len(Skilllist):
-        
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    
-                    #turn python data into javascript object
-                    "books": [Skill.json() for Skill in Skilllist]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no Skills."
-        }
-    ), 404
-    
-    
-
-@app.route("/addSkill", methods=['GET','POST'])
-def create_skillbook():
-    
-    Skill_name = "Finance"
-    Skill_desc = "pivot table"
-    Skill_status = "virtual"
-    Skill_type = "Sales"
-    
-    Skill = Skill(Skill_name = Skill_name,Skill_desc = Skill_desc, Skill_status = Skill_status,Skill_type = Skill_type)
-    
-    try:
-        db.session.add(Skill)
-        db.session.commit()
-        
-        return('Skill added successfully')
-        
-    except:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred creating the Skill."
-            }
-        ), 500
-
-
-@app.route("/deleteSkill/<string:Skill_name>", methods=['GET','DELETE'])
-def delete_skillbook(Skill_name):
-    
-    Skill = Skill.query.filter_by(Skill_name=Skill_name).first()
-    if Skill:
-        db.session.delete(Skill)
-        db.session.commit()
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    "Skill_name": Skill_name + 'has been successfully deleted'
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "data": {
-                 "Skill_name": Skill_name
-            },
-            "message": "Skill not found."
-        }
-    ), 404
-    
-
-@app.route("/updateSkill/<string:Skill_name>", methods=['GET','PUT'])
-def update_skillbook(Skill_name):
-    Skill = Skill.query.filter_by(Skill_name=Skill_name).first()
-    if Skill:
-        Skill.Skill_name = 'Fintech'
-        Skill.Skill_desc = 'Finance analytics'
-        Skill.Skill_status = 'F2F'
-        Skill.Skill_type = Skill.Skill_type
-        #data = request.get_json()
-        #if data['Skill_name'] != "":
-        #    Skill.Skill_name = data['Skill_name']
-        #if data['Skill_desc'] != "":
-        #    Skill.Skill_desc = data['Skill_desc']
-        #if data['Skill_status'] != "":
-        #    Skill.Skill_status = data['Skill_status']
-        #if data['Skill_type'] != "":
-        #   Skill.Skill_type = data['Skill_type']
-           
-        db.session.commit()
-        
-        return jsonify(
-            {
-                "code": 200,
-                "data": "Skill has been added successfully"
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "data": {
-                "isbn13": Skill
-            },
-            "message": "Skill not found."
-        }
-    ), 404
 
 
 
@@ -266,6 +159,154 @@ def find_by_course(Course_Name):
         {
             "code": 404,
             "message": "Course not found."
+        }
+    ), 404
+    
+    
+
+@app.route("/Skill")
+def get_all_skill():
+    #list
+    Skilllist = Skill.query.all()
+    if len(Skilllist):
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    
+                    #turn python data into javascript object
+                    "books": [Skill.json() for Skill in Skilllist]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no Skills."
+        }
+    ), 404
+    
+    
+    
+
+@app.route("/skill/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>/<string:Date_created>", methods=['GET','POST'])
+def create_role(Skill_ID,Skill_Name,Skill_Desc,Date_created):
+
+    if (Skill.query.filter_by(Skill_ID = Skill_ID ).first()):
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                    "Role_ID": Skill_ID,
+                    "Role_Name": Skill_Name,
+                    "Role_Name": Skill_Desc,
+                    "Date_created":Date_created
+                },
+                "message": "Skill already exists."
+            }
+        ), 400
+ 
+    #data = request.get_json()
+    #print("poopo" + data)
+    new_skill = Skill(Skill_ID,Skill_Name,Skill_Desc,Date_created)
+ 
+    try:
+        db.session.add(new_skill)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "Skill_ID": Skill_ID,
+                    "Skill_Name": Skill_Name,
+                    "Skill_Name": Skill_Desc,
+                    "Date_created":Date_created
+                },
+                "message": "An error occurred creating the Role."
+            }
+        ), 500
+ 
+    return jsonify(
+        {
+            "code": 201,
+            "data": new_skill.json()
+        }
+    ), 201 
+    
+    
+
+@app.route("/skill/delete/<string:Skill_ID>",methods=['GET', 'DELETE'])
+def deleteSkill(Skill_ID):
+    skill = Skill.query.filter_by(Skill_ID=Skill_ID).first()
+    if skill:
+            db.session.delete(skill)
+            db.session.commit()
+            
+            return jsonify(
+                {
+                    "code": 201,
+                    "message": "Delete success"
+                } ), 201
+
+    else:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Delete unsuccessful"
+                } ), 404   
+            
+            
+
+@app.route('/skill/update/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>',methods=['PUT'])
+def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
+    skill = Skill.query.filter_by(Skill_ID=Skill_ID).first()
+    
+
+    if skill:
+        
+        
+         if Skill_ID != "":
+            #    course.course_name = data['course_name']
+            Skill.Skill_ID = Skill_ID
+            
+         if Skill_Name != "":
+            Skill.Skill_Name = Skill_Name
+            
+            
+         if Skill_Desc != "":
+            Skill.Skill_Desc = Skill_Desc
+            
+         db.session.commit()
+                
+         return jsonify(
+         {
+                        "code": 200,
+                        "data": "skill has been updated successfully"
+            }
+         )
+            
+        
+    
+
+        #data = request.get_json()
+       
+        #if data['course_desc'] != "":
+        #    course.course_desc = data['course_desc']
+        #if data['course_status'] != "":
+        #    course.course_status = data['course_status']
+        #if data['course_type'] != "":
+        #   course.course_type = data['course_type']
+           
+         
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "skill": skill
+            },
+            "message": "course not found."
         }
     ), 404
  

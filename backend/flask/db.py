@@ -43,7 +43,25 @@ class Skill(db.Model):
    #Courses = relationship("Course", secondary=skill_assignment)
     def json(self):
 
-        return {"Skill_id": self.Skill_ID , "Skill_name": self.Skill_Name, "Skill_desc": self.Skill_Desc , "Skill_status": self.Date_created}
+        return {"Skill_id": self.Skill_ID , "Skill_name": self.Skill_Name, "Skill_desc": self.Skill_Desc , "Date_created": self.Date_created}
+    
+    
+    def __init__(self, Skill_ID, Skill_Name, Skill_Desc, Date_created=None):
+        self.Skill_ID = Skill_ID 
+        self.Skill_Name = Skill_Name
+        self.Skill_Desc = Skill_Desc
+        if Date_created is None:
+            self.created_time = datetime.utcnow()
+        else:
+            self.created_time = Date_created
+    
+    
+    
+
+
+
+    
+
 
 
 
