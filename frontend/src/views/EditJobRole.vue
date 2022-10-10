@@ -93,10 +93,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-32 place-self-center">
-                    <!--need to have v-on to delete job role from database-->
-                    <button class="btn">Delete Job Role</button>
-                </div>
+                <div class='place-self-end'>
+                <button class="btn" v-on:click="handleDeleteJob">Delete Job Role</button>
+            </div>
             </div>
         </form>
     </div>
@@ -106,6 +105,32 @@
 
 <script setup>
 import NavBar from '../components/NavBar.vue';
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { getAllRoles } from "@/endpoint/endpoint.js";
+
+const router = useRouter()
+
+const jobRoles = ref([])
+const numOfJobRoles = ref()
+
+onMounted(async() => {
+    await getAllRoles()
+    .then((roles) => {
+        for (var role of roles) {
+            jobRoles.value.push(role.Role_Name)
+        }
+        numOfJobRoles.value = jobRoles.value.length
+    }).catch((err) => {
+        console.log(err);
+    });
+});
+
+function handleDeleteJob(jobRoleName) {
+    router.push({
+        path: `/jobRole/${jobRoleName}`
+    })
+}
 
 
 
