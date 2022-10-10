@@ -7,6 +7,7 @@ import ManagerPage from "../views/ManagerPage.vue"
 import HrPage from "../views/HrPage.vue"
 import JobRolePage from "../views/JobRolePage.vue"
 import NewRolePage from "../views/NewRolePage.vue"
+import StaffCreateLearningJourney from "../views/StaffCreateLearningJourney.vue"
 
 const routes = [
     {
@@ -50,6 +51,12 @@ const routes = [
         path: '/newRole',
         name: 'newRole',
         component: NewRolePage
+    },
+
+    {
+        path: '/staff/create',
+        name: 'staffCreateLearningJourney',
+        component: StaffCreateLearningJourney
     },
 ]
 

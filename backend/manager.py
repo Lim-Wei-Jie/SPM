@@ -83,6 +83,20 @@ class Role(db.Model):
         # "inventoryId": self.inventoryId,
         return {"Role_ID": self.Role_ID, "Role_Name": self.Role_Name, "Role_Desc": self.Role_Desc, "Date_Created": self.Date_Created} 
 
+class Role(db.Model):
+    __tablename__ = 'Skill_Assignment'
+    skill_assignment_id = db.Column(db.Integer, primary_key=True)
+    Course_ID = db.Column(db.Integer, nullable=False, unique=True)
+    Skill_ID = db.Column(db.Integer, nullable=False, unique=True)
+
+    def __init__(self, skill_assignment_id, Course_ID,Skill_ID):
+        self.skill_assignment_id = skill_assignment_id
+        self.Course_ID = Course_ID
+        self.Skill_ID = Skill_ID
+ 
+    def json(self):
+        return {"skill_assignment_id": self.skill_assignment_id, "Course_ID": self.Course_ID, "Skill_ID": self.Skill_ID} 
+
 
 # show all inventory
 @app.route("/staff")
@@ -239,6 +253,26 @@ def get_role_id(Role_ID):
 #get role from name
 @app.route("/role/name/<string:role_Name>",methods=['GET'])
 def get_role_name(role_Name):
+    #role_List = Role.query.filter(Role.Role_Name.like(Role_Name)).all()
+    role_List = Role.query.filter(Role.Role_Name.like(f'%{role_Name}%')).all()
+    print(role_List)
+    if role_List:
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                        "Role": [role.json() for role in role_List]
+                }            
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There is no such role"
+        }
+    ), 404
+
+def get_skill_by_course(role_Name):
     #role_List = Role.query.filter(Role.Role_Name.like(Role_Name)).all()
     role_List = Role.query.filter(Role.Role_Name.like(f'%{role_Name}%')).all()
     print(role_List)
