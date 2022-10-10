@@ -149,7 +149,11 @@ INSERT INTO `role` (`Role_ID`, `Role_Name`,`Role_Desc`,`Date_Created` ) VALUES
 (123456 , 'Mechanical Engineering Role', 'MER Desc', 'Jan-21-2022'),
 (974182, 'Computer Science Role', 'CER Desc', 'Aug-21-2022'); 
 
-
 INSERT INTO `registration` (`Reg_ID`, `Course_ID`,`Staff_ID`,`Reg_Status`,`Completion_Status` ) VALUES
 (12345655 , 123456, 123456, 'Waitlist', 'Incomplete'),
 (97418255, 974182, 974182, 'Registered', 'Incomplete'); 
+
+INSERT INTO `Skill_Assignment` (`skill_assignment_id`, `Course_ID`,`Skill_ID`) VALUES
+(1 , 123456, 1234567),
+(2, 123456, 9741827),
+(3, 974182, 9741827); 
