@@ -71,6 +71,12 @@ function handleJobRoleClick(jobRoleName) {
     })
 }
 
+function handleAddNewJob() {
+    router.push({
+        path: '/newRole'
+    })
+}
+
 </script>
 
 <style scoped>
