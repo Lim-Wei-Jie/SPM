@@ -83,7 +83,42 @@ class Role(db.Model):
         # "inventoryId": self.inventoryId,
         return {"Role_ID": self.Role_ID, "Role_Name": self.Role_Name, "Role_Desc": self.Role_Desc, "Date_Created": self.Date_Created} 
 
-class Role(db.Model):
+class Course(db.Model):
+    __tablename__ = 'course'
+    # inventoryId = db.Column(db.Integer, primary_key=True)
+    # storeName = db.Column(db.String(64), nullable=False)
+    Course_ID = db.Column(db.Integer, primary_key=True)
+    Course_Name = db.Column(db.String(64), nullable=False, unique=True)
+    Course_Desc = db.Column(db.String(512), nullable=False, unique=True)
+    Course_Status = db.Column(db.String(64), nullable=False, unique=True)
+    Course_Type = db.Column(db.String(64), nullable=False, unique=True)
+    Course_Category = db.Column(db.String(64), nullable=False, unique=True)
+    # staff_id = db.Column(db.String(64), nullable=False, primary_key=True)
+    #price = db.Column(db.Float(precision=2), nullable=False)
+    #stockCount = db.Column(db.Integer)
+    # imageLink= db.Column(db.String(100), nullable=False)
+    #userId = db.Column(db.Integer, primary_key=True)
+    #username = db.Column(db.String(64), nullable=False, unique=True)
+    
+
+    def __init__(self, Course_ID, Course_Name,Course_Desc,Course_Status,Course_Type,Course_Category):
+        # self.inventoryId = inventoryId
+        # self.storeName = storeName
+        self.Course_ID = Course_ID
+        self.Course_Name = Course_Name
+        self.Course_Desc = Course_Desc
+        self.Course_Status = Course_Status
+        self.Course_Type = Course_Type
+        self.Course_Category = Course_Category
+
+        # self.imageLink = imageLink
+ 
+    def json(self):
+        # "inventoryId": self.inventoryId,
+        return {"Course_ID": self.Course_ID, "Course_Name": self.Course_Name, "Course_Desc": self.Course_Desc, "Course_Status": self.Course_Status, "Course_Type":self.Course_Type, "Course_Category":self.Course_Category} 
+
+
+class Skill_Assign(db.Model):
     __tablename__ = 'Skill_Assignment'
     skill_assignment_id = db.Column(db.Integer, primary_key=True)
     Course_ID = db.Column(db.Integer, nullable=False, unique=True)
@@ -272,19 +307,42 @@ def get_role_name(role_Name):
         }
     ), 404
 
-def get_skill_by_course(role_Name):
-    #role_List = Role.query.filter(Role.Role_Name.like(Role_Name)).all()
-    role_List = Role.query.filter(Role.Role_Name.like(f'%{role_Name}%')).all()
-    print(role_List)
-    if role_List:
+#get courses from skill_ID
+@app.route("/role/getcourse/<string:Skill_ID>",methods=['GET'])
+def get_course_list_by_Skill(Skill_ID):
+    list_ofID = get_course_id_by_skill(Skill_ID)
+    filtered_list = filterID(list_ofID)
+    course_list = Course.query.filter(Course.Course_ID.in_(filtered_list)).all()
+
+    if course_list:
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                        "Role": [role.json() for role in role_List]
+                        "Course": [course.json() for course in course_list]
                 }            
             }
         )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There is no such role"
+        }
+    ), 404
+
+#filter only courseID
+def filterID(list_of_id):
+    list_onlyID = []
+    for data in list_of_id:
+        #print(data.Skill_ID)
+        list_onlyID.append(str(getattr(data,"Course_ID")))
+    return list_onlyID
+
+#get course from associative table using skill_id
+def get_course_id_by_skill(Skill_ID):
+    skill_list = Skill_Assign.query.filter_by(Skill_ID=Skill_ID).all()
+    if skill_list:
+        return skill_list
     return jsonify(
         {
             "code": 404,
