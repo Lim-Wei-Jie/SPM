@@ -13,7 +13,6 @@ export function getAllRoles() {
                 console.log(err);
                 reject('Fail to fetch all job roles, check WAMP/MAMP server')
             })
-
     })
 }
 
@@ -30,55 +29,37 @@ export function getRoleDetails(jobRoleName) {
                 console.log(err);
                 reject('Fail to fetch all job roles, check WAMP/MAMP server')
             })
-
     })
 }
 
-// Get specific skills using Job Role ID / Name
-export function getSkills(jobRoleName) {
+// Get all skills using Job Role ID / Name
+export function getAllSkills(jobRoleName) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/name/${jobRoleName}/skills`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}`
         axios
             .get(apiEndpoint)
             .then((res) => {
-                resolve(res.data.data.books)
+                resolve(res.data)
             })
             .catch((err) => {
                 console.log(err);
                 reject('Fail to fetch all skills, check WAMP/MAMP server')
             })
-
     })
 }
 
 // Get specific courses using skill ID / Name
-export function getCourses(skill_ID) {
+export function getCourses(skillID) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/getcourse/${skill_ID}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/getcourse/${skillID}`
         axios
             .get(apiEndpoint)
             .then((res) => {
-                resolve(res.data.data.courses)
+                resolve(res.data)
             })
             .catch((err) => {
                 console.log(err);
                 reject('Fail to fetch all courses, check WAMP/MAMP server')
             })
-
     })
-}
-
-// Create new job role
-export function handleNewJobRole() {
-
-}
-
-// Delete job role
-export function handleDeleteJob() {
-
-}
-
-// Remove course of a skill in a job
-export function handleRemoveCourse() {
-
 }
