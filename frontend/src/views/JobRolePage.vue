@@ -46,7 +46,10 @@
 <script setup>
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
+import { useRouter } from 'vue-router'
 import { getRoleDetails } from "@/endpoint/endpoint.js";
+
+const router = useRouter()
 
 const props = defineProps({
     jobRoleName: {

@@ -105,7 +105,7 @@
 
 <script setup>
 import NavBar from '../components/NavBar.vue';
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 
 const roleDetailsName = ref()
