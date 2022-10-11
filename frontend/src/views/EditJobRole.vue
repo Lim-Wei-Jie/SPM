@@ -76,10 +76,10 @@
                                 <div class="card w-80 bg-base-100 shadow-xl" v-for="course in skill.Skill_courses">
                                     <div class="card-body">
                                         <div id="top-card" class="flex-row">
-                                            <h2 class="card-title mb-2">{{course.course_id}}: {{course.Course_Name}}</h2>
-                                            <h4>{{course.Course_Desc}}</h4>
+                                            <h2 class="card-title mb-2">{{course.course_id}}: {{course.course_name}}</h2>
+                                            <h4>{{course.course_desc}}</h4>
                                             <div class="card-actions justify-start">
-                                                <button class="btn btn-primary">Remove Course</button>
+                                                <button class="btn btn-primary" v-on:click="handleRemoveCourse(course_id)">Remove Course</button>
                                             </div>
                                         </div>
                                         <!-- <p>If a dog chews shoes whose shoes does he choose?</p> -->
@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <div class='place-self-end'>
-                <button class="btn" v-on:click="handleDeleteJob">Delete Job Role</button>
+                <button class="btn" v-on:click="handleDeleteJob(roleDetailsID)">Delete Job Role</button>
             </div>
             </div>
         </div></div>
@@ -107,31 +107,30 @@
 import NavBar from '../components/NavBar.vue';
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getAllRoles } from "@/endpoint/endpoint.js";
 
-const router = useRouter()
+const roleDetailsName = ref()
+const roleDetailsID = ref()
+const roleDetailsDesc = ref()
+const course_id = ref()
 
-const jobRoles = ref([])
-const numOfJobRoles = ref()
-
-onMounted(async() => {
-    await getAllRoles()
-    .then((roles) => {
-        for (var role of roles) {
-            jobRoles.value.push(role.Role_Name)
-        }
-        numOfJobRoles.value = jobRoles.value.length
+onBeforeMount(async() => {
+    await getRoleDetails(roleName)
+    .then((role) => {
+        roleDetailsName.value = role.Role_Name
+        roleDetailsID.value = role.Role_ID
+        roleDetailsDesc.value = role.Role_Desc
     }).catch((err) => {
         console.log(err);
     });
 });
 
-function handleDeleteJob(jobRoleName) {
-    router.push({
-        path: `/jobRole/${jobRoleName}`
-    })
+function handleRemoveCourse(){
+
 }
 
+function handleDeleteJob() {
+    
+}
 
 
 </script>
