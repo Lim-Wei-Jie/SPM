@@ -383,7 +383,7 @@ def get_course_id_by_skill(Skill_ID):
 #for skill-course assignment
 
 
-@app.route("/Skill")
+@app.route("/skill")
 def get_all_skill():
     #list
     Skilllist = Skill.query.all()
@@ -500,18 +500,8 @@ def skill_to_course_assignment(skill_assignment_id,Skill_ID,Course_ID):
             "data": new_skill_assignment.json()
         }
     ), 201 
-    
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5004, debug=True)
-
-
-
-
 #viewing the skill_assignment table
-
-"""
-@app.route("/Skill_Course_Assignment")
+@app.route("/skill_course_assignment")
 def get_mapped_skill_to_course():
     #list
     Skill_Course_Map = Skill_Assign.query.all()
@@ -533,6 +523,15 @@ def get_mapped_skill_to_course():
             "message": "There are no Skills assigned to Courses."
         }
     ), 404
- """
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5004, debug=True)
+
+
+
+
+
+
 
     
