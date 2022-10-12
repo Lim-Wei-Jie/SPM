@@ -1,0 +1,301 @@
+{
+	"info": {
+		"_postman_id": "d9447b80-bde7-42ff-adf2-c5d92e706fb1",
+		"name": "SPM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17615295"
+	},
+	"item": [
+		{
+			"name": "Manager",
+			"item": [
+				{
+					"name": "Skill",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/skill",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"skill"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Staff",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/staff",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"staff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/role",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role-Get Role from role_id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/role/<string:Role_ID>",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"role",
+								"<string:Role_ID>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role-Get Role from name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/role/name/<string:role_Name>",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"role",
+								"name",
+								"<string:role_Name>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Course-Get from skill_id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/role/getcourse/<string:Skill_ID>",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"role",
+								"getcourse",
+								"<string:Skill_ID>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get/Create-individual skill",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/skill/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>/<string:Date_created>",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"skill",
+								"<string:Skill_ID>",
+								"<string:Skill_Name>",
+								"<string:Skill_Desc>",
+								"<string:Date_created>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get/Create-assign skill to course",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/skill/<string:skill_assignment_id>/<string:Course_ID>/<string:Skill_ID>/",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"skill",
+								"<string:skill_assignment_id>",
+								"<string:Course_ID>",
+								"<string:Skill_ID>",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Skill-Course Mappings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/skill_course_assignment",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"skill_course_assignment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role-Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/role/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"role",
+								"<string:Role_ID>",
+								"<string:Role_Name>",
+								"<string:Role_Desc>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role-Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/role/delete/<string:Role_ID>",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"role",
+								"delete",
+								"<string:Role_ID>"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Role-Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.0.133:5004/role/update/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"0",
+								"133"
+							],
+							"port": "5004",
+							"path": [
+								"role",
+								"update",
+								"<string:Role_ID>",
+								"<string:Role_Name>",
+								"<string:Role_Desc>"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
