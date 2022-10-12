@@ -63,3 +63,19 @@ export function getCourses(skillID) {
             })
     })
 }
+
+// Create job role
+export function createRole(newJobRoleData) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>`
+        axios
+            .post(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch all courses, check WAMP/MAMP server')
+            })
+    })
+}

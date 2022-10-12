@@ -95,7 +95,7 @@
                 </div>
                 <div class="w-32 place-self-center">
                     <!--need to have v-on to delete job role from database-->
-                    <button class="btn" v-on:click="handleNewJobRole()">Create Job Role</button>
+                    <button class="btn" v-on:click="createRole(newJobRoleData)">Create Job Role</button>
                 </div>
             </div>
             </div>
@@ -107,6 +107,7 @@
 <script setup>
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
+import { createRole } from '@/endpoint/endpoint.js'
 
 const selected = ref()
 const selectedSkill = false;
@@ -118,11 +119,8 @@ function onChange(event){
     //need to call axios to fetch the courses related to the skill id 
 }
 
-function handleNewJobRole() {
-    router.push({
-        path: '/manager'
-    })
-}
+
+
 </script>
 
 <style scoped>
