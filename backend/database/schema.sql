@@ -157,3 +157,9 @@ INSERT INTO `Skill_Assignment` (`skill_assignment_id`, `Course_ID`,`Skill_ID`) V
 (1 , 123456, 1234567),
 (2, 123456, 9741827),
 (3, 974182, 9741827); 
+
+
+INSERT INTO `Role_Assignment` (`role_assignment_id`, `Role_ID`,`Skill_ID`) VALUES
+(1 , 123456, 1234567),
+(2, 123456, 9741827),
+(3, 974182, 9741827); 

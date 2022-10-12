@@ -198,9 +198,9 @@ def create_role(Skill_ID,Skill_Name,Skill_Desc,Date_created):
             {
                 "code": 400,
                 "data": {
-                    "Role_ID": Skill_ID,
-                    "Role_Name": Skill_Name,
-                    "Role_Name": Skill_Desc,
+                    "Skill_ID": Skill_ID,
+                    "Skill_Name": Skill_Name,
+                    "Skill_Desc": Skill_Desc,
                     "Date_created":Date_created
                 },
                 "message": "Skill already exists."
@@ -221,7 +221,7 @@ def create_role(Skill_ID,Skill_Name,Skill_Desc,Date_created):
                 "data": {
                     "Skill_ID": Skill_ID,
                     "Skill_Name": Skill_Name,
-                    "Skill_Name": Skill_Desc,
+                    "Skill_Desc": Skill_Desc,
                     "Date_created":Date_created
                 },
                 "message": "An error occurred creating the Role."
