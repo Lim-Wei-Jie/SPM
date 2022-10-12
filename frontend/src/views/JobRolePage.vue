@@ -25,7 +25,7 @@
                 Job Role Description
             </p>
             <p>
-                {{roleDetailsDesc}}The Software Engineer / Officer (Engineering Procurement) is responsible for providing administrative support for procurement activities. He/She coordinates with internal teams to gather requirements for procurement, with
+                {{roleDetailsDesc}}. The Software Engineer / Officer (Engineering Procurement) is responsible for providing administrative support for procurement activities. He/She coordinates with internal teams to gather requirements for procurement, with
                 vendors for managing delivery schedules, and prepares purchase orders. He maintains documents and reports schedules material purchases and deliveries and performs verification of current inventory. He is comfortable in engaging and interacting with internal and external stakeholders, and is able to multi-task in a fast-paced work environment.
             </p>
         </div>
@@ -47,7 +47,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getSkillsByRole } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 
@@ -64,16 +64,32 @@ const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 
-onBeforeMount(async() => {
-    await getRoleDetails(roleName)
-    .then((role) => {
-        roleDetailsName.value = role.Role_Name
-        roleDetailsID.value = role.Role_ID
-        roleDetailsDesc.value = role.Role_Desc
-    }).catch((err) => {
-        console.log(err);
-    });
-});
+;(async() => {
+    await Promise.all([
+        // get role name, ID, and description
+        getRoleDetails(roleName)
+        .then((role) => {
+            roleDetailsName.value = role.Role_Name
+            roleDetailsID.value = role.Role_ID
+            roleDetailsDesc.value = role.Role_Desc
+        })
+        .catch((err) => {
+            console.log(err);
+        }),
+        
+        console.log(roleDetailsID)
+        // get skills with role ID
+        // getSkillsByRole(roleDetailsID)
+        // .then((data) => {
+        //     console.log(data);
+        // })
+        // .catch((err) => {
+        //     console.log(err);
+        // })
+    ]);
+})();
+
+
 
 function handleEditClick() {
     router.push({
