@@ -34,19 +34,18 @@ export function getRoleDetails(jobRoleName) {
 
 // Get all skills using Job Role ID / Name
 export function getSkillsByRole(jobRoleID) {
-    console.log(jobRoleID);
-    // return new Promise((resolve, reject) => {
-    //     let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/getskill/${jobRoleID}`
-    //     axios
-    //         .get(apiEndpoint)
-    //         .then((res) => {
-    //             resolve(res.data)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //             reject('Fail to fetch all skills, check WAMP/MAMP server')
-    //         })
-    // })
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/getskill/${jobRoleID}`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data.Skill)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch all skills, check WAMP/MAMP server')
+            })
+    })
 }
 
 // Get specific courses using skill ID / Name

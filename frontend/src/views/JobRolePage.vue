@@ -35,8 +35,8 @@
                 Skills
             </p>
             <div class="grid grid-cols-3 gap-6 bg-gray-700 rounded-lg my-6 p-8">
-                <div class="flex justify-evenly">
-                    
+                <div class="flex justify-evenly" v-for="skillName in skillNames">
+                    {{skillName}}
                 </div>
             </div>
         </div>
@@ -63,6 +63,7 @@ const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
 const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
+const skillNames = ref([])
 
 ;(async() => {
     await Promise.all([
@@ -72,20 +73,23 @@ const roleDetailsDesc = ref()
             roleDetailsName.value = role.Role_Name
             roleDetailsID.value = role.Role_ID
             roleDetailsDesc.value = role.Role_Desc
+
+            // get skills with role ID
+            getSkillsByRole(roleDetailsID.value)
+            .then((data) => {
+                for (var each of data) {
+                    skillNames.value.push(each.Skill_name)
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
         })
         .catch((err) => {
             console.log(err);
         }),
         
-        console.log(roleDetailsID)
-        // get skills with role ID
-        // getSkillsByRole(roleDetailsID)
-        // .then((data) => {
-        //     console.log(data);
-        // })
-        // .catch((err) => {
-        //     console.log(err);
-        // })
     ]);
 })();
 
