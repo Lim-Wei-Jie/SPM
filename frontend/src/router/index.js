@@ -8,7 +8,8 @@ import HrPage from "../views/HrPage.vue"
 import JobRolePage from "../views/JobRolePage.vue"
 import NewRolePage from "../views/NewRolePage.vue"
 import EditJobRole from "../views/EditJobRole.vue"
-import StaffCreateLearningJourney from "../views/StaffCreateLearningJourney.vue"
+import SearchJobRole from "../views/SearchRole.vue"
+import createLJ from "../views/CreateLJ.vue"
 
 const routes = [
     {
@@ -61,9 +62,16 @@ const routes = [
     },
 
     {
-        path: '/staff/create',
-        name: 'staffCreateLearningJourney',
-        component: StaffCreateLearningJourney
+        path: '/staff/searchRole',
+        name: 'searchRole',
+        component: SearchJobRole
+    },
+
+    {
+        path: '/staff/create/:jobRoleName',
+        name: 'createLJ',
+        component: createLJ,
+        props: true
     },
 ]
 
