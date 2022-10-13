@@ -49,13 +49,13 @@ export function getSkillsByRole(jobRoleID) {
 }
 
 // Get specific courses using skill ID / Name
-export function getCourses(skillID) {
+export function getCoursesBySkill(skillID) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/getcourse/${skillID}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/skill/getcourse/${skillID}`
         axios
             .get(apiEndpoint)
             .then((res) => {
-                resolve(res.data)
+                resolve(res.data.data.Course)
             })
             .catch((err) => {
                 console.log(err);
