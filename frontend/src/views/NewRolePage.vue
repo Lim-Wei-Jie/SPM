@@ -25,7 +25,7 @@
                     <div id="s-info" class="space-y-3">
             
                         <div id="skills">
-                            <h2 class="font-bold text-2xl">Skills</h2>
+                            <h2 class="font-bold text-2xl">Skills {{numOfSkills}}</h2>
                             <!--need to add a button for add new skills-->
                             <!-- <div class="place-self-end">
                                 <button class="bg-sky-500 hover:bg-sky-700 font-bold btn">
@@ -94,26 +94,28 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { createRole } from '@/endpoint/endpoint.js'
+import { getAllSkills } from "@/endpoint/endpoint.js";
 
 const new_job_title = ref();
 const new_job_des = ref();
 const newJobRoleData = ref([]);
 const selectedSkill = ref([]);
+const numOfSkills = ref();
 
-const skills = ref([
-      {
-        "Skill_desc": "MES Desc", 
-        "Skill_id": 1234567, 
-        "Skill_name": "Mechanical Engineeri", 
-        "Skill_status": null
-      }, 
-      {
-        "Skill_desc": "CES Desc", 
-        "Skill_id": 9741827, 
-        "Skill_name": "Computer Science Ski", 
-        "Skill_status": null
-      }
-    ]);
+// const skills = ref([
+//       {
+//         "Skill_desc": "MES Desc", 
+//         "Skill_id": 1234567, 
+//         "Skill_name": "Mechanical Engineeri", 
+//         "Skill_status": null
+//       }, 
+//       {
+//         "Skill_desc": "CES Desc", 
+//         "Skill_id": 9741827, 
+//         "Skill_name": "Computer Science Ski", 
+//         "Skill_status": null
+//       }
+//     ]);
 
 function display(){
    
@@ -121,6 +123,19 @@ function display(){
     console.log(this.newJobRoleData);
 }
 
+// get all skills
+;(async() => {
+    await getAllSkills()
+    .then((skills) => {
+        for (var skill of skills) {
+            skills.value.push(skill.skill_Name)
+        }
+        numOfSkills.value = skills.value.length
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+})();
 
 
 
