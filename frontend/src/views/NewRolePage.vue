@@ -6,7 +6,7 @@
 
         <!-- Hero Container -->
         <form action="">
-            <div class=" hero px-8 py-2">
+            <div class="container mx-auto my-8">
                 <div class="auto-row-max space-y-2">
                     <div id="j-info" class="space-y-2">
                         <h1 class="font-bold text-2xl">Creating Job Role</h1>
@@ -34,44 +34,29 @@
                             </div> -->
                         </div>
 
-                        <div class="bg-gray-100">
+                        <div class="bg-gray-100 pt-2 pb-2">
                             
-                            <div v-for="skill in skills">
-                            <div class="p-4">
-                                <label for="cars" class="font-bold text-l mx-5 mt-3">Skill Name:</label>
-
-                                <select class="py-2" v-model="selected" style="width:600px" v-on:change="onChange($event)">
-                                    <option v-bind:value="skill.Skill_name">
-                                        {{skill.Skill_name}}
-                                    </option>
-                                </select>
-
-                                <!--need to insert pop up msg-->
-                                <div class="place-items-end">
-                                    <button type="button" class="rounded-md p-2 inline-flex items-end justify-end text-read-400 hover:text-red-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" v-on:click="removeSkill()" v-bind:id="skill">
-                                        <span class="sr-only">Remove Skill</span>
-                                        <!-- Heroicon name: outline/x -->
-                                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- <h2 class="font-medium text-xl mx-5 mt-3">{{skill}}</h2> -->
-                            <div class="p-4">
-                                <!--need to check with the structure of json data to get the skill des and course des -->
-                                <!--need to bind with the particular skill des-->
+                        <div class="grid grid-cols-3 gap-4 ml-3 mb-5 mt-2" v-for="skill in skills">
+                            <div class="card w-80 bg-base-100 shadow-xl">
+                                <fieldset>      
+                                    <!-- <legend>What is Your Favorite Pet?</legend>       -->
+                                    <input type="checkbox" v-bind:name="skill.Skill_name" value="Cats" class="m-3">{{skill.Skill_name}} <br>    
+                                    <!-- <input type="submit" value="Submit now" />       -->
+                                </fieldset> 
+                            </div>           
+                                <!--Card #1 -->
+                                <!-- <div class="card w-80 bg-base-100 shadow-xl">
+                                    <div class="card-body hover:bg-red-300" v-on:click="getCourses()" >
+                                        <div id="top-card" class="flex-row">  
+                                            <h2 class="card-title mb-2">{{skill.Skill_name}}</h2>
+                                            <p>{{skill.Skill_desc}}</p> 
+                                        </div>
+                                    </div>
+                                </div> -->
 
 
-                                <h4 class="font-bold text-l mx-5 mt-3">Skill Description: </h4>
-                                <div class="p-4">
-                                    <!--need to check with the structure of json data to get the skill des and course des -->
-                                    <!--need to bind with the particular skill des-->
-                                    
-                                    <input type="text" id="skill-des" name="skill-des" class="text-m py-2" placeholder="Enter Skill Description here..." style="width:900px"  v-model="skill.Skill_des" v-bind:id="skill.Skill_des">
-                                </div>
-                            </div>
-
+                                   
+                           
                             <!-- courses will be displayed when a skill is selected-->
                             <div class="w-32" v-if="selectedSkill">
                             <div class="grid grid-cols-3 gap-4 ml-3 mb-5">
@@ -108,16 +93,26 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { createRole } from '@/endpoint/endpoint.js'
+import { getCourses } from '@/endpoint/endpoint.js'
 
-const selected = ref()
-const selectedSkill = false;
-const targetSkillID = ref();
 
-function onChange(event){
-    selectedSkill = true;
-    targetSkillID = event.target.value; 
-    //need to call axios to fetch the courses related to the skill id 
-}
+const skills = ref([
+      {
+        "Skill_desc": "MES Desc", 
+        "Skill_id": 1234567, 
+        "Skill_name": "Mechanical Engineeri", 
+        "Skill_status": null
+      }, 
+      {
+        "Skill_desc": "CES Desc", 
+        "Skill_id": 9741827, 
+        "Skill_name": "Computer Science Ski", 
+        "Skill_status": null
+      }
+    ]);
+const checkboxes = ref([]);
+
+
 
 
 
