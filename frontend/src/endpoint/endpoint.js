@@ -79,3 +79,19 @@ export function createRole(newJobRoleData) {
             })
     })
 }
+
+// Get all Skills
+export function getAllSkills() {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/skill`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data.books)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch all skills, check WAMP/MAMP server')
+            })
+    })
+}
