@@ -1,7 +1,7 @@
 <template>
     <!-- eslint-disable -->
     <NavBar/>
-    <div class="container mx-auto my-8 ">
+    <div class="container mx-auto my-8 flex flex-col">
         <!-- Breadcrumbs -->
         <div class="text-sm breadcrumbs">
             <ul>
@@ -31,12 +31,50 @@
             <p class="text-2xl font-medium">
                 Skills
             </p>
-            <div class="grid grid-cols-3 gap-6 bg-gray-700 rounded-lg my-6 p-8">
-                <div class="flex justify-evenly">
-                    
+            <div v-for="(courseList, skillName) in LearningJourney.skills" class="bg-gray-300 rounded-lg my-6 p-8 space-y-4">
+                <p class="text-lg font-normal">
+                    {{ skillName }}
+                </p>
+                <div class="grid grid-cols-3 gap-6">
+                    <div v-if="courseList != {}" class="flex " v-for="(courseDes, courseName) in courseList">
+                        <label class="btn btn-lg w-11/12 modal-btn" for="my-modal" @click="handleJobRoleClick(jobRole)">
+                            {{courseName}}
+                        </label>
+
+                        <!-- modal pop up to delete course-->
+                        <input type="checkbox" id="my-modal" class="modal-toggle" />
+                        <div class="modal">
+                            <div class="modal-box">
+                                <h3 class="font-bold text-lg">{{ courseName }}</h3>
+                                <p class="py-4">{{ courseDes }}</p>
+                                <div class="modal-action">
+                                <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(courseName)">Remove Course</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12">Add Course</label>
+                    <!-- modal pop up to add course-->
+                    <input type="checkbox" id="addCourseModal" class="modal-toggle" />
+                    <div class="modal">
+                        <div class="modal-box h-fit">
+                            <h3 class="font-bold text-lg">{{ skillName }}</h3>
+                            <ul>
+                                <li v-for="(courseDes, courseName) in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
+                                    <p>{{ courseName }}</p>
+                                    <p>{{ courseDes }}</p>
+                                </li>
+                            </ul>
+                            <div class="modal-action">
+                                <label for="my-modal" class="btn btn-outline btn-success" @click="addCourse(courseName)">Add Course</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- send edited data back-->
+        <button class="btn btn-outline btn-success" @click="createLJ()">Create Learning Journey</button>
     </div>
 </template>
 
@@ -83,6 +121,26 @@ function handleEditClick() {
         path: '/editRole'
     })
 }
+
+const LearningJourney = ref({
+    jobRoleName: "Mechanical Engineeri",
+    skills: {
+        "skill1": {},
+        "skill2": {},
+        "skill3": {}
+    }
+})
+
+const courseList = ref({
+    skillName: "skill",
+    courses: {
+        "course1": "course description 1",
+        "course2": "course description 2",
+        "course3": "course description 3",
+        "course4": "course description 4",
+        "course5": "course description 5"
+    }
+})
 
 </script>
 

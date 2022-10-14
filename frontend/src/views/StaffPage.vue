@@ -3,9 +3,13 @@
     <NavBar/>
     <Hero v-if="numOfLJ == 0" :title="title" :button="button" @click="searchJobRole"/>
     <div v-else class="container mx-auto my-8">
-        <p class="text-2xl font-bold">
-            Learning Journey Progress
-        </p>
+        <div class="flex justify-between">
+            <p class="text-2xl font-bold">
+                Learning Journey Progress
+            </p>
+            <button class="btn" @click="searchJobRole">Add New</button>
+        </div>
+        
         <div v-for="LJ in learningJourneys">
             <LearningJourney :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :inProgCourses="LJ.courses.inProgress"/>
         </div>
@@ -35,14 +39,14 @@ function searchJobRole() {
 //fake data
 const learningJourneys = ref({
     learningJourney1: {
-        jobRoleName: "Job Role Name1",
+        jobRoleName: "Mechanical Engineeri",
         courses: {
             completed: ["Course4", "Course5"],
             inProgress: ["Course1", "Course2", "Course3"]
         }
     },
     learningJourney2: {
-        jobRoleName: "Job Role Name2",
+        jobRoleName: "Computer Science",
         courses: {
             completed: ["Course9", "Course10"],
             inProgress: ["Course6", "Course7", "Course8"]

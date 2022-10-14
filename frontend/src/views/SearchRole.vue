@@ -18,7 +18,7 @@
             </div>
             <div class="w-full">
                 <ul v-for="jobRole in jobRoles" class="w-full">
-                    <li class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3 " @click="createLJ(selectedJobRole)" value="">
+                    <li class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3 " @click="createLJ(jobRole)" value="">
                         {{jobRole}}
                     </li>
                 </ul>
@@ -26,8 +26,6 @@
             
             <p>v-modal test: {{searchQuery}}</p>
         </div>
-
-        <button @click="createLJ(selectedJobRole)" class="btn">temporary</button>
     </div>
 </template>
 
