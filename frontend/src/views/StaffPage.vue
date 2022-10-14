@@ -6,7 +6,9 @@
         <p class="text-2xl font-bold">
             Learning Journey Progress
         </p>
-        <LearningJourney></LearningJourney>
+        <div v-for="LJ in learningJourneys">
+            <LearningJourney :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :inProgCourses="LJ.courses.inProgress"/>
+        </div>
     </div>
 </template>
 
@@ -29,6 +31,24 @@ const button = 'Create now'
 function searchJobRole() {
     router.push('/staff/searchRole')
 }
+
+//fake data
+const learningJourneys = ref({
+    learningJourney1: {
+        jobRoleName: "Job Role Name1",
+        courses: {
+            completed: ["Course4", "Course5"],
+            inProgress: ["Course1", "Course2", "Course3"]
+        }
+    },
+    learningJourney2: {
+        jobRoleName: "Job Role Name2",
+        courses: {
+            completed: ["Course9", "Course10"],
+            inProgress: ["Course6", "Course7", "Course8"]
+        }
+    }
+})
 
 </script>
 
