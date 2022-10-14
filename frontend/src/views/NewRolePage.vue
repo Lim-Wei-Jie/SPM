@@ -118,8 +118,8 @@ const numOfSkills = ref();
 //     ]);
 
 function display(){
-   
-    this.newJobRoleData.push(this.new_job_title, this.new_job_des, this.selectedSkill);
+    // this.newJobRoleData.push(this.new_job_title, this.new_job_des, this.selectedSkill);
+    this.newJobRoleData.push(this.new_job_title, this.new_job_des);
     console.log(this.newJobRoleData);
 }
 
