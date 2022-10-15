@@ -102,19 +102,17 @@ CREATE TABLE IF NOT EXISTS `registration` (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `Skill_Assignment`(
-`skill_assignment_id` int(11) NOT NULL,
 `Course_ID` varchar(20) NOT NULL,
 `Skill_ID` varchar(20) NOT NULL,
 
-PRIMARY KEY (`skill_assignment_id`)
+PRIMARY KEY (`Course_ID`,`Skill_ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `Role_assignment`(
-`role_assignment_id` int(11) NOT NULL,
 `Role_ID` varchar(20) NOT NULL,
 `Skill_ID` varchar(20) NOT NULL,
 
-PRIMARY KEY (`role_assignment_id`)
+PRIMARY KEY (`Role_ID`,`Skill_ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO sys(System_Role,System_Role_Desc) VALUES
@@ -356,16 +354,16 @@ Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat 
 ,(50,'Sales Representative','Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.','8/21/2022');
  
 
-INSERT INTO `Skill_Assignment` (`skill_assignment_id`, `Course_ID`,`Skill_ID`) VALUES
-(1 , 'COR001', 42),
-(2, 'FIN002', 18),
-(3, 'tch006', 18),
-(4, 'tch006', 15); 
+INSERT INTO `Skill_Assignment` (`Course_ID`,`Skill_ID`) VALUES
+('COR001', 42),
+('FIN002', 18),
+('tch006', 18),
+('tch006', 15); 
 
-INSERT INTO `Role_Assignment` (`role_assignment_id`, `Role_ID`,`Skill_ID`) VALUES
-(1 , 2, 12),
-(2, 32, 14),
-(3, 46, 36); 
+INSERT INTO `Role_Assignment` (`Role_ID`,`Skill_ID`) VALUES
+(2, 12),
+(32, 14),
+(46, 36); 
 
 INSERT INTO registration(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status) VALUES
  (1,'COR002',130001,'Registered','Completed')

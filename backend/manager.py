@@ -1,5 +1,6 @@
 
 import os
+from unittest import skip
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -61,7 +62,7 @@ class Role(db.Model):
     Role_ID = db.Column(db.Integer, primary_key=True)
     Role_Name = db.Column(db.String(64), nullable=False, unique=True)
     Role_Desc = db.Column(db.String(512), nullable=False, unique=True)
-    Date_Created = db.Column(db.String(64), nullable=False, unique=True)
+    Date_Created = db.Column(db.String(64), nullable=False, unique=True, default=datetime.utcnow)
 
 
     # staff_id = db.Column(db.String(64), nullable=False, primary_key=True)
@@ -146,8 +147,7 @@ class Skill(db.Model):
 class Skill_Assign(db.Model):
     __tablename__ = 'Skill_Assignment'
 
-    Course_ID = db.Column(db.Integer, nullable=False, primary_key=True)
-
+    Course_ID = db.Column(db.String(64), nullable=False, primary_key=True)
     Skill_ID = db.Column(db.Integer, nullable=False, primary_key=True)
 
     def __init__(self, Skill_ID,Course_ID):
@@ -166,7 +166,6 @@ class Role_Assign(db.Model):
     Skill_ID = db.Column(db.Integer, nullable=False, primary_key=True)
 
     def __init__(self, Role_ID,Skill_ID):
-        
         self.Role_ID = Role_ID
         self.Skill_ID = Skill_ID
  
@@ -228,8 +227,7 @@ def create_role(Role_ID,Role_Name,Role_Desc):
                 "message": "Role already exists."
             }
         ), 400
-    new_role = Role(Role_ID, Role_Name,Role_Desc,str(datetime.now()))
- 
+    new_role = Role(Role_ID, Role_Name,Role_Desc)
     try:
         db.session.add(new_role)
         db.session.commit()
@@ -421,50 +419,42 @@ def get_skill_id_by_role(Role_ID):
 
 #mapping skills to role
 
-@app.route("/role/roleassignskills/<string:Role_ID>/<string:Skill_ID>/", methods=['GET','POST'])
-def role_to_course_assignment(Role_ID,Skill_ID):
+@app.route("/role/roleassignskills/<string:Role_ID>/<string:Skill_ID>", methods=['GET','POST'])
+def role_to_skill_assignment(Role_ID,Skill_ID):
+    Skill_ID = Skill_ID.replace("[","")
+    Skill_ID = Skill_ID.replace("]","")
+    skill_arr = Skill_ID.split(",")
+    if_duplicate_err = ""
 
-    if (Role_Assign.query.filter_by(Role_ID = Role_ID,Skill_ID = Skill_ID).first()):
-        return jsonify(
-            {
-                "code": 400,
-                "data": {
+    for skill in skill_arr:
+        print(skill)
+        skip    
+        if (Role_Assign.query.filter(Role_Assign.Role_ID.like(Role_ID),Role_Assign.Skill_ID.like(skill)).first()):
+            if_duplicate_err += str(skill)
+        
+        new_role_assignment = Role_Assign(Role_ID,skill)
+        try:
+            db.session.add(new_role_assignment)
+            db.session.commit()
+        except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "data": {
 
-                    "Role_ID": Role_ID,
-                    "Skill_ID": Skill_ID
-                    
-                },
-                "message": "Role-skill already exists."
-            }
-        ), 400
-    
-    new_role_assignment = Role_Assign(Role_ID,Skill_ID)
-    try:
-        db.session.add(new_role_assignment)
-        db.session.commit()
-    except:
-        return jsonify(
-            {
-                "code": 500,
-                "data": {
-
-                    "Role_ID": Role_ID,
-                    "Skill_ID": Skill_ID
-                    
-                },
-                "message": "An error occurred when assigning the skill to role."
-            }
-        ), 500
- 
+                        "Role_ID": Role_ID,
+                        "Skill_ID": skill
+                        
+                    },
+                    "message": "An error occurred when assigning the skill to role."
+                }
+            ), 500
     return jsonify(
         {
             "code": 201,
             "data": new_role_assignment.json()
         }
     ), 201 
-
-
-
 
 
 
@@ -547,7 +537,6 @@ def create_skill(Skill_ID,Skill_Name,Skill_Desc,Date_created):
 @app.route("/skill/getcourse/<string:Skill_ID>",methods=['GET'])
 def get_course_list_by_Skill(Skill_ID):
     list_ofID = get_course_id_by_skill(Skill_ID)
-
     if list_ofID:
         filtered_list = filterID(list_ofID)
         course_list = Course.query.filter(Course.Course_ID.in_(filtered_list)).all()
@@ -604,8 +593,6 @@ def get_mapped_skill_to_course():
     ), 404
 
 
-#mapping skills to courses
-
 @app.route("/skill/<string:Skill_ID>/<string:Course_ID>/", methods=['GET','POST'])
 def skill_to_course_assignment(Skill_ID,Course_ID):
 
@@ -622,9 +609,6 @@ def skill_to_course_assignment(Skill_ID,Course_ID):
                 "message": "Skill-course already exists."
             }
         ), 400
- 
-    #data = request.get_json()
-    #print("poopo" + data)
     new_skill_assignment = Skill_Assign(Course_ID,Skill_ID)
  
     try:
