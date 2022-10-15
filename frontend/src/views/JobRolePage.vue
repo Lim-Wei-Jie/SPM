@@ -35,13 +35,17 @@
                 Skills
             </p>
             <!-- Skills component -->
-            <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="skillName in skillNames">
+            <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="(courseArr, skill) in coursesBySkillName" :key="skill">
+                <!-- Skill -->
                 <div class="font-medium text-lg mb-5">
-                    {{skillName}}
+                    {{skill}}
                 </div>
+                <!-- Courses -->
                 <div class="grid grid-cols-3 gap-6">
-                    <div class="flex justify-evenly bg-gray-800 rounded-lg">
-                        {{coursesBySkillID}}
+                    <div class="flex justify-evenly" v-for="course of courseArr">
+                        <div class="btn bg-gray-800 rounded-lg w-11/12">
+                            {{course}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -71,8 +75,7 @@ const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const skillNames = ref([])
-// const skillIDs = ref([])
-const coursesBySkillID = ref({}) // key=skillName, value=courseName
+const coursesBySkillName = ref({}) // key=skillName, value=courseName
 
 ;(async() => {
     await Promise.all([
@@ -92,16 +95,15 @@ const coursesBySkillID = ref({}) // key=skillName, value=courseName
                     // get courses with skill IDs
                     const skillID = each.Skill_id
                     const skillName = each.Skill_name
-                    
 
                     getCoursesBySkill(skillID)
                     .then((data) => {
                         for (var each of data) {
-                            // check if skillId exist in object
-                            if (coursesBySkillID.value[skillName]) {
-                                coursesBySkillID.value[skillName].push(each.Course_Name)
+                            // check if skillName exist in object
+                            if (coursesBySkillName.value[skillName]) {
+                                coursesBySkillName.value[skillName].push(each.Course_Name)
                             } else {
-                                coursesBySkillID.value[skillName] = [each.Course_Name]
+                                coursesBySkillName.value[skillName] = [each.Course_Name]
                             }
                         }
                     })
@@ -122,8 +124,6 @@ const coursesBySkillID = ref({}) // key=skillName, value=courseName
         
     ]);
 })();
-
-
 
 function handleEditClick() {
     router.push({
