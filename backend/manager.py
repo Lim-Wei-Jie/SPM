@@ -120,7 +120,6 @@ class Course(db.Model):
         # "inventoryId": self.inventoryId,
         return {"Course_ID": self.Course_ID, "Course_Name": self.Course_Name, "Course_Desc": self.Course_Desc, "Course_Status": self.Course_Status, "Course_Type":self.Course_Type, "Course_Category":self.Course_Category} 
 
-
 class Skill(db.Model):
 
     __tablename__ = 'Skill'
@@ -143,42 +142,36 @@ class Skill(db.Model):
             self.created_time = datetime.utcnow()
         else:
             self.created_time = Date_created
-    
 
 class Skill_Assign(db.Model):
     __tablename__ = 'Skill_Assignment'
-    skill_assignment_id = db.Column(db.Integer, primary_key=True)
-    Course_ID = db.Column(db.Integer, nullable=False, unique=True)
-    Skill_ID = db.Column(db.Integer, nullable=False, unique=True)
 
-    def __init__(self, skill_assignment_id, Course_ID,Skill_ID):
-        self.skill_assignment_id = skill_assignment_id
-        self.Course_ID = Course_ID
+    Course_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+
+    Skill_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+
+    def __init__(self, Skill_ID,Course_ID):
+        
+        
         self.Skill_ID = Skill_ID
+        self.Course_ID = Course_ID
  
     def json(self):
-        return {"skill_assignment_id": self.skill_assignment_id, "Course_ID": self.Course_ID, "Skill_ID": self.Skill_ID} 
-
-
+        return { "Skill_ID": self.Skill_ID,"Course_ID": self.Course_ID } 
 
 class Role_Assign(db.Model):
     __tablename__ = 'Role_Assignment'
-    role_assignment_id = db.Column(db.Integer, primary_key=True)
-    Role_ID = db.Column(db.Integer, nullable=False, unique=True)
-    Skill_ID = db.Column(db.Integer, nullable=False, unique=True)
+    
+    Role_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+    Skill_ID = db.Column(db.Integer, nullable=False, primary_key=True)
 
-    def __init__(self, role_assignment_id, Role_ID,Skill_ID):
-        self.role_assignment_id = role_assignment_id
+    def __init__(self, Role_ID,Skill_ID):
+        
         self.Role_ID = Role_ID
         self.Skill_ID = Skill_ID
  
     def json(self):
-        return {"role_assignment_id": self.role_assignment_id, "Role_ID": self.Role_ID, "Skill_ID": self.Skill_ID} 
-
-
-
-
-
+        return { "Role_ID": self.Role_ID, "Skill_ID": self.Skill_ID} 
 
 # show all inventory
 @app.route("/staff")
@@ -220,7 +213,7 @@ def get_all_role():
         }
     ), 404
 
-@app.route("/role/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>", methods=['POST'])
+@app.route("/role/create/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>", methods=['POST'])
 def create_role(Role_ID,Role_Name,Role_Desc):
 
     if (Role.query.filter_by(Role_ID=Role_ID).first()):
@@ -235,10 +228,7 @@ def create_role(Role_ID,Role_Name,Role_Desc):
                 "message": "Role already exists."
             }
         ), 400
- 
-    #data = request.get_json()
-    #print("poopo" + data)
-    new_role = Role(Role_ID, Role_Name,Role_Desc)
+    new_role = Role(Role_ID, Role_Name,Role_Desc,str(datetime.now()))
  
     try:
         db.session.add(new_role)
@@ -264,7 +254,7 @@ def create_role(Role_ID,Role_Name,Role_Desc):
     ), 201
 
 @app.route('/role/delete/<string:Role_ID>',methods=['DELETE'])
-def deleteInventory(Role_ID):
+def delete_role(Role_ID):
     role = Role.query.filter_by(Role_ID=Role_ID).first()
     if role:
             db.session.delete(role)
@@ -380,7 +370,6 @@ def get_mapped_skill_to_role():
     ), 404
 
 
-
 #get skills from role_ID
 @app.route("/role/getskill/<string:Role_ID>",methods=['GET'])
 def get_skill_list_by_Role(Role_ID):
@@ -430,43 +419,26 @@ def get_skill_id_by_role(Role_ID):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #mapping skills to role
 
-@app.route("/role/<string:role_assignment_id>/<string:Role_ID>/<string:Skill_ID>/", methods=['GET','POST'])
-def role_to_course_assignment(role_assignment_id,Role_ID,Skill_ID):
+@app.route("/role/roleassignskills/<string:Role_ID>/<string:Skill_ID>/", methods=['GET','POST'])
+def role_to_course_assignment(Role_ID,Skill_ID):
 
-    if (Role_Assign.query.filter_by(role_assignment_id = role_assignment_id ).first()):
+    if (Role_Assign.query.filter_by(Role_ID = Role_ID,Skill_ID = Skill_ID).first()):
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "Role_Assignment_ID": role_assignment_id,
+
                     "Role_ID": Role_ID,
                     "Skill_ID": Skill_ID
                     
                 },
-                "message": "Role already exists."
+                "message": "Role-skill already exists."
             }
         ), 400
- 
-    #data = request.get_json()
-    #print("poopo" + data)
-    new_role_assignment = Role_Assign(role_assignment_id,Role_ID,Skill_ID)
- 
+    
+    new_role_assignment = Role_Assign(Role_ID,Skill_ID)
     try:
         db.session.add(new_role_assignment)
         db.session.commit()
@@ -475,7 +447,7 @@ def role_to_course_assignment(role_assignment_id,Role_ID,Skill_ID):
             {
                 "code": 500,
                 "data": {
-                    "Role_Assignment_ID": role_assignment_id,
+
                     "Role_ID": Role_ID,
                     "Skill_ID": Skill_ID
                     
@@ -500,8 +472,6 @@ def role_to_course_assignment(role_assignment_id,Role_ID,Skill_ID):
 
 
 #for skill-course assignment
-
-
 @app.route("/skill")
 def get_all_skill():
     #list
@@ -609,7 +579,6 @@ def get_course_id_by_skill(Skill_ID):
     if skill_list:
         return skill_list    
 
-
 #viewing the skill_assignment table
 @app.route("/skill_course_assignment")
 def get_mapped_skill_to_course():
@@ -637,26 +606,26 @@ def get_mapped_skill_to_course():
 
 #mapping skills to courses
 
-@app.route("/skill/<string:skill_assignment_id>/<string:Skill_ID>/<string:Course_ID>/", methods=['GET','POST'])
-def skill_to_course_assignment(skill_assignment_id,Skill_ID,Course_ID):
+@app.route("/skill/<string:Skill_ID>/<string:Course_ID>/", methods=['GET','POST'])
+def skill_to_course_assignment(Skill_ID,Course_ID):
 
-    if (Skill_Assign.query.filter_by(skill_assignment_id = skill_assignment_id ).first()):
+    if (Skill_Assign.query.filter_by(Skill_ID = Skill_ID ,Course_ID=Course_ID).first()):
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "Skill_Assignment_ID": skill_assignment_id,
+                    
                     "Skill_ID": Skill_ID,
                     "Course_ID": Course_ID
                     
                 },
-                "message": "Skill already exists."
+                "message": "Skill-course already exists."
             }
         ), 400
  
     #data = request.get_json()
     #print("poopo" + data)
-    new_skill_assignment = Skill_Assign(skill_assignment_id,Skill_ID,Course_ID)
+    new_skill_assignment = Skill_Assign(Course_ID,Skill_ID)
  
     try:
         db.session.add(new_skill_assignment)
@@ -666,7 +635,7 @@ def skill_to_course_assignment(skill_assignment_id,Skill_ID,Course_ID):
             {
                 "code": 500,
                 "data": {
-                    "Skill_Assignment_ID": skill_assignment_id,
+                    
                     "Skill_ID": Skill_ID,
                     "Course_ID": Course_ID
                 },
