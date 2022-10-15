@@ -130,6 +130,7 @@ export function mapSkillsToJob(skillstoJobRoleData) {
     })
 }
 
+
 // Get specific course using course name
 export function getCourseDetails(Course_Name) {
     // return new Promise((resolve, reject) => {
@@ -146,3 +147,22 @@ export function getCourseDetails(Course_Name) {
     // })
     console.log(Course_Name);
 }
+
+// Delete job role
+export function deleteRole(roleDetailsID) {
+  
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/delete/${roleDetailsID}`
+        axios
+            .post(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to create role, check WAMP/MAMP server');
+            })
+    })
+}
+
+
