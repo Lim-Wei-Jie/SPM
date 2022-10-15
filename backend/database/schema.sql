@@ -157,311 +157,215 @@ INSERT INTO course(Course_ID,Course_Name,Course_Desc,Course_Status,Course_Type,C
 ,('tch019','Innovation and Change Management�','the organization that constantly reinvents itself to be relevant has a better chance of making progress','Active','External','Technical');
 
 INSERT INTO skill(Skill_ID,Skill_name,Skill_Desc,Date_Created) VALUES
- (1,'Facebook','Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.
-
-Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.','2/2/2022')
+ (1,'Facebook','Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.','2/2/2022')
 ,(2,'UB04','Phasellus in felis. Donec semper sapien a libero. Nam dui.','11/19/2021')
 ,(3,'TMA','In congue. Etiam justo. Etiam pretium iaculis justo.','2/13/2022')
 ,(4,'Black Box Testing','Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.
-
 Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.','10/7/2022')
 ,(5,'SGBD','Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.
-
 Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.','8/21/2022')
 ,(6,'Business Journalism','Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.
-
 Fusce consequat. Nulla nisl. Nunc nisl.','3/3/2022')
 ,(7,'Nortel DMS','Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.
-
 In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.
-
 Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.','4/17/2022')
 ,(8,'Social Media Marketing','Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.','8/1/2022')
 ,(9,'Psychotherapy','Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.','7/17/2022')
 ,(10,'Robotics','Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.','12/18/2021')
 ,(11,'Medicine','Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.
-
 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.','1/5/2022')
 ,(12,'IAM','Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.
-
 Phasellus in felis. Donec semper sapien a libero. Nam dui.
-
 Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.','1/1/2022')
 ,(13,'TFM','Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.
-
 Fusce consequat. Nulla nisl. Nunc nisl.','3/20/2022')
 ,(14,'Luxury Homes','Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.
-
 In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.','12/28/2021')
 ,(15,'HDV','Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.
-
 In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.','10/28/2021')
 ,(16,'PTCRB','In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.','5/29/2022')
 ,(17,'DVB-S2','Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.','7/20/2022')
 ,(18,'Quantitative Research','Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.
-
 Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.
-
 Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.','8/27/2022')
 ,(19,'Film','Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.
-
 Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.','10/25/2021')
 ,(20,'Microsoft Dynamics AX','Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.
-
 Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.','9/24/2022')
 ,(21,'GSI','Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.
-
 Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.','3/19/2022')
 ,(22,'Xero','Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.','7/14/2022')
 ,(23,'OGC','Phasellus in felis. Donec semper sapien a libero. Nam dui.','7/31/2022')
 ,(24,'Thermodynamics','Phasellus in felis. Donec semper sapien a libero. Nam dui.
-
 Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.','11/4/2021')
 ,(25,'Evidence','Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.
-
 Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.','7/16/2022')
 ,(26,'Xserve','Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.
-
 Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.
-
 Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.','11/11/2021')
 ,(27,'RMX','Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.
-
 Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.
-
 Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.','2/9/2022')
 ,(28,'Nokia Qt','Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.','1/27/2022')
 ,(29,'Young Adults','Fusce consequat. Nulla nisl. Nunc nisl.','8/18/2022')
 ,(30,'Xytech','Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.
-
 Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.','4/12/2022')
 ,(31,'Project Estimation','Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.
-
 Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.
-
 Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.','12/30/2021')
 ,(32,'Guided Imagery','Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-
 Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.','10/21/2021')
 ,(33,'Corporate FP&amp;A','Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.','1/22/2022')
 ,(34,'SQL Server Management Studio','Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.
-
 Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.','10/20/2021')
 ,(35,'Temporary Placement','Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.
-
 Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.
-
 Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.','12/4/2021')
 ,(36,'MVS','Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.
-
 Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.','3/20/2022')
 ,(37,'PTCRB','Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.','2/18/2022')
 ,(38,'Bridge','Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.
-
 In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.','5/11/2022')
 ,(39,'RBI','Phasellus in felis. Donec semper sapien a libero. Nam dui.','1/22/2022')
 ,(40,'Green Belt','Fusce consequat. Nulla nisl. Nunc nisl.
-
 Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.
-
 In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.','5/13/2022')
 ,(41,'Vaccines','Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.','9/13/2022')
 ,(42,'3D Visualization','Phasellus in felis. Donec semper sapien a libero. Nam dui.','12/7/2021')
 ,(43,'Behavioral Health','Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.
-
 Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.
-
 Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.','1/10/2022')
 ,(44,'Public Safety','Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.','4/18/2022')
 ,(45,'Income Tax','Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.
-
 Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.
-
 Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.','2/3/2022')
-,(46,'Outcomes Research','In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.
-
+,(46,'Outcomes Research','In hc habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.
 Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.','7/25/2022')
 ,(47,'Horticulture','Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.
-
 Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.
-
 Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.','1/21/2022')
 ,(48,'Oil Analysis','Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.
-
 Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.
-
 Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.','1/15/2022')
 ,(49,'Nagios','Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-
 Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.','7/8/2022')
 ,(50,'FMCG','Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.
-
 Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.','3/4/2022'); 
 
 INSERT INTO role(Role_ID,Role_Name,Role_Desc,Date_Created) VALUES
  (1,'Biostatistician I','Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.
-
 Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.
-
 Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.','7/15/2022')
 ,(2,'Geologist II','Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.
-
 In congue. Etiam justo. Etiam pretium iaculis justo.
-
 In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.','7/2/2022')
 ,(3,'Speech Pathologist','Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.
-
 Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.
-
 In congue. Etiam justo. Etiam pretium iaculis justo.','6/3/2022')
 ,(4,'Office Assistant III','Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.
-
 Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.
-
 Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.','3/17/2022')
 ,(5,'Help Desk Operator','Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.
-
 In congue. Etiam justo. Etiam pretium iaculis justo.','9/8/2022')
 ,(6,'Graphic Designer','Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.
-
 Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.','11/29/2021')
 ,(7,'Senior Quality Engineer','Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.
-
 Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.','3/1/2022')
 ,(8,'Desktop Support Technician','Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.
-
 Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.','10/26/2021')
 ,(9,'Geological Engineer','Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.
-
 Fusce consequat. Nulla nisl. Nunc nisl.','7/21/2022')
 ,(10,'Structural Analysis Engineer','Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.','1/31/2022')
 ,(11,'VP Quality Control','Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.
-
 Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.','6/20/2022')
 ,(12,'Programmer Analyst II','Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.
-
 Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.
-
 In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.','11/11/2021')
 ,(13,'Project Manager','Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-
 Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.
-
 Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.','1/5/2022')
 ,(14,'Environmental Specialist','Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-
 Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.
-
 Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.','1/11/2022')
 ,(15,'Editor','Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.
-
 Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.','3/6/2022')
 ,(16,'Health Coach II','Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.','4/18/2022')
 ,(17,'Pharmacist','Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.
-
 Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.','12/15/2021')
 ,(18,'Graphic Designer','Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.
-
 Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.','7/20/2022')
 ,(19,'Actuary','Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.
-
 In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.','3/25/2022')
 ,(20,'Structural Engineer','Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.
-
 Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.','1/7/2022')
 ,(21,'Assistant Manager','Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.','5/17/2022')
 ,(22,'VP Sales','Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.
-
 Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.
-
 Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.','12/4/2021')
 ,(23,'Food Chemist','Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat.
-
 Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.','11/25/2021')
 ,(24,'Budget/Accounting Analyst I','Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.
-
 Sed ante. Vivamus tortor. Duis mattis egestas metus.','12/14/2021')
 ,(25,'Senior Editor','Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.','10/11/2022')
 ,(26,'Software Test Engineer II','Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.','3/8/2022')
 ,(27,'Programmer Analyst II','Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris.','7/3/2022')
 ,(28,'Sales Representative','Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.
-
 Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.
-
 Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.','1/23/2022')
 ,(29,'Speech Pathologist','Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus.
-
 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-
 Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.','9/25/2022')
 ,(30,'Financial Analyst','Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.
-
 Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.
-
 Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.','7/22/2022')
 ,(31,'Mechanical Systems Engineer','Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-
 Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.','10/16/2021')
 ,(32,'Analog Circuit Design manager','Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.','12/22/2021')
 ,(33,'Structural Analysis Engineer','Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.','9/23/2022')
 ,(34,'Staff Accountant II','Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.
-
 Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.
-
 Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.','3/22/2022')
 ,(35,'Mechanical Systems Engineer','Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.','10/30/2021')
 ,(36,'Analog Circuit Design manager','Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.
-
 Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.','6/12/2022')
 ,(37,'Analyst Programmer','Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.
-
-Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.
-
+Nullam sit amet turpis elementum igula vehicula consequat. Morbi a ipsum. Integer a nibh.
 In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.','2/7/2022')
 ,(38,'Dental Hygienist','Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.','9/28/2022')
 ,(39,'VP Sales','Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.','6/11/2022')
 ,(40,'Assistant Manager','Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.
-
 Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.
-
 Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.','12/7/2021')
 ,(41,'Staff Accountant III','Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.
-
 Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.','7/7/2022')
 ,(42,'Health Coach I','Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.
-
 Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-
 Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.','6/29/2022')
 ,(43,'Assistant Media Planner','Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.','9/15/2022')
 ,(44,'Senior Editor','Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.','2/5/2022')
 ,(45,'Senior Sales Associate','In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.
-
 Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.','10/14/2022')
 ,(46,'Senior Cost Accountant','Fusce consequat. Nulla nisl. Nunc nisl.','11/5/2021')
 ,(47,'Assistant Manager','Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.
-
 Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.
-
 In congue. Etiam justo. Etiam pretium iaculis justo.','9/24/2022')
 ,(48,'GIS Technical Architect','In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet.
-
 Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.
-
 Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.','8/14/2022')
 ,(49,'Analog Circuit Design manager','Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.','11/3/2021')
 ,(50,'Sales Representative','Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.','8/21/2022');
  
 
 INSERT INTO `Skill_Assignment` (`skill_assignment_id`, `Course_ID`,`Skill_ID`) VALUES
-(1 , 123456, 1234567),
-(2, 123456, 9741827),
-(3, 974182, 9741827); 
+(1 , 'COR001', 42),
+(2, 'FIN002', 18),
+(3, 'tch006', 18),
+(4, 'tch006', 15); 
 
 INSERT INTO `Role_Assignment` (`role_assignment_id`, `Role_ID`,`Skill_ID`) VALUES
-(1 , 123456, 1234567),
-(2, 123456, 9741827),
-(3, 974182, 9741827); 
+(1 , 2, 12),
+(2, 32, 14),
+(3, 46, 36); 
 
 INSERT INTO registration(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status) VALUES
  (1,'COR002',130001,'Registered','Completed')
