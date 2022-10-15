@@ -55,6 +55,31 @@ class Skill(db.Model):
         else:
             self.created_time = Date_created
     
+
+class Registration(db.Model):
+    __tablename__ = 'registration'
+
+    Reg_ID = db.Column(db.Integer, primary_key=True)
+    Course_ID = db.Column(db.String(64), nullable=False)
+    Staff_ID = db.Column(db.String(255), nullable=False)
+    Reg_Status = db.Column(db.String(64), nullable=False)
+    Completion_Status = db.Column(db.String(64), nullable=False)
+  
+
+    def json(self):
+        return {"reg_id": self.Reg_ID, "course_id": self.Course_ID , "staff_id": self.Staff_ID, "reg_status": self.Reg_Status, "completion_status":self.Completion_Status}
+    
+    
+    def __init__(self, Reg_ID, Course_ID, Staff_ID, Reg_Status,Completion_Status):
+        self.Reg_ID = Reg_ID 
+        self.Course_ID = Course_ID
+        self.Staff_ID = Staff_ID
+        self.Reg_Status = Reg_Status
+        self.Completion_Status = Completion_Status
+       
+
+
+
     
     
 

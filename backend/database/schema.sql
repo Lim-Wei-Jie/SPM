@@ -152,6 +152,7 @@ INSERT INTO `role` (`Role_ID`, `Role_Name`,`Role_Desc`,`Date_Created` ) VALUES
 INSERT INTO `registration` (`Reg_ID`, `Course_ID`,`Staff_ID`,`Reg_Status`,`Completion_Status` ) VALUES
 (12345655 , 123456, 123456, 'Waitlist', 'Incomplete'),
 (97418255, 974182, 974182, 'Registered', 'Incomplete'); 
+(9741825, 74182, 9182, 'Registered', 'Incomplete'); 
 
 INSERT INTO `Skill_Assignment` (`skill_assignment_id`, `Course_ID`,`Skill_ID`) VALUES
 (1 , 123456, 1234567),

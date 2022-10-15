@@ -22,7 +22,7 @@ class Skill(db.Model):
     Skill_name = db.Column(db.String(64), nullable=False)
     Skill_desc = db.Column(db.String(255), nullable=False)
     Date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    course_ids = 
+
 
 
 
@@ -45,3 +45,21 @@ class Course(db.Model):
 
     def json(self):
         return {"course_id": self.course_id, "course_name": self.course_name, "course_desc": self.course_desc, "course_status": self.course_status}
+    
+    
+    
+    
+class Registration(db.Model):
+    __tablename__ = 'registration'
+
+    reg_id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.String(64), nullable=False)
+    staff_id = db.Column(db.String(255), nullable=False)
+    reg_status = db.Column(db.String(64), nullable=False)
+    completion_status = db.Column(db.String(64), nullable=False)
+  
+
+    def json(self):
+        return {"reg_id": self.reg_id, "course_id": self.course_id, "staff_id": self.staff_id, "reg_status": self.course_status, "completion_status":self.completion_status}
+
+
