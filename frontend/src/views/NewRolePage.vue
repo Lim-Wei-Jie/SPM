@@ -113,22 +113,23 @@ const errors = ref([]);
 const skillstoJobRoleData = ref();
 const hasJobError = ref(false);
 const jobError = ref();
+const skills = ref([]);
 
 
-const skills = ref([
-      {
-        "Skill_desc": "MES Desc", 
-        "Skill_id": 1234567, 
-        "Skill_name": "Mechanical Engineeri", 
-        "Skill_status": null
-      }, 
-      {
-        "Skill_desc": "CES Desc", 
-        "Skill_id": 9741827, 
-        "Skill_name": "Computer Science Ski", 
-        "Skill_status": null
-      }
-    ]);
+
+//       {
+//         "Skill_desc": "MES Desc", 
+//         "Skill_id": 1234567, 
+//         "Skill_name": "Mechanical Engineeri", 
+//         "Skill_status": null
+//       }, 
+//       {
+//         "Skill_desc": "CES Desc", 
+//         "Skill_id": 9741827, 
+//         "Skill_name": "Computer Science Ski", 
+//         "Skill_status": null
+//       }
+//     ]);
 
 function display(){
     // console.log(new_job_title.value);
@@ -152,18 +153,18 @@ function display(){
 }
 
 // get all skills
-// ;(async() => {
-//     await getAllSkills()
-//     .then((skills) => {
-//         for (var skill of skills) {
-//             skills.value.push(skill.skill_Name)
-//         }
-//         numOfSkills.value = skills.value.length
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
-// })();
+;(async() => {
+    await getAllSkills()
+    .then((skills) => {
+        for (var skill of skills) {
+            skills.value.push(skill.skill_Name)
+        }
+        numOfSkills.value = skills.value.length
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+})();
 
 // error from creating job role
 ;(async() => {
