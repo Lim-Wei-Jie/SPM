@@ -117,7 +117,7 @@ export function getAllSkills() {
 // Mapping skills to role
 export function mapSkillsToJob(skillstoJobRoleData) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}"/role/<string:role_assignment_id>/<string:Role_ID>/<string:Skill_ID>/"`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/<string:role_assignment_id>/<string:Role_ID>/<string:Skill_ID>`
         axios
             .post(apiEndpoint)
             .then((res) => {
@@ -130,3 +130,19 @@ export function mapSkillsToJob(skillstoJobRoleData) {
     })
 }
 
+// Get specific course using course name
+export function getCourseDetails(Course_Name) {
+    // return new Promise((resolve, reject) => {
+    //     let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/searchcourse/${Course_Name}`
+    //     axios
+    //         .get(apiEndpoint)
+    //         .then((res) => {
+    //             resolve(res.data.data)
+    //         })
+    //         .catch((err) => {
+    //             console.log(err.message);
+    //             reject('Fail to fetch all skills, check WAMP/MAMP server')
+    //         })
+    // })
+    console.log(Course_Name);
+}

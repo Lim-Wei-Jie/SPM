@@ -2,7 +2,7 @@
 <!-- eslint-disable -->
     <NavBar/>
     <div class="container mx-auto my-8 ">
-        <!-- Breadcrumbs -->
+        <!-- Breadcrumbs component -->
         <div class="text-sm breadcrumbs">
             <ul>
                 <li><a>Home</a></li> 
@@ -43,21 +43,32 @@
                 <!-- Courses -->
                 <div class="grid grid-cols-3 gap-6">
                     <div class="flex justify-evenly" v-for="course of courseArr">
-                        <div class="btn bg-gray-800 rounded-lg w-11/12">
+                        <!-- Course Modal component -->
+                        <label for="course-modal" class="btn modal-button bg-gray-800 rounded-lg w-11/12" @click="getCourseDetails(course)">
                             {{course}}
-                        </div>
+                        </label>
+                        <!-- Modal pop-up -->
+                        <input type="checkbox" id="course-modal" class="modal-toggle" />
+                        <label for="course-modal" class="modal cursor-default">
+                            <label class="modal-box relative" for="">
+                                <label for="course-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                            </label>
+                        </label>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    
 </template>
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getSkillsByRole, getCoursesBySkill } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getSkillsByRole, getCoursesBySkill, getCourseDetails } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 
