@@ -25,8 +25,7 @@
                 Job Role Description
             </p>
             <p>
-                {{roleDetailsDesc}}. The Software Engineer / Officer (Engineering Procurement) is responsible for providing administrative support for procurement activities. He/She coordinates with internal teams to gather requirements for procurement, with
-                vendors for managing delivery schedules, and prepares purchase orders. He maintains documents and reports schedules material purchases and deliveries and performs verification of current inventory. He is comfortable in engaging and interacting with internal and external stakeholders, and is able to multi-task in a fast-paced work environment.
+                {{roleDetailsDesc}}
             </p>
         </div>
         <!-- Skills -->
