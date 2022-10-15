@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `Skill_Assignment`(
 PRIMARY KEY (`skill_assignment_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `role_assignment`(
+CREATE TABLE IF NOT EXISTS `Role_assignment`(
 `role_assignment_id` int(11) NOT NULL,
 `Role_ID` varchar(20) NOT NULL,
 `Skill_ID` varchar(20) NOT NULL,

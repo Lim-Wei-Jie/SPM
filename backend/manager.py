@@ -577,30 +577,29 @@ def create_skill(Skill_ID,Skill_Name,Skill_Desc,Date_created):
 @app.route("/skill/getcourse/<string:Skill_ID>",methods=['GET'])
 def get_course_list_by_Skill(Skill_ID):
     list_ofID = get_course_id_by_skill(Skill_ID)
-    filtered_list = filterID(list_ofID)
-    course_list = Course.query.filter(Course.Course_ID.in_(filtered_list)).all()
 
-    if course_list:
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                        "Course": [course.json() for course in course_list]
-                }            
-            }
-        )
+    if list_ofID:
+        filtered_list = filterID(list_ofID)
+        course_list = Course.query.filter(Course.Course_ID.in_(filtered_list)).all()
+        if course_list:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                            "Course": [course.json() for course in course_list]
+                    }            
+                }
+            )
     return jsonify(
         {
             "code": 404,
-            "message": "There is no such role"
+            "message": "There is no course"
         }
     ), 404
-
 #filter only courseID
 def filterID(list_of_id):
     list_onlyID = []
     for data in list_of_id:
-        #print(data.Skill_ID)
         list_onlyID.append(str(getattr(data,"Course_ID")))
     return list_onlyID
 
@@ -608,13 +607,7 @@ def filterID(list_of_id):
 def get_course_id_by_skill(Skill_ID):
     skill_list = Skill_Assign.query.filter_by(Skill_ID=Skill_ID).all()
     if skill_list:
-        return skill_list
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There is no such role"
-        }
-    ), 404
+        return skill_list    
 
 
 #viewing the skill_assignment table
