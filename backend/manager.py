@@ -120,7 +120,6 @@ class Course(db.Model):
         # "inventoryId": self.inventoryId,
         return {"Course_ID": self.Course_ID, "Course_Name": self.Course_Name, "Course_Desc": self.Course_Desc, "Course_Status": self.Course_Status, "Course_Type":self.Course_Type, "Course_Category":self.Course_Category} 
 
-
 class Skill(db.Model):
 
     __tablename__ = 'Skill'
@@ -143,7 +142,6 @@ class Skill(db.Model):
             self.created_time = datetime.utcnow()
         else:
             self.created_time = Date_created
-    
 
 class Skill_Assign(db.Model):
     __tablename__ = 'Skill_Assignment'
@@ -159,8 +157,6 @@ class Skill_Assign(db.Model):
     def json(self):
         return {"skill_assignment_id": self.skill_assignment_id, "Course_ID": self.Course_ID, "Skill_ID": self.Skill_ID} 
 
-
-
 class Role_Assign(db.Model):
     __tablename__ = 'Role_Assignment'
     role_assignment_id = db.Column(db.Integer, primary_key=True)
@@ -174,11 +170,6 @@ class Role_Assign(db.Model):
  
     def json(self):
         return {"role_assignment_id": self.role_assignment_id, "Role_ID": self.Role_ID, "Skill_ID": self.Skill_ID} 
-
-
-
-
-
 
 # show all inventory
 @app.route("/staff")
@@ -235,9 +226,6 @@ def create_role(Role_ID,Role_Name,Role_Desc):
                 "message": "Role already exists."
             }
         ), 400
- 
-    #data = request.get_json()
-    #print("poopo" + data)
     new_role = Role(Role_ID, Role_Name,Role_Desc)
  
     try:
