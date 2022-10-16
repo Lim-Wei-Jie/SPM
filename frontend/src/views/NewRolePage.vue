@@ -12,7 +12,7 @@
                         <h1 class="font-bold text-2xl">Creating Job Role</h1>
                         <h3 class="font-bold text-xl">Job Title</h3>
                         <div id="j-title" class="grid grid-cols-2">
-                            <input type="text" id="job-title" name="job-title" class="text-xl bg-gray-100 py-2 " placeholder="Enter Name of Job Role" style="width:700px"  v-model="new_job_title">
+                            <input type="text" v-bind:id="newRoleID" name="job-title" class="text-xl bg-gray-100 py-2 " placeholder="Enter Name of Job Role" style="width:700px"  v-model="new_job_title">
                             
                         </div>
                         <div id="j-des" class="space-y-2 w-4/6">
@@ -40,7 +40,7 @@
                             <div class="card w-80 bg-base-100 shadow-xl">
                                 <fieldset>      
                                     <!-- <legend>What is Your Favorite Pet?</legend>       -->
-                                    <input type="checkbox" v-bind:value="skill.Skill_name" v-bind:id="skill.Skill_id" v-model="selectedSkill" class="m-3">{{skill.Skill_name}} <br>    
+                                    <input type="checkbox" v-bind:value="skill.Skill_Name" v-bind:id="skill.Skill_Id" v-model="selectedSkills" class="m-3">{{skill.Skill_Name}} <br>    
                                 </fieldset> 
                             </div>           
                                
@@ -51,7 +51,7 @@
                 </div>
                 <!-- modal pop up for errors-->
                 <div v-if="hasErros">
-                    <label class="btn" for="my-modal">Erros</label>
+                    <label for="my-modal"></label>
                     <input type="checkbox" id="my-modal" class="modal-toggle" />
                             <div class="modal">
                                 <div class="modal-box">
@@ -84,7 +84,7 @@
                                 <div class="modal-box">
                                     <div class="modal-action">
                                         <h4>{{jobError}}</h4>
-                                    <label for="my-modal" class="btn btn-outline btn-error">Ok</label>
+                                    <label for="my-modal" class="btn btn-outline btn-error" v-on:click="clearErrors()">Ok</label>
                                     </div>
                                 </div>
                             </div>
@@ -100,36 +100,38 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { createRole } from '@/endpoint/endpoint.js'
-import { getAllSkills } from "@/endpoint/endpoint.js";
+import { getAllSkills, getAllRoles } from "@/endpoint/endpoint.js";
 import { mapSkillsToJob } from "@/endpoint/endpoint.js";
 
 const new_job_title = ref();
 const new_job_des = ref();
 const newJobRoleData = ref([]);
-const selectedSkill = ref([]);
+const selectedSkills = ref([]);
 const numOfSkills = ref();
 const hasErros = ref(false);
 const errors = ref([]);
-const skillstoJobRoleData = ref();
+const skillstoJobRoleData = ref([]);
 const hasJobError = ref(false);
 const jobError = ref();
-const skills = ref([]);
+// const skills = ref([]);
+const newRoleID = ref();
+const jobRoles = ref([])
+const numOfJobRoles = ref()
 
-
-
-//       {
-//         "Skill_desc": "MES Desc", 
-//         "Skill_id": 1234567, 
-//         "Skill_name": "Mechanical Engineeri", 
-//         "Skill_status": null
-//       }, 
-//       {
-//         "Skill_desc": "CES Desc", 
-//         "Skill_id": 9741827, 
-//         "Skill_name": "Computer Science Ski", 
-//         "Skill_status": null
-//       }
-//     ]);
+const skills = ref([
+      {
+        "Skill_Desc": "MES Desc", 
+        "Skill_Id": 1234567, 
+        "Skill_Name": "Mechanical Engineeri", 
+        "Skill_Status": null
+      }, 
+      {
+        "Skill_Desc": "CES Desc", 
+        "Skill_Id": 9741827, 
+        "Skill_Name": "Computer Science Ski", 
+        "Skill_Status": null
+      }
+    ]);
 
 function display(){
     // console.log(new_job_title.value);
@@ -141,15 +143,25 @@ function display(){
         errors.value.push('enter job description');
         hasErros.value = true;
     }
-    if(selectedSkill.value.length == 0){
+    if(selectedSkills.value.length == 0){
         errors.value.push('select at least 1 skill');
         hasErros.value = true;
     }
     //console.log(selectedSkill);
     // this.newJobRoleData.push(this.new_job_title, this.new_job_des, this.selectedSkill);
-    newJobRoleData.value.push(new_job_title.value, new_job_des.value);
+    newJobRoleData.value.push(newRoleID.value, new_job_title.value, new_job_des.value);
     //console.log(this.newJobRoleData);
-    skillstoJobRoleData.value.push()
+
+    //need to push both job id and skill id 
+    skillstoJobRoleData.value.push(newRoleID.value,selectedSkills.value);
+
+}
+
+function clearErrors(){
+    // while(errors.value.length > 0) {
+    // errors.value.pop();
+    // }
+    // errors.value.splice(0, errors.value.length)
 }
 
 // get all skills
@@ -157,9 +169,24 @@ function display(){
     await getAllSkills()
     .then((skills) => {
         for (var skill of skills) {
-            skills.value.push(skill.skill_Name)
+            skills.value.push(skill)
         }
         numOfSkills.value = skills.value.length
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+})();
+
+// get the most recent role id and +1 to create new role id
+;(async() => {
+    await getAllRoles()
+    .then((roles) => {
+        for (var role of roles) {
+            jobRoles.value.push(role.Role_Name)
+        }
+        numOfJobRoles.value = jobRoles.value.length
+        newRoleID.value = numOfJobRoles + 1;
     })
     .catch((err) => {
         console.log(err);

@@ -66,13 +66,14 @@ export function getCoursesBySkill(skillID) {
 
 // Create job role
 export function createRole(newJobRoleData) {
-    var role_name = newJobRoleData[0];
-    var role_des = newJobRoleData[1];
+    var role_id = newJobRoleData[0];
+    var role_name = newJobRoleData[1];
+    var role_des = newJobRoleData[2];
     // var BE_error = false;
     // var job_err_msg = '';
 
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/<string:Role_ID>/${role_name}/${role_des}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/${role_id}/${role_name}/${role_des}`
         axios
             .post(apiEndpoint)
             .then((res) => {
@@ -116,8 +117,10 @@ export function getAllSkills() {
 
 // Mapping skills to role
 export function mapSkillsToJob(skillstoJobRoleData) {
+    var role_id = newJobRoleData[0];
+
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/<string:role_assignment_id>/<string:Role_ID>/<string:Skill_ID>`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${role_id}/<string:Skill_ID>/`
         axios
             .post(apiEndpoint)
             .then((res) => {
