@@ -235,11 +235,11 @@ def create_role(Role_ID,Role_Name,Role_Desc):
                 "message": "Role already exists."
             }
         ), 400
- 
+
     #data = request.get_json()
     #print("poopo" + data)
     new_role = Role(Role_ID, Role_Name,Role_Desc)
- 
+
     try:
         db.session.add(new_role)
         db.session.commit()

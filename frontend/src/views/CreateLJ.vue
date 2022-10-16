@@ -31,6 +31,9 @@
             <p class="text-2xl font-medium">
                 Skills
             </p>
+            <!--
+            <div v-for="skill in skillsList" class="bg-gray-300 rounded-lg my-6 p-8 space-y-4"></div>
+            -->
             <div v-for="(courseList, skillName) in LearningJourney.skills" class="bg-gray-300 rounded-lg my-6 p-8 space-y-4">
                 <p class="text-lg font-normal">
                     {{ skillName }}
@@ -53,20 +56,42 @@
                             </div>
                         </div>
                     </div>
-                    <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12">Add Course</label>
+                    <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12" @click="getAllCourses(skill[0])">Add Course</label>
                     <!-- modal pop up to add course-->
                     <input type="checkbox" id="addCourseModal" class="modal-toggle" />
                     <div class="modal">
-                        <div class="modal-box h-fit">
+                        <div class="modal-box h-fit w-11/12">
                             <h3 class="font-bold text-lg">{{ skillName }}</h3>
+                            <!--
+                            <h3 class="font-bold text-lg">{{ skill[1] }}</h3>
+                            -->
                             <ul>
-                                <li v-for="(courseDes, courseName) in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
-                                    <p>{{ courseName }}</p>
+                                <!--
+                                <li v-for="course in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
+                                -->
+                                <li v-for="(courseDes, courseName) in coursesList.courses" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
+                                    <div class="flex justify-between">
+                                        <!--
+                                        <p>{{ course[1] }}</p>
+                                        -->
+                                        <p>{{ courseName }}</p>
+                                        <!--
+                                        <input type="checkbox" v-model="selectedCourses" :id="course[0]" :value="course[1]" class="checkbox" />
+                                        -->
+                                        <input type="checkbox" v-model="selectedCourses" :id="courseName" :value="courseName" class="checkbox" />
+                                    </div>
+                                    <!--
+                                    <p>{{ course[2] }}</p>
+                                    -->
                                     <p>{{ courseDes }}</p>
                                 </li>
                             </ul>
+                            <p>selected courses: {{selectedCourses}}</p>
                             <div class="modal-action">
-                                <label for="my-modal" class="btn btn-outline btn-success" @click="addCourse(courseName)">Add Course</label>
+                                <!--
+                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skillName)">Add Course</label>
+                                -->
+                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skillName)">Add Course</label>
                             </div>
                         </div>
                     </div>
@@ -74,23 +99,25 @@
             </div>
         </div>
         <!-- send edited data back-->
-        <button class="btn btn-outline btn-success" @click="createLJ()">Create Learning Journey</button>
+        <label for="my-modal" class="btn btn-outline btn-success" @click="createLJ()">Create Learning Journey</label>
     </div>
 </template>
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
-import { ref, toRefs, onBeforeMount } from 'vue'
+import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getAllSkills,  getCourses} from "@/endpoint/endpoint.js";
+import { getRoleDetails, getSkillsByRole,  getCourses} from "@/endpoint/endpoint.js";
 
+//route back for breadcrumb
 const router = useRouter()
-function JobRolePage() {
-    router.push('/staff/searchRole')
-}
 function HomePage() {
     router.push('/staff')
 }
+function JobRolePage() {
+    router.push('/staff/searchRole')
+}
+
 
 const props = defineProps({
     jobRoleName: {
@@ -101,11 +128,12 @@ const props = defineProps({
 const { jobRoleName } = toRefs(props)
 const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
 
+//JOB ROLE
 const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 
-onBeforeMount(async() => {
+;(async() => {
     await getRoleDetails(roleName)
     .then((role) => {
         roleDetailsName.value = role.Role_Name
@@ -114,15 +142,58 @@ onBeforeMount(async() => {
     }).catch((err) => {
         console.log(err);
     });
-});
+})();
 
-function handleEditClick() {
-    router.push({
-        path: '/editRole'
-    })
+
+//SKILLS
+const skillsList = ref()
+
+;(async() => {
+    await getSkillsByRole(roleDetailsID)
+    .then((skills) => {
+        for(var skill of skills){
+            var skillDetails = [skill.Skill_ID, skill.Skill_Name, skill.Skill_Desc]
+            skillsList.value += skillDetails
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
+})();
+
+//COURSES
+const courseList = ref()
+
+function getAllCourses(skillID) {
+    ;(async() => {
+        await getCourses(skillID)
+        .then((courses) => {
+            for (var course of courses) {
+                var courseDetails = [course.Course_ID, course.Course_Name, course.Course_Desc]
+                courseList += courseDetails
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    })();
 }
 
-const LearningJourney = ref({
+
+
+function addCourse() {
+
+}
+
+function deleteCourse() {
+
+}
+
+function createLJ() {
+
+}
+
+
+//FAKE DATA
+var LearningJourney = ref({
     jobRoleName: "Mechanical Engineeri",
     skills: {
         "skill1": {},
@@ -131,7 +202,7 @@ const LearningJourney = ref({
     }
 })
 
-const courseList = ref({
+const coursesList = ref({
     skillName: "skill",
     courses: {
         "course1": "course description 1",
@@ -141,6 +212,26 @@ const courseList = ref({
         "course5": "course description 5"
     }
 })
+
+const skillListFake = ref(
+    [1, "Facebook", "Duis consequat dui n"],
+    [2, "UB04", "Phasellus in felis."],
+    [3, "TMA", "In congue. Etiam jus"]
+)
+const selectedCourses = ref([])
+
+
+function addCourse(selectedCourses, skillName) {
+    for (course in selectedCourses.value) {
+        var addCourseDes = coursesList.courses[course]
+        console.log(addCourseDes)
+    }
+    //call backend route
+    console.log('done')
+    console.log(LearningJourney.value.skills[skillName])
+    selectedCourses = []
+}
+
 
 </script>
 

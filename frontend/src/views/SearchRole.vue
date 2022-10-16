@@ -18,6 +18,7 @@
             </div>
             
             <p>v-modal test: {{searchQuery}}</p>
+            <button class="btn" @click="createLJ(selectedJobRole)">temporary</button>
         </div>
     </div>
 </template>

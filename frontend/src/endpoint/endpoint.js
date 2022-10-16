@@ -79,3 +79,19 @@ export function createRole(newJobRoleData) {
             })
     })
 }
+
+// Get all skills using Job Role ID / Name
+export function get_skill_list_by_Role(roleID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/getskill/<string:Role_ID>`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch all skills, check WAMP/MAMP server')
+            })
+    })
+}
