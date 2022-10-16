@@ -334,6 +334,27 @@ def get_all_registration():
             "message": "There are no registration."
         }
     ), 404
+    
+    
+
+@app.route("/Registration/<string:Staff_ID>")
+def get_registration_staff(Staff_ID):
+    #list
+    Regis = Registration.query.filter_by(Staff_ID = Staff_ID).all()
+    if len(Regis):
+        return jsonify(
+            {
+                "code": 200,
+                "registration": [Reg.json() for Reg in Regis]
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "registration not found."
+        }
+    ), 404
+
 
 
   
@@ -394,6 +415,9 @@ def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
             "data": new_registration.json()
         }
     ), 201 
+    
+    
+    
 
 
 
