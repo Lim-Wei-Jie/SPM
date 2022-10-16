@@ -186,7 +186,7 @@ function clearErrors(){
             jobRoles.value.push(role.Role_Name)
         }
         numOfJobRoles.value = jobRoles.value.length
-        newRoleID.value = numOfJobRoles + 1;
+        newRoleID.value = numOfJobRoles + 1; // backend will remove Role_ID
     })
     .catch((err) => {
         console.log(err);
