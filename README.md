@@ -2,9 +2,10 @@
 #### For a feature to be considered done, it has to fulfil the following criteria:
 * Fulfil acceptance criteria defined in the User Story
 * Pass all test-cases created for the User Story
+## Test-Driven Development (TDD)
+* Python TDD framework: Unittest
 ## Branching Strategy
-* Feature-based, each branch is for each feature <br>
-#### Test-Driven Development (TDD)
+* Feature-based, each branch is for each feature
 * When a feature fulfils DoD, merge the feature branch into the main branch for other branches to merge main branch into their branch, so that they know that the feature fulfils DoD and they can access the features
 * Refactoring of code can be done after
 ## Merge Conflict rule
