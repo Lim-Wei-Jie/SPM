@@ -91,7 +91,7 @@
                                 <!--
                                 <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skillName)">Add Course</label>
                                 -->
-                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skillName)">Add Course</label>
+                                <label for="addCourseModal" class="btn btn-outline btn-success">Add Course</label>
                             </div>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getSkillsByRole,  getCourses} from "@/endpoint/endpoint.js";
+import { getRoleDetails} from "@/endpoint/endpoint.js"; //getSkillsByRole,  getCourses
 
 //route back for breadcrumb
 const router = useRouter()
@@ -144,7 +144,7 @@ const roleDetailsDesc = ref()
     });
 })();
 
-
+/*
 //SKILLS
 const skillsList = ref()
 
@@ -159,6 +159,7 @@ const skillsList = ref()
         console.log(err);
     });
 })();
+
 
 //COURSES
 const courseList = ref()
@@ -190,7 +191,7 @@ function deleteCourse() {
 function createLJ() {
 
 }
-
+*/
 
 //FAKE DATA
 var LearningJourney = ref({
