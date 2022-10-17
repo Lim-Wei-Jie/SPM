@@ -310,6 +310,115 @@ def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
         }
     ), 404
  
+ 
+
+@app.route("/Registration")
+def get_all_registration():
+    #list
+    Reglist = Registration.query.all()
+    if len(Reglist):
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    
+                    #turn python data into javascript object
+                    "registration": [Reg.json() for Reg in Reglist]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no registration."
+        }
+    ), 404
+    
+    
+
+@app.route("/Registration/<string:Staff_ID>")
+def get_registration_staff(Staff_ID):
+    #list
+    Regis = Registration.query.filter_by(Staff_ID = Staff_ID).all()
+    if len(Regis):
+        return jsonify(
+            {
+                "code": 200,
+                "registration": [Reg.json() for Reg in Regis]
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "registration not found."
+        }
+    ), 404
+
+
+
+  
+
+@app.route("/Registration/addRegis/<string:Reg_ID>/<string:Course_ID>/<string:Staff_ID>/<string:Reg_Status>/<string:Completion_Status>",methods=['GET','POST'])
+def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
+    
+
+    
+    
+    if (Registration.query.filter_by(Reg_ID = Reg_ID).first()):
+        return jsonify(
+            {
+                "code": 464,
+                "data": {
+                    "reg_id": Reg_ID,
+                    "course_id": Course_ID,
+                    "staff_id": Staff_ID,
+                    "reg_status":Reg_Status,
+                    "completion_status":Completion_Status
+                },
+                "message": "Registration already exists."
+            }
+        ), 400
+ 
+
+    #data = request.get_json()
+    #print("poopo" + data)
+    
+   
+    
+    new_registration = Registration(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status)
+
+
+    
+    try:
+        db.session.add(new_registration)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "reg_id": Reg_ID,
+                    "course_id": Course_ID,
+                    "staff_id": Staff_ID,
+                    "reg_status":Reg_Status,
+                    "completion_status":Completion_Status
+                   
+                },
+                "message": "An error occurred creating the registration."
+            }
+        ), 500
+ 
+    return jsonify(
+        {
+            "code": 201,
+            "data": new_registration.json()
+        }
+    ), 201 
+    
+    
+    
+
 
 
 if __name__ == '__main__':

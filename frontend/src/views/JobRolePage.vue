@@ -25,7 +25,7 @@
                 Job Role Description
             </p>
             <p>
-                {{roleDetailsDesc}}The Software Engineer / Officer (Engineering Procurement) is responsible for providing administrative support for procurement activities. He/She coordinates with internal teams to gather requirements for procurement, with
+                {{roleDetailsDesc}}. The Software Engineer / Officer (Engineering Procurement) is responsible for providing administrative support for procurement activities. He/She coordinates with internal teams to gather requirements for procurement, with
                 vendors for managing delivery schedules, and prepares purchase orders. He maintains documents and reports schedules material purchases and deliveries and performs verification of current inventory. He is comfortable in engaging and interacting with internal and external stakeholders, and is able to multi-task in a fast-paced work environment.
             </p>
         </div>
@@ -34,9 +34,15 @@
             <p class="text-2xl font-medium">
                 Skills
             </p>
-            <div class="grid grid-cols-3 gap-6 bg-gray-700 rounded-lg my-6 p-8">
-                <div class="flex justify-evenly">
-                    
+            <!-- Skills component -->
+            <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="skillName in skillNames">
+                <div class="font-medium text-lg mb-5">
+                    {{skillName}}
+                </div>
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="flex justify-evenly bg-gray-800 rounded-lg">
+                        {{coursesBySkillID}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,7 +53,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getSkillsByRole, getCoursesBySkill } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 
@@ -60,20 +66,64 @@ const props = defineProps({
 const { jobRoleName } = toRefs(props)
 const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
 
+// can try reactive()
 const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
+const skillNames = ref([])
+// const skillIDs = ref([])
+const coursesBySkillID = ref({}) // key=skillName, value=courseName
 
-onBeforeMount(async() => {
-    await getRoleDetails(roleName)
-    .then((role) => {
-        roleDetailsName.value = role.Role_Name
-        roleDetailsID.value = role.Role_ID
-        roleDetailsDesc.value = role.Role_Desc
-    }).catch((err) => {
-        console.log(err);
-    });
-});
+;(async() => {
+    await Promise.all([
+        // get role name, ID, and description
+        getRoleDetails(roleName)
+        .then((role) => {
+            roleDetailsName.value = role.Role_Name
+            roleDetailsID.value = role.Role_ID
+            roleDetailsDesc.value = role.Role_Desc
+
+            // get skills with role ID
+            getSkillsByRole(roleDetailsID.value)
+            .then((data) => {
+                for (var each of data) {
+                    skillNames.value.push(each.Skill_name)
+
+                    // get courses with skill IDs
+                    const skillID = each.Skill_id
+                    const skillName = each.Skill_name
+                    
+
+                    getCoursesBySkill(skillID)
+                    .then((data) => {
+                        for (var each of data) {
+                            // check if skillId exist in object
+                            if (coursesBySkillID.value[skillName]) {
+                                coursesBySkillID.value[skillName].push(each.Course_Name)
+                            } else {
+                                coursesBySkillID.value[skillName] = [each.Course_Name]
+                            }
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                }
+
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+        })
+        .catch((err) => {
+            console.log(err);
+        }),
+        
+    ]);
+})();
+
+
 
 function handleEditClick() {
     router.push({

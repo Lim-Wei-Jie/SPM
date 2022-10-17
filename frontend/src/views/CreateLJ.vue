@@ -107,7 +107,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails} from "@/endpoint/endpoint.js"; //getSkillsByRole,  getCourses
+import { getRoleDetails, getSkillsByRole, getCoursesBySkill} from "@/endpoint/endpoint.js";
 
 //route back for breadcrumb
 const router = useRouter()

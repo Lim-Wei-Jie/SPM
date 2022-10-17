@@ -53,17 +53,19 @@ const router = useRouter()
 const jobRoles = ref([])
 const numOfJobRoles = ref()
 
-onMounted(async() => {
+// get all roles
+;(async() => {
     await getAllRoles()
     .then((roles) => {
         for (var role of roles) {
             jobRoles.value.push(role.Role_Name)
         }
         numOfJobRoles.value = jobRoles.value.length
-    }).catch((err) => {
+    })
+    .catch((err) => {
         console.log(err);
     });
-});
+})();
 
 function handleJobRoleClick(jobRoleName) {
     router.push({
