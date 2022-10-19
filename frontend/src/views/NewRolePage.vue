@@ -1,98 +1,91 @@
 <template>
-    <!-- eslint-disable -->
-   
-    <div id="app1">
-        <NavBar/>
+<!-- eslint-disable -->
+    <NavBar/>
+    <div class="container mx-auto my-8">
+        <div class="auto-row-max space-y-2">
+            <div id="j-info" class="space-y-2">
+                <h1 class="font-bold text-2xl">Creating Job Role</h1>
+                <h3 class="font-bold text-xl">Job Title</h3>
+                <div id="j-title" class="grid grid-cols-2">
+                    <input type="text" v-bind:id="newRoleID" name="job-title" class="text-xl bg-gray-100 py-2 " placeholder="Enter Name of Job Role" style="width:700px"  v-model="new_job_title">
+                    
+                </div>
+                <div id="j-des" class="space-y-2 w-4/6">
+                    
+                    <h3 class="font-bold text-xl">Job Description</h3>
+                        <input type="text" id="job-des" name="job-des" class="text-xl  bg-gray-100 py-2" placeholder="Enter Job Description here..." style="width:700px; height:200px;" v-model="new_job_des" >
+                    
+                </div>  
+            </div>
+            <div id="s-info" class="space-y-3">
+    
+                <div id="skills">
+                    <h2 class="font-bold text-2xl">Skills {{numOfSkills}}</h2>
+                    <!--need to add a button for add new skills-->
+                    <!-- <div class="place-self-end">
+                        <button class="bg-sky-500 hover:bg-sky-700 font-bold btn">
+                            Add New Skill
+                        </button>
+                    </div> -->
+                </div>
 
-        <!-- Hero Container -->
-        <!-- <form> -->
-            <div class="container mx-auto my-8">
-                <div class="auto-row-max space-y-2">
-                    <div id="j-info" class="space-y-2">
-                        <h1 class="font-bold text-2xl">Creating Job Role</h1>
-                        <h3 class="font-bold text-xl">Job Title</h3>
-                        <div id="j-title" class="grid grid-cols-2">
-                            <input type="text" v-bind:id="newRoleID" name="job-title" class="text-xl bg-gray-100 py-2 " placeholder="Enter Name of Job Role" style="width:700px"  v-model="new_job_title">
-                            
+                <div class="bg-gray-100 pt-2 pb-2">
+                    
+                <div class="grid grid-cols-3 gap-4 ml-3 mb-5 mt-2" v-for="skill in skills">
+                    <div class="card w-80 bg-base-100 shadow-xl">
+                        <fieldset>      
+                            <!-- <legend>What is Your Favorite Pet?</legend>       -->
+                            <input type="checkbox" v-bind:value="skill.Skill_ID" v-bind:id="skill.Skill_ID" v-model="selectedSkills" class="m-3">{{skill.Skill_Name}} <br>    
+                        </fieldset> 
+                    </div>           
+                        
+            </div>
+        </div>
+        <div class="w-32 place-self-center">
+            <label class="btn" for="my-modal" v-on:click="display()">Create Job Role</label>
+        </div>
+        <!-- modal pop up for errors-->
+        <div v-if="hasErros">
+            <label for="my-modal"></label>
+            <input type="checkbox" id="my-modal" class="modal-toggle" />
+                    <div class="modal">
+                        <div class="modal-box">
+                            <div class="modal-action">
+                                <h4>Errors:</h4>
+                                <ol>
+                                    <li v-for="error in errors">Please {{error}}</li> 
+                                </ol>
+                            <label for="my-modal" class="btn btn-outline btn-error" >Ok</label>
+                            </div>
                         </div>
-                        <div id="j-des" class="space-y-2 w-4/6">
-                            
-                            <h3 class="font-bold text-xl">Job Description</h3>
-                                <input type="text" id="job-des" name="job-des" class="text-xl  bg-gray-100 py-2" placeholder="Enter Job Description here..." style="width:700px; height:200px;" v-model="new_job_des" >
-                           
-                        </div>  
                     </div>
-                    <div id="s-info" class="space-y-3">
-            
-                        <div id="skills">
-                            <h2 class="font-bold text-2xl">Skills {{numOfSkills}}</h2>
-                            <!--need to add a button for add new skills-->
-                            <!-- <div class="place-self-end">
-                                <button class="bg-sky-500 hover:bg-sky-700 font-bold btn">
-                                    Add New Skill
-                                </button>
-                            </div> -->
+        </div>
+
+        <!-- modal pop up to create job role-->
+        <div v-else>
+            <input type="checkbox" id="my-modal" class="modal-toggle" />
+                    <div class="modal">
+                        <div class="modal-box">
+                            <div class="modal-action">
+                                <h4>You are creating {{new_job_title}}.</h4>
+                            <label for="my-modal" class="btn btn-outline btn-error" @click="createRole(newJobRoleData); mapSkillsToJob(skillstoJobRoleData)" >Create Job Role</label>
+                            </div>
                         </div>
-
-                        <div class="bg-gray-100 pt-2 pb-2">
-                            
-                        <div class="grid grid-cols-3 gap-4 ml-3 mb-5 mt-2" v-for="skill in skills">
-                            <div class="card w-80 bg-base-100 shadow-xl">
-                                <fieldset>      
-                                    <!-- <legend>What is Your Favorite Pet?</legend>       -->
-                                    <input type="checkbox" v-bind:value="skill.Skill_ID" v-bind:id="skill.Skill_ID" v-model="selectedSkills" class="m-3">{{skill.Skill_Name}} <br>    
-                                </fieldset> 
-                            </div>           
-                               
+                    </div>
+        </div>
+        <div v-if="hasJobError">
+            <input type="checkbox" id="my-modal" class="modal-toggle" />
+                    <div class="modal">
+                        <div class="modal-box">
+                            <div class="modal-action">
+                                <h4>{{jobError}}</h4>
+                            <label for="my-modal" class="btn btn-outline btn-error" v-on:click="clearErrors()">Ok</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="w-32 place-self-center">
-                    <label class="btn" for="my-modal" v-on:click="display()">Create Job Role</label>
-                </div>
-                <!-- modal pop up for errors-->
-                <div v-if="hasErros">
-                    <label for="my-modal"></label>
-                    <input type="checkbox" id="my-modal" class="modal-toggle" />
-                            <div class="modal">
-                                <div class="modal-box">
-                                    <div class="modal-action">
-                                        <h4>Errors:</h4>
-                                        <ol>
-                                            <li v-for="error in errors">Please {{error}}</li> 
-                                        </ol>
-                                    <label for="my-modal" class="btn btn-outline btn-error" >Ok</label>
-                                    </div>
-                                </div>
-                            </div>
-                </div>
-
-                <!-- modal pop up to create job role-->
-                <div v-else>
-                    <input type="checkbox" id="my-modal" class="modal-toggle" />
-                            <div class="modal">
-                                <div class="modal-box">
-                                    <div class="modal-action">
-                                        <h4>You are creating {{new_job_title}}.</h4>
-                                    <label for="my-modal" class="btn btn-outline btn-error" @click="createRole(newJobRoleData); mapSkillsToJob(skillstoJobRoleData)" >Create Job Role</label>
-                                    </div>
-                                </div>
-                            </div>
-                </div>
-                <div v-if="hasJobError">
-                    <input type="checkbox" id="my-modal" class="modal-toggle" />
-                            <div class="modal">
-                                <div class="modal-box">
-                                    <div class="modal-action">
-                                        <h4>{{jobError}}</h4>
-                                    <label for="my-modal" class="btn btn-outline btn-error" v-on:click="clearErrors()">Ok</label>
-                                    </div>
-                                </div>
-                            </div>
-                </div>
             </div>
-            </div>
-            </div>
-        <!-- </form> -->
+        </div>
     </div>
 </template>
 
