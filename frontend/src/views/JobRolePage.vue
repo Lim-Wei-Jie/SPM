@@ -54,7 +54,7 @@
                                 <!-- Course name -->
                                 <div class="m-4">
                                     <p class="text-2xl font-bold underline underline-offset-8">
-                                        {{courseDetails.Course_Name}}
+                                        {{courseDetailsName}}
                                     </p>
                                 </div>
                                 <!-- Course desc -->
@@ -63,7 +63,7 @@
                                         Course Description
                                     </p>
                                     <p>
-                                        {{courseDetails.Course_Desc}}
+                                        {{courseDetailsDesc}}
                                     </p>
                                 </div>
                             </label>
@@ -100,7 +100,8 @@ const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const skillNames = ref([])
 const coursesBySkillName = ref({}) // key=skillName, value=courseName
-const courseDetails = ref()
+const courseDetailsName = ref()
+const courseDetailsDesc = ref()
 
 ;(async() => {
     await Promise.all([
@@ -159,7 +160,8 @@ function handleEditClick() {
 function handleCourseClick(course) {
     getCourseDetails(course)
     .then((data) => {
-        courseDetails.value = data
+        courseDetailsName.value = data.Course_Name
+        courseDetailsDesc.value = data.Course_Desc
     })
     .catch((err) => {
         console.log(err);
