@@ -5,8 +5,8 @@
         <!-- Breadcrumbs component -->
         <div class="text-sm breadcrumbs">
             <ul>
-                <li><a>Home</a></li> 
-                <li><a>Job Role</a></li> 
+                <li><a @click="handleClickHome">Home</a></li> 
+                <li><a @click="handleClickBack">Job Role</a></li> 
                 <li> {{roleDetailsName}} </li>
             </ul>
         </div>
@@ -150,6 +150,18 @@ const courseDetailsDesc = ref()
         
     ]);
 })();
+
+function handleClickHome() {
+    router.push({
+        path: '/login'
+    })
+}
+
+function handleClickBack() {
+    router.push({
+        path: '/manager'
+    })
+}
 
 function handleEditClick() {
     router.push({
