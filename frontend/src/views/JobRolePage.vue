@@ -43,7 +43,7 @@
                 <div class="grid grid-cols-3 gap-6">
                     <div class="flex justify-evenly" v-for="course of courseArr">
                         <!-- Course Modal component -->
-                        <label for="course-modal" class="btn modal-button bg-gray-800 rounded-lg w-11/12" @click="getCourseDetails(course)">
+                        <label for="course-modal" class="btn modal-button bg-gray-800 rounded-lg w-11/12" @click="handleCourseClick(course)">
                             {{course}}
                         </label>
                         <!-- Modal pop-up -->
@@ -51,9 +51,23 @@
                         <label for="course-modal" class="modal cursor-default">
                             <label class="modal-box relative" for="">
                                 <label for="course-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                                <!-- Course name -->
+                                <div class="m-4">
+                                    <p class="text-2xl font-bold underline underline-offset-8">
+                                        {{courseDetails.Course_Name}}
+                                    </p>
+                                </div>
+                                <!-- Course desc -->
+                                <div class="m-4 w-4/6">
+                                    <p class="font-medium text-lg">
+                                        Course Description
+                                    </p>
+                                    <p>
+                                        {{courseDetails.Course_Desc}}
+                                    </p>
+                                </div>
                             </label>
                         </label>
-
                     </div>
                 </div>
             </div>
@@ -86,6 +100,7 @@ const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const skillNames = ref([])
 const coursesBySkillName = ref({}) // key=skillName, value=courseName
+const courseDetails = ref()
 
 ;(async() => {
     await Promise.all([
@@ -138,6 +153,16 @@ const coursesBySkillName = ref({}) // key=skillName, value=courseName
 function handleEditClick() {
     router.push({
         path: '/editRole'
+    })
+}
+
+function handleCourseClick(course) {
+    getCourseDetails(course)
+    .then((data) => {
+        courseDetails.value = data
+    })
+    .catch((err) => {
+        console.log(err);
     })
 }
 

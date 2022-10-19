@@ -3,7 +3,7 @@ import axios from "axios";
 // Get all Job Roles
 export function getAllRoles() {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role`
         axios
             .get(apiEndpoint)
             .then((res) => {
@@ -19,7 +19,7 @@ export function getAllRoles() {
 // Get specific Job role using Job Role ID / Name
 export function getRoleDetails(jobRoleName) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/name/${jobRoleName}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/name/${jobRoleName}`
         axios
             .get(apiEndpoint)
             .then((res) => {
@@ -35,7 +35,7 @@ export function getRoleDetails(jobRoleName) {
 // Get all skills using Job Role ID / Name
 export function getSkillsByRole(jobRoleID) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/getskill/${jobRoleID}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/getskill/${jobRoleID}`
         axios
             .get(apiEndpoint)
             .then((res) => {
@@ -51,7 +51,7 @@ export function getSkillsByRole(jobRoleID) {
 // Get specific courses using skill ID / Name
 export function getCoursesBySkill(skillID) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/skill/getcourse/${skillID}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill/getcourse/${skillID}`
         axios
             .get(apiEndpoint)
             .then((res) => {
@@ -73,7 +73,7 @@ export function createRole(newJobRoleData) {
     // var job_err_msg = '';
 
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/${role_id}/${role_name}/${role_des}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/${role_id}/${role_name}/${role_des}`
         axios
             .post(apiEndpoint)
             .then((res) => {
@@ -102,7 +102,7 @@ export function createRole(newJobRoleData) {
 // Get all Skills
 export function getAllSkills() {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/skill`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill`
         axios
             .get(apiEndpoint)
             .then((res) => {
@@ -121,7 +121,7 @@ export function mapSkillsToJob(skillstoJobRoleData) {
     var skills_id = skillstoJobRoleData[1];
 
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${role_id}/${skills_id}/`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roleassignskills/${role_id}/${skills_id}/`
         axios
             .post(apiEndpoint)
             .then((res) => {
@@ -134,31 +134,13 @@ export function mapSkillsToJob(skillstoJobRoleData) {
     })
 }
 
-
-// Get specific course using course name
-export function getCourseDetails(Course_Name) {
-    // return new Promise((resolve, reject) => {
-    //     let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/searchcourse/${Course_Name}`
-    //     axios
-    //         .get(apiEndpoint)
-    //         .then((res) => {
-    //             resolve(res.data.data)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.message);
-    //             reject('Fail to fetch all skills, check WAMP/MAMP server')
-    //         })
-    // })
-    console.log(Course_Name);
-}
-
 // Delete job role
 export function deleteRole(roleDetailsID) {
   
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/delete/${roleDetailsID}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/delete/${roleDetailsID}`
         axios
-            .post(apiEndpoint)
+        .post(apiEndpoint)
             .then((res) => {
                 resolve(res.data)
             })
@@ -169,4 +151,18 @@ export function deleteRole(roleDetailsID) {
     })
 }
 
-
+// Get specific course using course name
+export function getCourseDetails(Course_Name) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/searchcourse/${Course_Name}`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to fetch all skills, check WAMP/MAMP server')
+            })
+    })
+}
