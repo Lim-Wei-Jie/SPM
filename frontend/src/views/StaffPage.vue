@@ -74,9 +74,10 @@ function searchJobRole() {
         numOfLJ.value = response.length
     }).catch((err) => {
         console.log(err);
+        numOfLJ.value = 0
     });
 })();
-console.log(LJs)
+
 
 /*
 //fake data
