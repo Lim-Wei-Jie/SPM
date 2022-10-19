@@ -1,6 +1,13 @@
+## Definition of Done (DoD)
+#### For a feature to be considered done, it has to fulfil the following criteria:
+* Fulfil acceptance criteria defined in the User Story
+* Pass all test-cases created for the User Story
+## Test-Driven Development (TDD)
+* Python TDD framework: Unittest
 ## Branching Strategy
-* Current: Trunk-based <br>
-* Will be switching to Feature-based after tidying the code-base
+* Feature-based, each branch is for each feature
+* When a feature fulfils DoD, merge the feature branch into the main branch for other branches to merge main branch into their branch, so that they know that the feature fulfils DoD and they can access the features
+* Refactoring of code can be done after
 ## Merge Conflict rule
 In the instance where the merging of a branch to the main branch results in a merge conflict
 1. The person doing the merging will open the file with the merge conflict via github desktop
