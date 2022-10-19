@@ -9,12 +9,12 @@
             </button>
         </div>
         <!-- In Progress Section-->
-        <div v-show="inProgCourses != []" class="inProg">
+        <div v-show="onGoingCourses != []" class="inProg">
             <p class="text-lg font-normal">
                 In Progress
             </p>
             <div class="grid grid-cols-3 gap-4 my-4">
-                <div v-for="course in inProgCourses" class="bg-slate-50 rounded-md px-2 py-2 outline outline-1 outline-slate-400">
+                <div v-for="course in onGoingCourses" class="bg-slate-50 rounded-md px-2 py-2 outline outline-1 outline-slate-400">
                     {{ course }}
                 </div>
             </div>
@@ -35,8 +35,8 @@
 
         <!-- Progress Bar -->
         <div class="flex flex-row items-center w-full gap-4">
-            <progress class="progress w-full" value="40" max="100"></progress>
-            <p>40%</p>
+            <progress class="progress w-full" :value="progress" max="100"></progress>
+            <p>{{ progress }}%</p>
         </div>
         
     </div>
@@ -53,9 +53,13 @@ const props = defineProps({
         type: Array,
         default: []
     },
-    inProgCourses: {
+    onGoingCourses: {
         type: Array,
         default: []
+    },
+    progress: {
+        type: Number,
+        default: 0
     }
 });
 

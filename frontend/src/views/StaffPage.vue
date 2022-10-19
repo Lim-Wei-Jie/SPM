@@ -10,8 +10,8 @@
             <button class="btn" @click="searchJobRole">Add New</button>
         </div>
         
-        <div v-for="LJ in learningJourneys">
-            <LearningJourney :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :inProgCourses="LJ.courses.inProgress"/>
+        <div v-for="LJ in LJs">
+            <LearningJourney :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :onGoingCourses="LJ.courses.onGoing" :progress="LJ.progress"/>
         </div>
     </div>
 </template>
@@ -22,11 +22,14 @@ import Hero from '@/components/Hero.vue'
 import LearningJourney from '@/components/LearningJourney.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue';
+import { getRegistration } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 
 //check for existing LJ
-const numOfLJ = ref(3)
+const staff_ID = '140002'
+const numOfLJ = ref()
+var LJs = ref([])
 
 //no existing LJ
 const title = 'You have no learning journey'
@@ -36,6 +39,46 @@ function searchJobRole() {
     router.push('/staff/searchRole')
 }
 
+
+;(async() => {
+    await getRegistration(staff_ID)
+    .then((response) => {
+        var jobRole= "Job Role Name"
+        var completedCourses = []
+        var onGoingCourses = []
+        for (var registration of response) {
+            if (registration.completion_status == "Completed"){
+                completedCourses.push(registration.course_id)
+            } else {
+                onGoingCourses.push(registration.course_id)
+            }
+        }
+        
+        //calculation of progress
+        var totalCourses = completedCourses.length + onGoingCourses.length
+        var progress = Math.ceil((completedCourses.length / totalCourses) * 100)
+
+        //add data to overall Learning Journeys
+        LJs.value.push(
+            {
+                jobRoleName: jobRole,
+                courses: {
+                    completed: completedCourses,
+                    onGoing: onGoingCourses
+                },
+                progress: progress
+            }
+        ) 
+        
+        //NEED TO BE UPDATED
+        numOfLJ.value = response.length
+    }).catch((err) => {
+        console.log(err);
+    });
+})();
+console.log(LJs)
+
+/*
 //fake data
 const learningJourneys = ref({
     learningJourney1: {
@@ -53,6 +96,7 @@ const learningJourneys = ref({
         }
     }
 })
+*/
 
 </script>
 

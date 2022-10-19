@@ -130,3 +130,37 @@ export function mapSkillsToJob(skillstoJobRoleData) {
     })
 }
 
+//LEARNING JOURNEY
+
+// Get all registration
+export function getAllRegistration() {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT2}/Registration`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to fetch all registrations, check WAMP/MAMP server')
+            })
+    })
+}
+
+
+// Get registration with Staff ID
+export function getRegistration(staffID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT2}/Registration/${staffID}`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.registration)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch registration of staff, check WAMP/MAMP server')
+            })
+    })
+}

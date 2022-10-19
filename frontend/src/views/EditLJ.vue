@@ -82,7 +82,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getAllSkills,  getCourses} from "@/endpoint/endpoint.js";
+import { getRoleDetails, getRegistration } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 function JobRolePage() {

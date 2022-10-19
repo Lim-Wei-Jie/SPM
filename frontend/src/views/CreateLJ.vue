@@ -107,7 +107,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getSkillsByRole, getCoursesBySkill} from "@/endpoint/endpoint.js";
+import { getRoleDetails, getAllRegistration } from "@/endpoint/endpoint.js";
 
 //route back for breadcrumb
 const router = useRouter()
@@ -143,6 +143,17 @@ const roleDetailsDesc = ref()
         console.log(err);
     });
 })();
+
+;(async() => {
+    await getAllRegistration()
+    .then((registrations) => {
+        console.log(registrations)
+    }).catch((err) => {
+        console.log(err);
+    });
+})();
+
+
 
 /*
 //SKILLS
