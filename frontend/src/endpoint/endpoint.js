@@ -117,10 +117,11 @@ export function getAllSkills() {
 
 // Mapping skills to role
 export function mapSkillsToJob(skillstoJobRoleData) {
-    var role_id = newJobRoleData[0];
+    var role_id = skillstoJobRoleData[0];
+    var skills_id = skillstoJobRoleData[1];
 
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${role_id}/<string:Skill_ID>/`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${role_id}/${skills_id}/`
         axios
             .post(apiEndpoint)
             .then((res) => {

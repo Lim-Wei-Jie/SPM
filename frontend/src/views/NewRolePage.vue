@@ -40,7 +40,7 @@
                             <div class="card w-80 bg-base-100 shadow-xl">
                                 <fieldset>      
                                     <!-- <legend>What is Your Favorite Pet?</legend>       -->
-                                    <input type="checkbox" v-bind:value="skill.Skill_Name" v-bind:id="skill.Skill_Id" v-model="selectedSkills" class="m-3">{{skill.Skill_Name}} <br>    
+                                    <input type="checkbox" v-bind:value="skill.Skill_ID" v-bind:id="skill.Skill_ID" v-model="selectedSkills" class="m-3">{{skill.Skill_Name}} <br>    
                                 </fieldset> 
                             </div>           
                                
@@ -121,13 +121,13 @@ const numOfJobRoles = ref()
 const skills = ref([
       {
         "Skill_Desc": "MES Desc", 
-        "Skill_Id": 1234567, 
+        "Skill_ID": 1234567, 
         "Skill_Name": "Mechanical Engineeri", 
         "Skill_Status": null
       }, 
       {
         "Skill_Desc": "CES Desc", 
-        "Skill_Id": 9741827, 
+        "Skill_ID": 9741827, 
         "Skill_Name": "Computer Science Ski", 
         "Skill_Status": null
       }
