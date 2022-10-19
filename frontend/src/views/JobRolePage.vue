@@ -72,7 +72,7 @@ const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const skillNames = ref([])
 // const skillIDs = ref([])
-const coursesBySkillID = ref({}) // key=skillID, value=courseName
+const coursesBySkillID = ref({}) // key=skillName, value=courseName
 
 ;(async() => {
     await Promise.all([
