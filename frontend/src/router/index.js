@@ -73,6 +73,20 @@ const routes = [
         component: createLJ,
         props: true
     },
+
+
+    // {
+    //     path: '/newSkill',
+    //     name: 'newSkill',
+    //     component: NewSkillPage
+    // },
+
+    // {
+    //     path: '/skill/:skillName',
+    //     name: 'skill',
+    //     component: SkillPage,
+    //     props: true
+    // },
 ]
 
 const router = createRouter({
