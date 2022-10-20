@@ -342,21 +342,11 @@ def get_registration_staff(Staff_ID):
     #list
     Regis = Registration.query.filter_by(Staff_ID = Staff_ID).all()
     if len(Regis):
-        
-        
-        for Reg in Regis:
-            check_role_id = Reg.Role_ID
-            Role_call = Role.query.filter_by(Role_ID = check_role_id).first()
-            
         return jsonify(
-        {
+            {
                 "code": 200,
-                "role": Role_call.Role_Name,
                 "registration": [Reg.json() for Reg in Regis]
-        }
-            
-        
-        
+            }
         )
     return jsonify(
         {
