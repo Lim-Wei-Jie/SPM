@@ -115,6 +115,47 @@ CREATE TABLE IF NOT EXISTS `Role_assignment`(
 PRIMARY KEY (`Role_ID`,`Skill_ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE IF NOT EXISTS `LJPS_Assignment` (
+	`LJPS_ID` int(20) NOT NULL,
+    `Staff_ID` int(20) NOT NULL,
+    `Role_ID` int(20) NOT NULL,
+
+    
+    
+    
+    PRIMARY KEY (`LJPS_ID`)
+        
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE IF NOT EXISTS `LJPS_Course_Assignment`(
+`LJPS_ID` int(20) NOT NULL,
+`Course_ID` varchar(20) NOT NULL,
+
+PRIMARY KEY (`LJPS_ID`,`Course_ID`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+INSERT INTO LJPS_Assignment(LJPS_ID,Staff_ID,Role_ID) VALUES
+ (1,130002,3)
+,(2,130002,4)
+,(3,130003,5)
+,(4,130004,6);
+
+
+INSERT INTO LJPS_Course_Assignment(LJPS_ID,Course_ID) VALUES
+ (1,'COR001'),
+ (2,'COR002'),
+ (3,'COR006');
+
+
+
+
 INSERT INTO sys(System_Role,System_Role_Desc) VALUES
  (1,'Admin')
 ,(2,'User')
