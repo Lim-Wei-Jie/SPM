@@ -425,14 +425,35 @@ def get_skill_list_by_Role(Staff_ID):
     filtered_list = filter_LJPSID(list_ofID)
     course_list = LJPS_Course_Assignment.query.filter(LJPS_Course_Assignment.LJPS_ID.in_(filtered_list)).all()
     role_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
+    
+    #print(course_list)
+    xz = []
+    yz = []
+    
+    for i in course_list:
+        for y in role_list:
+            if (y.LJPS_ID == i.LJPS_ID):
+                print('yes')
+                yz.append(y.LJPS_ID)
+                yz.append(y.Role_ID)
+                yz.append(i.Course_ID)
+                
+        xz.append(yz)
+        yz=[]
+                
+    print(xz)
+    
+    
+
+    
 
     if course_list:
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                        "Course": [course.json() for course in course_list],
-                        "Role":[role.json() for role in role_list]
+                        "deets": [LJPS_Assign for LJPS_Assign in xz]
+                        
                 }            
             }
         )
@@ -449,6 +470,7 @@ def filter_LJPSID(list_of_id):
     for data in list_of_id:
         #print(data.Skill_ID)
         list_onlyID.append(str(getattr(data,"LJPS_ID")))
+        #print(list_onlyID)
     return list_onlyID
 
 #get skill from associative table using role_id
