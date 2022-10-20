@@ -78,8 +78,46 @@ class Registration(db.Model):
         self.Completion_Status = Completion_Status
     
     
+
+class LJPS_Assignment(db.Model):
+    __tablename__ = 'LJPS_Assignment'
+
+
+    LJPS_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+    Staff_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+    Role_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+
+    def __init__(self,  LJPS_ID ,Staff_ID ,Role_ID):
+        
+        
+        self.LJPS_ID = LJPS_ID
+        self.Staff_ID = Staff_ID
+        self.Role_ID = Role_ID
+ 
+    def json(self):
+        return { "LJPS_ID": self.LJPS_ID,"Staff_ID": self.Staff_ID, "Role_ID":self.Role_ID} 
+    
     
 
+
+class LJPS_Course_Assignment(db.Model):
+    __tablename__ = 'LJPS_Course_Assignment'
+
+
+    LJPS_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+    Course_ID = db.Column(db.String(64), nullable=False, primary_key=True)
+
+
+    def __init__(self,  LJPS_ID ,Course_ID):
+        
+        
+        self.LJPS_ID = LJPS_ID
+        self.Course_ID = Course_ID
+ 
+    def json(self):
+        return { "LJPS_ID": self.LJPS_ID,"Course_ID": self.Course_ID} 
+    
+    
 
 
     
