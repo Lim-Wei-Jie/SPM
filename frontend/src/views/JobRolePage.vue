@@ -79,6 +79,7 @@
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
+// import Breadcrumb from '@/components/Breadcrumb.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { getRoleDetails, getSkillsByRole, getCoursesBySkill, getCourseDetails } from "@/endpoint/endpoint.js";
