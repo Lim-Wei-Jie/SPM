@@ -13,6 +13,10 @@
         <div v-for="LJ in LJs">
             <LearningJourney :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :onGoingCourses="LJ.courses.onGoing" :progress="LJ.progress"/>
         </div>
+
+        <div v-for="LJ in LJs2">
+            <LearningJourney :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :onGoingCourses="LJ.courses.onGoing" :progress="LJ.progress"/>
+        </div>
     </div>
 </template>
 
@@ -22,12 +26,13 @@ import Hero from '@/components/Hero.vue'
 import LearningJourney from '@/components/LearningJourney.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue';
-import { getRegistration } from "@/endpoint/endpoint.js";
+import { getRegistration, getLJs, getRoleNameByID } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 
 //check for existing LJ
 const staff_ID = '140002'
+const staff_ID2 = '130002'
 const numOfLJ = ref()
 var LJs = ref([])
 
@@ -39,7 +44,7 @@ function searchJobRole() {
     router.push('/staff/searchRole')
 }
 
-
+//Registration Table
 ;(async() => {
     await getRegistration(staff_ID)
     .then((response) => {
@@ -77,6 +82,49 @@ function searchJobRole() {
         numOfLJ.value = 0
     });
 })();
+
+
+//SECOND
+var LJs2 = ref([])
+
+;(async() => {
+    await getLJs(staff_ID2)
+    .then((res) => {
+        // for each LJ => LJ id, Role ID, Course IDs
+        for (var LJ of res) {
+            //var LJ_id = LJ[0]
+            var Role_id = LJ[1]
+            var courseList = LJ[2]
+            const Role_Name = ref()
+
+            ;(async() => {
+                await getRoleNameByID(Role_id)
+                .then((res) => {
+                    // for each LJ => LJ id, Role ID, Course IDs
+                    Role_Name.value = res
+                }).catch((err) => {
+                    console.log(err);
+                });
+            })();
+            
+            //add to overall LJ
+            LJs2.value.push(
+                {
+                    jobRoleName: Role_Name,
+                    courses: {
+                        completed: [],
+                        onGoing: [courseList]
+                    },
+                    progress: 0
+                }
+            ) 
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
+})();
+
+
 
 
 /*

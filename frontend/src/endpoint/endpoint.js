@@ -136,7 +136,7 @@ export function mapSkillsToJob(skillstoJobRoleData) {
 
 // Delete job role
 export function deleteRole(roleDetailsID) {
-  
+
     return new Promise((resolve, reject) => {
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/delete/${roleDetailsID}`
         axios
@@ -155,14 +155,7 @@ export function deleteRole(roleDetailsID) {
 export function getCourseDetails(Course_Name) {
     return new Promise((resolve, reject) => {
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/searchcourse/${Course_Name}`
-        
-//LEARNING JOURNEY
-
-// Get all registration
-export function getAllRegistration() {
-    return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT2}/Registration`
-            axios
+        axios
             .get(apiEndpoint)
             .then((res) => {
                 resolve(res.data.data)
@@ -171,17 +164,67 @@ export function getAllRegistration() {
                 console.log(err.message);
                 reject('Fail to fetch all skills, check WAMP/MAMP server')
             })
+        })
+}
+
+//LEARNING JOURNEY
+
+// Get all registration
+export function getAllRegistration() {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/Registration`
+            axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to fetch all registrations, check WAMP/MAMP server')
+            })
     })
 }
+
 
 // Get registration with Staff ID
 export function getRegistration(staffID) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT2}/Registration/${staffID}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/Registration/${staffID}`
         axios
             .get(apiEndpoint)
             .then((res) => {
                 resolve(res.data.registration)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch registration of staff, check WAMP/MAMP server')
+            })
+    })
+}
+
+// Get Learning Journeys with Staff ID
+export function getLJs(staffID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/LJAssign/${staffID}`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data.deets)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch learning journeys of staff, check WAMP/MAMP server')
+            })
+    })
+}
+
+export function getRoleNameByID(jobID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/${jobID}`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data.Role[0].Role_Name)
             })
             .catch((err) => {
                 console.log(err);

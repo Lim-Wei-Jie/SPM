@@ -11,7 +11,7 @@ def hello():
         "message": [skill_assignment.c.keys()]
     }
     ), 404
- """
+"""
 
 
 
@@ -62,7 +62,7 @@ def create_book():
     Course_Type = "Sales"
     Course_Category = "Infomatics"
     
-   
+
     course = Course(Course_ID = Course_ID , Course_Name = Course_Name , Course_Desc = Course_Desc , Course_Status = Course_Status , Course_Type = Course_Type , Course_Category = Course_Category )
     
     try:
@@ -99,7 +99,7 @@ def delete_book(Course_Name):
         {
             "code": 404,
             "data": {
-                 "course_name": Course_Name
+                "course_name": Course_Name
             },
             "message": "Course not found."
         }
@@ -124,7 +124,7 @@ def update_book(Course_Name):
         #    course.course_status = data['course_status']
         #if data['course_type'] != "":
         #   course.course_type = data['course_type']
-           
+        
         db.session.commit()
         
         return jsonify(
@@ -267,39 +267,39 @@ def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
     if skill:
         
         
-         if Skill_ID != "":
-            #    course.course_name = data['course_name']
+        if Skill_ID != "":
+        #    course.course_name = data['course_name']
             Skill.Skill_ID = Skill_ID
-            
-         if Skill_Name != "":
+        
+        if Skill_Name != "":
             Skill.Skill_Name = Skill_Name
-            
-            
-         if Skill_Desc != "":
+        
+        
+        if Skill_Desc != "":
             Skill.Skill_Desc = Skill_Desc
+        
+        db.session.commit()
             
-         db.session.commit()
-                
-         return jsonify(
-         {
-                        "code": 200,
-                        "data": "skill has been updated successfully"
-            }
-         )
+        return jsonify(
+        {
+                    "code": 200,
+                    "data": "skill has been updated successfully"
+        }
+        )
             
         
     
 
         #data = request.get_json()
-       
+
         #if data['course_desc'] != "":
         #    course.course_desc = data['course_desc']
         #if data['course_status'] != "":
         #    course.course_status = data['course_status']
         #if data['course_type'] != "":
         #   course.course_type = data['course_type']
-           
-         
+        
+        
     return jsonify(
         {
             "code": 404,
@@ -309,8 +309,8 @@ def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
             "message": "course not found."
         }
     ), 404
- 
- 
+
+
 
 @app.route("/Registration")
 def get_all_registration():
@@ -357,7 +357,7 @@ def get_registration_staff(Staff_ID):
 
 
 
-  
+
 
 @app.route("/Registration/addRegis/<string:Reg_ID>/<string:Course_ID>/<string:Staff_ID>/<string:Reg_Status>/<string:Completion_Status>",methods=['GET','POST'])
 def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
@@ -379,12 +379,12 @@ def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
                 "message": "Registration already exists."
             }
         ), 400
- 
+
 
     #data = request.get_json()
     #print("poopo" + data)
     
-   
+    
     
     new_registration = Registration(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status)
 
@@ -403,12 +403,11 @@ def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
                     "staff_id": Staff_ID,
                     "reg_status":Reg_Status,
                     "completion_status":Completion_Status
-                   
                 },
                 "message": "An error occurred creating the registration."
             }
         ), 500
- 
+
     return jsonify(
         {
             "code": 201,
@@ -442,10 +441,6 @@ def get_skill_list_by_Role(Staff_ID):
         yz=[]
                 
     print(xz)
-    
-    
-
-    
 
     if course_list:
         return jsonify(
@@ -524,8 +519,8 @@ def get_LJPS_Assignment_By_Course(LJPS_ID):
     
     if len(LJPS_Assignment_Map_By_Course):
         
-         
-      
+        
+        
             return jsonify(
                 {
                     "code": 200,
