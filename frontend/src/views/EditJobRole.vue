@@ -9,7 +9,7 @@
                     <div id="j-info" class="space-y-2">
                         <h3 class="font-bold text-xl">Job Title</h3>
                         <div id="j-title" class="font-bold grid grid-cols-2">
-                            <input type="text" id="job-title" name="job-title" class="text-3xl" placeholder="Software Engineer (Engineering Procurement)" style="width:700px"  v-model="new_job_title">
+                            <input type="text" v-bind:id="roleDetailsID" name="job-title" class="text-3xl"  style="width:700px"  v-model="roleDetailsName">
                             <div class="w-32 place-self-end">
                                 <!-- <input type="submit" value="Save Changes" > -->
                                 <!--there is something wrong with the styling of button-->
@@ -43,7 +43,50 @@
                                 </button>
                             </div>
                         </div>
+                        <!-- Skills -->
+                        <div class="space-y-3 my-4">
+                            <p class="text-2xl font-medium">
+                                Skills
+                            </p>
+                            <!-- Skills component -->
+                            <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="(courseArr, skill) in coursesBySkillName" :key="skill">
+                                <!-- Skill -->
+                                <div class="font-medium text-lg mb-5">
+                                    {{skill}}
+                                    <!--remove skill -->
+                                    <label for="my-modal" class="btn rounded-md p-2 inline-flex items-end justify-end text-read-400 hover:text-red-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" v-on:click="removeSkill()" v-bind:id="skillID">
+                                        <span class="sr-only">Remove Skill</span>
+                                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </label>
 
+                                    <!-- modal pop up to delete skill-->
+                                    <!-- <div v-if="hasRemoveSkill">
+                                        <input type="checkbox" id="my-modal" class="modal-toggle" />
+                                                <div class="modal">
+                                                    <div class="modal-box">
+                                                        <div class="modal-action">
+                                                            <h4>You are deleting {{skillName}}.</h4>
+                                                        <label for="my-modal" class="btn btn-outline btn-error" @click="deleteSkill(skillID)" >Delete Skill</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                    </div> -->
+                                    <!--end of remove skill-->
+                                </div>
+                                <!-- Courses -->
+                                <div class="grid grid-cols-3 gap-6">
+                                    <div class="flex justify-evenly" v-for="course of courseArr">
+                                        <div class="btn bg-gray-800 rounded-lg w-11/12">
+                                            {{course}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--to be commented out-->
                         <div class="flex flex-col w-full bg-gray-100" v-for="skill in skills">
                             <div>
                                 <h4 class="font-bold text-l mx-5 mt-3">Skill Name: </h4>
@@ -82,10 +125,6 @@
                                                 <button class="btn btn-primary" v-on:click="handleRemoveCourse(course_id)">Remove Course</button>
                                             </div>
                                         </div>
-                                        <!-- <p>If a dog chews shoes whose shoes does he choose?</p> -->
-                                        <!-- <div class="card-actions justify-end">
-                                            <button class="btn btn-primary">Buy Now</button>
-                                        </div> -->
                                     </div>
                                 </div>   
                             
@@ -93,8 +132,35 @@
                         </div>
                     </div>
                 </div>
+                 <!--end of to be commented out-->
+
                 <div class='place-self-end'>
-                <button class="btn" v-on:click="handleDeleteJob(roleDetailsID)">Delete Job Role</button>
+                <label class="btn" for="my-modal" v-on:click="display()">Delete Job Role</label>
+                <!-- modal pop up to delete job role-->
+                <div v-if="removeJob">
+                    <input type="checkbox" id="my-modal" class="modal-toggle" />
+                            <div class="modal">
+                                <div class="modal-box">
+                                    <div class="modal-action">
+                                        <h4>You are deleting {{roleDetailsName}}.</h4>
+                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteJob(roleDetailsID)" >Delete Job Role</label>
+                                    </div>
+                                </div>
+                            </div>
+                </div>
+                <!-- modal pop up when there is error in delete job role-->
+                <div v-if="hasDeleteError">
+                    <input type="checkbox" id="my-modal" class="modal-toggle" />
+                            <div class="modal">
+                                <div class="modal-box">
+                                    <div class="modal-action">
+                                        <h4>{{deleteError}}</h4>
+                                    <label for="my-modal" class="btn btn-outline btn-error">Ok</label>
+                                    </div>
+                                </div>
+                            </div>
+                </div>
+               
             </div>
             </div>
         </div></div>
@@ -105,32 +171,98 @@
 
 <script setup>
 import NavBar from '../components/NavBar.vue';
-import { ref, onBeforeMount } from 'vue'
+import { ref, toRefs,onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
+import { getRoleDetails, getSkillsByRole, getCoursesBySkill, deleteRole } from "@/endpoint/endpoint.js";
 
+const router = useRouter()
+
+const props = defineProps({
+    jobRoleName: {
+        type: String
+    }
+});
+// props to be use in script setup, break down proxy
+const { jobRoleName } = toRefs(props)
+const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
+
+// can try reactive()
 const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
-const course_id = ref()
+const skillNames = ref([])
+const coursesBySkillName = ref({}) // key=skillName, value=courseName
+const removeJob = ref(false);
+const deleteError = ref();
+const hasDeleteError = ref(false);
 
-onBeforeMount(async() => {
-    await getRoleDetails(roleName)
-    .then((role) => {
-        roleDetailsName.value = role.Role_Name
-        roleDetailsID.value = role.Role_ID
-        roleDetailsDesc.value = role.Role_Desc
-    }).catch((err) => {
-        console.log(err);
-    });
-});
+
+;(async() => {
+    await Promise.all([
+        // get role name, ID, and description
+        getRoleDetails(roleName)
+        .then((role) => {
+            roleDetailsName.value = role.Role_Name
+            roleDetailsID.value = role.Role_ID
+            roleDetailsDesc.value = role.Role_Desc
+
+            // get skills with role ID
+            getSkillsByRole(roleDetailsID.value)
+            .then((data) => {
+                for (var each of data) {
+                    skillNames.value.push(each.Skill_name)
+
+                    // get courses with skill IDs
+                    const skillID = each.Skill_id
+                    const skillName = each.Skill_name
+
+                    getCoursesBySkill(skillID)
+                    .then((data) => {
+                        for (var each of data) {
+                            // check if skillName exist in object
+                            if (coursesBySkillName.value[skillName]) {
+                                coursesBySkillName.value[skillName].push(each.Course_Name)
+                            } else {
+                                coursesBySkillName.value[skillName] = [each.Course_Name]
+                            }
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                }
+
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+
+        })
+        .catch((err) => {
+            console.log(err);
+        }),
+        
+    ]);
+})();
 
 function handleRemoveCourse(){
 
 }
 
-function handleDeleteJob() {
-    
+function display() {
+    removeJob.value = true;
 }
 
+// error from deleting job role
+;(async() => {
+    await deleteRole(roleDetailsID)
+    .catch((err) => {
+        hasDeleteError.value = true;
+        deleteError.value = err.message;
+        //"Role already exists."
+        //"An error occurred creating the Role."
+        console.log(err.message);
+    });
+})();
 
 </script>

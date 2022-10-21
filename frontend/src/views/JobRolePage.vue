@@ -2,11 +2,11 @@
 <!-- eslint-disable -->
     <NavBar/>
     <div class="container mx-auto my-8 ">
-        <!-- Breadcrumbs -->
+        <!-- Breadcrumbs component -->
         <div class="text-sm breadcrumbs">
             <ul>
-                <li><a>Home</a></li> 
-                <li><a>Job Role</a></li> 
+                <li><a @click="handleClickHome">Home</a></li> 
+                <li><a @click="handleClickBack">Job Role</a></li> 
                 <li> {{roleDetailsName}} </li>
             </ul>
         </div>
@@ -25,8 +25,7 @@
                 Job Role Description
             </p>
             <p>
-                {{roleDetailsDesc}}. The Software Engineer / Officer (Engineering Procurement) is responsible for providing administrative support for procurement activities. He/She coordinates with internal teams to gather requirements for procurement, with
-                vendors for managing delivery schedules, and prepares purchase orders. He maintains documents and reports schedules material purchases and deliveries and performs verification of current inventory. He is comfortable in engaging and interacting with internal and external stakeholders, and is able to multi-task in a fast-paced work environment.
+                {{roleDetailsDesc}}
             </p>
         </div>
         <!-- Skills -->
@@ -35,25 +34,54 @@
                 Skills
             </p>
             <!-- Skills component -->
-            <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="skillName in skillNames">
+            <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="(courseArr, skill) in coursesBySkillName" :key="skill">
+                <!-- Skill -->
                 <div class="font-medium text-lg mb-5">
-                    {{skillName}}
+                    {{skill}}
                 </div>
+                <!-- Courses -->
                 <div class="grid grid-cols-3 gap-6">
-                    <div class="flex justify-evenly bg-gray-800 rounded-lg">
-                        {{coursesBySkillID}}
+                    <div class="flex justify-evenly" v-for="course of courseArr">
+                        <!-- Course Modal component -->
+                        <label for="course-modal" class="btn modal-button bg-gray-800 rounded-lg w-11/12" @click="handleCourseClick(course)">
+                            {{course}}
+                        </label>
+                        <!-- Modal pop-up -->
+                        <input type="checkbox" id="course-modal" class="modal-toggle" />
+                        <label for="course-modal" class="modal cursor-default">
+                            <label class="modal-box relative" for="">
+                                <label for="course-modal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                                <!-- Course name -->
+                                <div class="m-4">
+                                    <p class="text-2xl font-bold underline underline-offset-8">
+                                        {{courseDetailsName}}
+                                    </p>
+                                </div>
+                                <!-- Course desc -->
+                                <div class="m-4 w-4/6">
+                                    <p class="font-medium text-lg">
+                                        Course Description
+                                    </p>
+                                    <p>
+                                        {{courseDetailsDesc}}
+                                    </p>
+                                </div>
+                            </label>
+                        </label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    
 </template>
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getSkillsByRole, getCoursesBySkill } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getSkillsByRole, getCoursesBySkill, getCourseDetails } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 
@@ -71,8 +99,9 @@ const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const skillNames = ref([])
-// const skillIDs = ref([])
-const coursesBySkillID = ref({}) // key=skillName, value=courseName
+const coursesBySkillName = ref({}) // key=skillName, value=courseName
+const courseDetailsName = ref()
+const courseDetailsDesc = ref()
 
 ;(async() => {
     await Promise.all([
@@ -92,16 +121,15 @@ const coursesBySkillID = ref({}) // key=skillName, value=courseName
                     // get courses with skill IDs
                     const skillID = each.Skill_id
                     const skillName = each.Skill_name
-                    
 
                     getCoursesBySkill(skillID)
                     .then((data) => {
                         for (var each of data) {
-                            // check if skillId exist in object
-                            if (coursesBySkillID.value[skillName]) {
-                                coursesBySkillID.value[skillName].push(each.Course_Name)
+                            // check if skillName exist in object
+                            if (coursesBySkillName.value[skillName]) {
+                                coursesBySkillName.value[skillName].push(each.Course_Name)
                             } else {
-                                coursesBySkillID.value[skillName] = [each.Course_Name]
+                                coursesBySkillName.value[skillName] = [each.Course_Name]
                             }
                         }
                     })
@@ -123,11 +151,32 @@ const coursesBySkillID = ref({}) // key=skillName, value=courseName
     ]);
 })();
 
+function handleClickHome() {
+    router.push({
+        path: '/login'
+    })
+}
 
+function handleClickBack() {
+    router.push({
+        path: '/manager'
+    })
+}
 
 function handleEditClick() {
     router.push({
         path: '/editRole'
+    })
+}
+
+function handleCourseClick(course) {
+    getCourseDetails(course)
+    .then((data) => {
+        courseDetailsName.value = data.Course_Name
+        courseDetailsDesc.value = data.Course_Desc
+    })
+    .catch((err) => {
+        console.log(err);
     })
 }
 
