@@ -5,8 +5,12 @@
         <!-- Breadcrumbs component -->
         <div class="text-sm breadcrumbs">
             <ul>
-                <li><a @click="handleClickHome">Home</a></li> 
-                <li><a @click="handleClickBack">Job Role</a></li> 
+                <li>
+                    <RouterLink to="/login">Home</RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/manager">Job Role</RouterLink>
+                </li> 
                 <li> {{roleDetailsName}} </li>
             </ul>
         </div>
@@ -15,7 +19,7 @@
             <p class="text-3xl font-bold underline underline-offset-8">
                 {{roleDetailsName}}
             </p>
-            <button @click="handleEditClick" class="btn btn-circle place-self-end">
+            <button @click="handleEditClick(roleDetailsName)" class="btn btn-circle place-self-end">
                 <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
             </button>
         </div>
@@ -152,21 +156,9 @@ const courseDetailsDesc = ref()
     ]);
 })();
 
-function handleClickHome() {
+function handleEditClick(roleDetailsName) {
     router.push({
-        path: '/login'
-    })
-}
-
-function handleClickBack() {
-    router.push({
-        path: '/manager'
-    })
-}
-
-function handleEditClick() {
-    router.push({
-        path: '/editRole'
+        path: `/editRole/${roleDetailsName}`
     })
 }
 
