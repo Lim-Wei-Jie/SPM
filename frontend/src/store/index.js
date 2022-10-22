@@ -1,10 +1,11 @@
-import { createStore } from "vuex";
-import test from '../store/modules/test'
+import { defineStore } from 'pinia'
 
-export const store = createStore({
-    modules: {
-        test
-    }
+// ref()s become state properties
+// computed()s become getters
+// function()s become actions
+
+export const useStore = defineStore('main', () => {
+    const name = ref()
 })
 
 export default store
