@@ -426,6 +426,7 @@ def get_skill_list_by_Role(Staff_ID):
     course_list = LJPS_Course_Assignment.query.filter(LJPS_Course_Assignment.LJPS_ID.in_(filtered_list)).all()
     role_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
     
+    
     #print(course_list)
     xz = []
     yz = []
@@ -434,9 +435,21 @@ def get_skill_list_by_Role(Staff_ID):
         for y in role_list:
             if (y.LJPS_ID == i.LJPS_ID):
                 print('yes')
+                
                 yz.append(y.LJPS_ID)
                 yz.append(y.Role_ID)
                 yz.append(i.Course_ID)
+                
+            
+                status_c = Registration.query.filter_by(Course_ID=i.Course_ID,Staff_ID=y.Staff_ID).first()
+                if (status_c):
+                    yz.append(status_c.Completion_Status)
+                    yz.append(status_c.Reg_Status)
+                else:
+                    yz.append("ERROR")
+               
+                    
+                    
                 
         xz.append(yz)
         yz=[]
