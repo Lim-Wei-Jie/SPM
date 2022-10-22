@@ -22,8 +22,7 @@
                 Job Role Description
             </p>
             <p>
-                {{roleDetailsDesc}}The Software Engineer / Officer (Engineering Procurement) is responsible for providing administrative support for procurement activities. He/She coordinates with internal teams to gather requirements for procurement, with
-                vendors for managing delivery schedules, and prepares purchase orders. He maintains documents and reports schedules material purchases and deliveries and performs verification of current inventory. He is comfortable in engaging and interacting with internal and external stakeholders, and is able to multi-task in a fast-paced work environment.
+                {{roleDetailsDesc}}
             </p>
         </div>
         <!-- Skills -->
@@ -31,67 +30,48 @@
             <p class="text-2xl font-medium">
                 Skills
             </p>
-            <!--
-            <div v-for="skill in skillsList" class="bg-gray-300 rounded-lg my-6 p-8 space-y-4"></div>
-            -->
-            <div v-for="(courseList, skillName) in LearningJourney.skills" class="bg-gray-300 rounded-lg my-6 p-8 space-y-4">
+            
+            <div v-for="skill in skillsList" class="bg-gray-300 rounded-lg my-6 p-8 space-y-4">
                 <p class="text-lg font-normal">
-                    {{ skillName }}
+                    {{ skill.skill_name }}
                 </p>
                 <div class="grid grid-cols-3 gap-6">
-                    <div v-if="courseList != {}" class="flex " v-for="(courseDes, courseName) in courseList">
-                        <label class="btn btn-lg w-11/12 modal-btn" for="my-modal" @click="handleJobRoleClick(jobRole)">
-                            {{courseName}}
+                    <div v-if="courses_selected != []" class="flex " v-for="course in skill.courses_selected">
+                        <label class="btn btn-lg w-11/12 modal-btn" for="my-modal">
+                            {{ course }}
                         </label>
 
                         <!-- modal pop up to delete course-->
                         <input type="checkbox" id="my-modal" class="modal-toggle" />
                         <div class="modal">
                             <div class="modal-box">
-                                <h3 class="font-bold text-lg">{{ courseName }}</h3>
-                                <p class="py-4">{{ courseDes }}</p>
+                                <h3 class="font-bold text-lg">{{ course }}</h3>
                                 <div class="modal-action">
-                                <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(courseName)">Remove Course</label>
+                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(course, skill.skill_id, skillsList)">Remove Course</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12" @click="getAllCourses(skill[0])">Add Course</label>
+                    <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12" @click="getAllCourses(skill.skill_id)">Add Course</label>
                     <!-- modal pop up to add course-->
                     <input type="checkbox" id="addCourseModal" class="modal-toggle" />
                     <div class="modal">
                         <div class="modal-box h-fit w-11/12">
-                            <h3 class="font-bold text-lg">{{ skillName }}</h3>
-                            <!--
-                            <h3 class="font-bold text-lg">{{ skill[1] }}</h3>
-                            -->
+                            <h3 class="font-bold text-lg">{{ skill.skill_name }}</h3>
                             <ul>
-                                <!--
                                 <li v-for="course in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
-                                -->
-                                <li v-for="(courseDes, courseName) in coursesList.courses" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
                                     <div class="flex justify-between">
-                                        <!--
-                                        <p>{{ course[1] }}</p>
-                                        -->
-                                        <p>{{ courseName }}</p>
-                                        <!--
-                                        <input type="checkbox" v-model="selectedCourses" :id="course[0]" :value="course[1]" class="checkbox" />
-                                        -->
-                                        <input type="checkbox" v-model="selectedCourses" :id="courseName" :value="courseName" class="checkbox" />
+                                        <div>
+                                            <p class="font-medium">{{ course.course_id}} - {{ course.course_name }}</p>
+                                            <p class="font-light">{{ course.course_desc }}</p>
+                                        </div>
+                                        <input type="checkbox" v-model="selectedCourses" :id="course.course_id" :value="course.course_id" class="checkbox" />
                                     </div>
-                                    <!--
-                                    <p>{{ course[2] }}</p>
-                                    -->
-                                    <p>{{ courseDes }}</p>
+                                    
                                 </li>
                             </ul>
-                            <p>selected courses: {{selectedCourses}}</p>
                             <div class="modal-action">
-                                <!--
-                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skillName)">Add Course</label>
-                                -->
-                                <label for="addCourseModal" class="btn btn-outline btn-success">Add Course</label>
+                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course</label>
                             </div>
                         </div>
                     </div>
@@ -107,7 +87,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getAllRegistration } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getCoursesBySkill, getSkillsByRole } from "@/endpoint/endpoint.js";
 
 //route back for breadcrumb
 const router = useRouter()
@@ -143,29 +123,25 @@ const roleDetailsDesc = ref()
         console.log(err);
     });
 })();
-
-;(async() => {
-    await getAllRegistration()
-    .then((registrations) => {
-        console.log(registrations)
-    }).catch((err) => {
-        console.log(err);
-    });
-})();
-
-
-
-/*
+console.log(roleDetailsID)
+console.log(roleDetailsID.value)
 //SKILLS
-const skillsList = ref()
+const skillsList = ref([])
 
 ;(async() => {
-    await getSkillsByRole(roleDetailsID)
+    await getSkillsByRole(1)
     .then((skills) => {
         for(var skill of skills){
-            var skillDetails = [skill.Skill_ID, skill.Skill_Name, skill.Skill_Desc]
-            skillsList.value += skillDetails
+            //var skillDetails = [skill.Skill_id, skill.Skill_name, skill.Skill_desc]
+            var skillDetails = {
+                skill_id: skill.Skill_id,
+                skill_name: skill.Skill_name,
+                skill_desc: skill.skill_desc,
+                courses_selected: []
+            }
+            skillsList.value.push(skillDetails) 
         }
+        console.log(skillsList)
     }).catch((err) => {
         console.log(err);
     });
@@ -173,37 +149,68 @@ const skillsList = ref()
 
 
 //COURSES
-const courseList = ref()
+const courseList = ref([])
 
 function getAllCourses(skillID) {
     ;(async() => {
-        await getCourses(skillID)
+        await getCoursesBySkill(skillID)
         .then((courses) => {
+            courseList.value = []
             for (var course of courses) {
-                var courseDetails = [course.Course_ID, course.Course_Name, course.Course_Desc]
-                courseList += courseDetails
+                if (course.Course_Status == "Active") {
+                    var courseDetails = {
+                        course_name: course.Course_Name,
+                        course_id: course.Course_ID,
+                        course_desc: course.Course_Desc
+                    }
+                    courseList.value.push(courseDetails)
+                }
             }
+            console.log(courseList)
         }).catch((err) => {
             console.log(err);
         });
     })();
 }
 
-
-
-function addCourse() {
-
+// skillID not working for some reason TT
+const selectedCourses = ref([])
+function addCourse(selectedCourses, skillID, skillsList) {
+    console.log(skillID)
+    for(var skill of skillsList){
+        if (skill.skill_id === skillID) {
+            for(var i=0; i<selectedCourses.length; i++){
+                console.log(selectedCourses[i])
+                skill.courses_selected.push(selectedCourses[i])
+            }
+            console.log(skill)
+        }
+    }
+    while(selectedCourses.length > 0) {
+        selectedCourses.pop();
+    }
 }
 
-function deleteCourse() {
-
+function deleteCourse(courseID, skillID, skillsList) {
+    console.log(courseID)
+    for(var skill of skillsList){
+        if (skill.skill_id === skillID) {
+            for( var i = 0; i < skill.courses_selected.length; i++){ 
+                if ( skill.courses_selected[i] === courseID) { 
+                    skill.courses_selected.splice(i, 1); 
+                }
+            }
+            console.log(skill)
+        }
+    }
 }
-
+/*
 function createLJ() {
 
 }
 */
 
+/*
 //FAKE DATA
 var LearningJourney = ref({
     jobRoleName: "Mechanical Engineeri",
@@ -230,20 +237,7 @@ const skillListFake = ref(
     [2, "UB04", "Phasellus in felis."],
     [3, "TMA", "In congue. Etiam jus"]
 )
-const selectedCourses = ref([])
-
-
-function addCourse(selectedCourses, skillName) {
-    for (course in selectedCourses.value) {
-        var addCourseDes = coursesList.courses[course]
-        console.log(addCourseDes)
-    }
-    //call backend route
-    console.log('done')
-    console.log(LearningJourney.value.skills[skillName])
-    selectedCourses = []
-}
-
+*/
 
 </script>
 
