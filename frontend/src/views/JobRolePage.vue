@@ -85,7 +85,7 @@
         </div>
         
         <div v-else>
-            Loading...
+            <button class="btn loading">loading</button>
         </div>
 
     </div>
@@ -99,10 +99,12 @@ import NavBar from '@/components/Navbar.vue'
 // import Breadcrumb from '@/components/Breadcrumb.vue'
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useRoleStore } from '@/store/role.js'
 import { getRoleDetails, getSkillsByRole, getCoursesBySkill, getCourseDetails } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
+const store = useRoleStore()
 
 // from params
 const roleName = route.params.jobRoleName
@@ -143,6 +145,9 @@ const error = ref('')
                 }
             }
         }
+
+        // store role in global store to be use by edit job role page
+        store.storeRole(roleName, role.roleID, role.roleDesc, role.coursesBySkillName)
 
         // after all API calls made
         loading.value = true
