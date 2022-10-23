@@ -46,7 +46,7 @@
         </div>
         
         <div v-else>
-            Loading...
+            <button class="btn loading">loading</button>
         </div>
             
     </div>
