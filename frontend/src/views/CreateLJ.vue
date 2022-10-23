@@ -36,7 +36,7 @@
                     {{ skill.skill_name }}
                 </p>
                 <div class="grid grid-cols-3 gap-6">
-                    <div v-if="courses_selected != []" class="flex " v-for="course in skill.courses_selected">
+                    <div v-if="skill.courses_selected != []" class="flex " v-for="course in skill.courses_selected">
                         <label class="btn btn-lg w-11/12 modal-btn" for="my-modal">
                             {{ course }}
                         </label>
@@ -71,6 +71,7 @@
                                 </li>
                             </ul>
                             <div class="modal-action">
+                                <!--skill.skill_id not working!-->
                                 <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course</label>
                             </div>
                         </div>
@@ -78,6 +79,8 @@
                 </div>
             </div>
         </div>
+        <button class="btn" @click="createRegis(skillsList, staffID)">temporary create regis</button>
+        <button class="btn" @click="addReg('3000', 'ABC', '')">temporary add regis</button>
         <!-- send edited data back-->
         <label for="my-modal" class="btn btn-outline btn-success" @click="createLJ()">Create Learning Journey</label>
     </div>
@@ -87,7 +90,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getCoursesBySkill, getSkillsByRole } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getCoursesBySkill, getSkillsByRole, createRegistration, getAllRegistration, getAllRegistrationNo } from "@/endpoint/endpoint.js";
 
 //route back for breadcrumb
 const router = useRouter()
@@ -112,6 +115,7 @@ const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
 const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
+const staffID = ref('130002')
 
 ;(async() => {
     await getRoleDetails(roleName)
@@ -123,8 +127,7 @@ const roleDetailsDesc = ref()
         console.log(err);
     });
 })();
-console.log(roleDetailsID)
-console.log(roleDetailsID.value)
+
 //SKILLS
 const skillsList = ref([])
 
@@ -132,7 +135,6 @@ const skillsList = ref([])
     await getSkillsByRole(1)
     .then((skills) => {
         for(var skill of skills){
-            //var skillDetails = [skill.Skill_id, skill.Skill_name, skill.Skill_desc]
             var skillDetails = {
                 skill_id: skill.Skill_id,
                 skill_name: skill.Skill_name,
@@ -141,7 +143,6 @@ const skillsList = ref([])
             }
             skillsList.value.push(skillDetails) 
         }
-        console.log(skillsList)
     }).catch((err) => {
         console.log(err);
     });
@@ -166,7 +167,6 @@ function getAllCourses(skillID) {
                     courseList.value.push(courseDetails)
                 }
             }
-            console.log(courseList)
         }).catch((err) => {
             console.log(err);
         });
@@ -176,14 +176,12 @@ function getAllCourses(skillID) {
 // skillID not working for some reason TT
 const selectedCourses = ref([])
 function addCourse(selectedCourses, skillID, skillsList) {
-    console.log(skillID)
     for(var skill of skillsList){
+        console.log(skillID)
         if (skill.skill_id === skillID) {
             for(var i=0; i<selectedCourses.length; i++){
-                console.log(selectedCourses[i])
                 skill.courses_selected.push(selectedCourses[i])
             }
-            console.log(skill)
         }
     }
     while(selectedCourses.length > 0) {
@@ -192,7 +190,6 @@ function addCourse(selectedCourses, skillID, skillsList) {
 }
 
 function deleteCourse(courseID, skillID, skillsList) {
-    console.log(courseID)
     for(var skill of skillsList){
         if (skill.skill_id === skillID) {
             for( var i = 0; i < skill.courses_selected.length; i++){ 
@@ -200,10 +197,64 @@ function deleteCourse(courseID, skillID, skillsList) {
                     skill.courses_selected.splice(i, 1); 
                 }
             }
-            console.log(skill)
         }
     }
 }
+
+/*
+function getLastRegis() {
+    var newRegis = ref()
+    ;(async() => {
+        await getAllRegistration()
+        .then((res) => {
+            newRegis.value = res.registration.length + 1
+        }).catch((err) => {
+            console.log(err);
+        });
+    })();
+    return newRegis
+}
+*/
+
+
+function createRegis(skillsList, staffID) {
+    const allSelectedCourses = []
+    for (var skill of skillsList) {
+        for(var course of skill.courses_selected) {
+            allSelectedCourses.push(course)
+        }
+    }
+    console.log(allSelectedCourses)
+
+    for (var courseID of allSelectedCourses) {
+        //get regID
+        var regID = ""
+        ;(async() => {
+            await getAllRegistrationNo()
+            .then((res) => {
+                regID += res
+                console.log(regID)
+                
+                addReg(regID, courseID, staffID)
+            }).catch((err) => {
+                console.log(err);
+            });
+        })();
+    }
+}
+
+//NOT WORKING 
+function addReg(regID, courseID, staffID) {
+    ;(async() => {
+        await createRegistration(regID, courseID, staffID, "Registered", "Ongoing")
+        .then((response) => {
+            console.log(response)
+        }).catch((err) => {
+        console.log(err);
+        });
+    })
+}
+
 /*
 function createLJ() {
 

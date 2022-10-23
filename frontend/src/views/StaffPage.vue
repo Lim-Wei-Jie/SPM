@@ -15,7 +15,7 @@
         </div>
 
         <div v-for="LJ in LJs2">
-            <LearningJourney :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :onGoingCourses="LJ.courses.onGoing" :progress="LJ.progress"/>
+            <LearningJourney2 :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :onGoingCourses="LJ.courses.onGoing" :progress="LJ.progress" :ljID="LJ.LJ_id"/>
         </div>
     </div>
 </template>
@@ -27,6 +27,7 @@ import LearningJourney from '@/components/LearningJourney.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue';
 import { getRegistration, getLJs, getRoleNameByID } from "@/endpoint/endpoint.js";
+import LearningJourney2 from '../components/LearningJourney2.vue';
 
 const router = useRouter()
 
@@ -92,7 +93,7 @@ var LJs2 = ref([])
     .then((res) => {
         // for each LJ => LJ id, Role ID, Course IDs
         for (var LJ of res) {
-            //var LJ_id = LJ[0]
+            var LJ_id = LJ[0]
             var Role_id = LJ[1]
             var courseList = LJ[2]
             const Role_Name = ref()
@@ -110,6 +111,7 @@ var LJs2 = ref([])
             //add to overall LJ
             LJs2.value.push(
                 {
+                    LJ_id: LJ_id,
                     jobRoleName: Role_Name,
                     courses: {
                         completed: [],

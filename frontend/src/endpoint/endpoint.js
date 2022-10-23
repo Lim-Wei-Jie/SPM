@@ -185,6 +185,21 @@ export function getAllRegistration() {
     })
 }
 
+// Get all registration number
+export function getAllRegistrationNo() {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/Registration`
+            axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data.registration.length + 1)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to fetch all registrations, check WAMP/MAMP server')
+            })
+    })
+}
 
 // Get registration with Staff ID
 export function getRegistration(staffID) {
@@ -201,6 +216,23 @@ export function getRegistration(staffID) {
             })
     })
 }
+
+// create registration
+export function createRegistration(regID, courseID, staffID, regStatus, completionStatus) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/Registration/addRegis/${regID}/${courseID}/${staffID}/${regStatus}/${completionStatus}`
+        axios
+        .post(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to create registration, check WAMP/MAMP server');
+            })
+    })
+}
+
 
 // Get Learning Journeys with Staff ID
 export function getLJs(staffID) {
@@ -225,6 +257,21 @@ export function getRoleNameByID(jobID) {
             .get(apiEndpoint)
             .then((res) => {
                 resolve(res.data.data.Role[0].Role_Name)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch registration of staff, check WAMP/MAMP server')
+            })
+    })
+}
+
+export function getRoleByID(jobID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/${jobID}`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data.Role[0])
             })
             .catch((err) => {
                 console.log(err);

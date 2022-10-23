@@ -22,8 +22,7 @@
                 Job Role Description
             </p>
             <p>
-                {{roleDetailsDesc}}The Software Engineer / Officer (Engineering Procurement) is responsible for providing administrative support for procurement activities. He/She coordinates with internal teams to gather requirements for procurement, with
-                vendors for managing delivery schedules, and prepares purchase orders. He maintains documents and reports schedules material purchases and deliveries and performs verification of current inventory. He is comfortable in engaging and interacting with internal and external stakeholders, and is able to multi-task in a fast-paced work environment.
+                {{roleDetailsDesc}}
             </p>
         </div>
         <!-- Skills -->
@@ -31,42 +30,48 @@
             <p class="text-2xl font-medium">
                 Skills
             </p>
-            <div v-for="(courseList, skillName) in LearningJourney.skills" class="bg-gray-300 rounded-lg my-6 p-8 space-y-4">
+            
+            <div v-for="skill in skillsList" class="bg-gray-300 rounded-lg my-6 p-8 space-y-4">
                 <p class="text-lg font-normal">
-                    {{ skillName }}
+                    {{ skill.skill_name }}
                 </p>
                 <div class="grid grid-cols-3 gap-6">
-                    <div class="flex " v-for="(courseDes, courseName) in courseList">
-                        <label class="btn btn-lg w-11/12 modal-btn" for="my-modal" @click="handleJobRoleClick(jobRole)">
-                            {{courseName}}
+                    <div v-if="skill.courses_selected != []" class="flex " v-for="course in skill.courses_selected">
+                        <label class="btn btn-lg w-11/12 modal-btn" for="my-modal">
+                            {{ course }}
                         </label>
 
                         <!-- modal pop up to delete course-->
                         <input type="checkbox" id="my-modal" class="modal-toggle" />
                         <div class="modal">
                             <div class="modal-box">
-                                <h3 class="font-bold text-lg">{{ courseName }}</h3>
-                                <p class="py-4">{{ courseDes }}</p>
+                                <h3 class="font-bold text-lg">{{ course }}</h3>
                                 <div class="modal-action">
-                                <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(courseName)">Remove Course</label>
+                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(course, skill.skill_id, skillsList)">Remove Course</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12">Add Course</label>
+                    <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12" @click="getAllCourses(skill.skill_id)">Add Course</label>
                     <!-- modal pop up to add course-->
                     <input type="checkbox" id="addCourseModal" class="modal-toggle" />
                     <div class="modal">
-                        <div class="modal-box h-fit">
-                            <h3 class="font-bold text-lg">{{ skillName }}</h3>
+                        <div class="modal-box h-fit w-11/12">
+                            <h3 class="font-bold text-lg">{{ skill.skill_name }}</h3>
                             <ul>
-                                <li v-for="(courseDes, courseName) in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
-                                    <p>{{ courseName }}</p>
-                                    <p>{{ courseDes }}</p>
+                                <li v-for="course in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <p class="font-medium">{{ course.course_id}} - {{ course.course_name }}</p>
+                                            <p class="font-light">{{ course.course_desc }}</p>
+                                        </div>
+                                        <input type="checkbox" v-model="selectedCourses" :id="course.course_id" :value="course.course_id" class="checkbox" />
+                                    </div>
+                                    
                                 </li>
                             </ul>
                             <div class="modal-action">
-                                <label for="my-modal" class="btn btn-outline btn-success" @click="addCourse(courseName)">Add Course</label>
+                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course</label>
                             </div>
                         </div>
                     </div>
@@ -82,7 +87,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getRegistration } from "@/endpoint/endpoint.js";
+import { getLJs, getRoleByID, getSkillsByRole, getCoursesBySkill } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 function JobRolePage() {
@@ -93,28 +98,117 @@ function HomePage() {
 }
 
 const props = defineProps({
-    jobRoleName: {
+    ljID: {
         type: String
     }
 });
 // props to be use in script setup, break down proxy
-const { jobRoleName } = toRefs(props)
-const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
+const { ljID } = toRefs(props)
 
+const staff_ID2 = '130002'
+const roleID = ref()
+const courseList = ref()
 const roleDetailsName = ref()
-const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 
+
 onBeforeMount(async() => {
-    await getRoleDetails(roleName)
-    .then((role) => {
-        roleDetailsName.value = role.Role_Name
-        roleDetailsID.value = role.Role_ID
-        roleDetailsDesc.value = role.Role_Desc
+    await getLJs(staff_ID2)
+    .then((res) => {
+        for (var LJ of res) {
+            if (String(LJ[0]) == ljID.value) {
+                roleID.value = LJ[1]
+                courseList.value = LJ[2]
+
+                //role details
+                ;(async() => {
+                    await getRoleByID(roleID.value)
+                    .then((role) => {
+                        roleDetailsName.value = role.Role_Name
+                        roleDetailsDesc.value = role.Role_Desc
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                })();
+            }
+        }
     }).catch((err) => {
         console.log(err);
     });
 });
+
+//SKILLS
+const skillsList = ref([])
+
+;(async() => {
+    await getSkillsByRole(1)
+    .then((skills) => {
+        for(var skill of skills){
+            var skillDetails = {
+                skill_id: skill.Skill_id,
+                skill_name: skill.Skill_name,
+                skill_desc: skill.skill_desc,
+                courses_selected: []
+            }
+            skillsList.value.push(skillDetails) 
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
+})();
+
+//COURSES
+const allCourseList = ref([])
+
+function getAllCourses(skillID) {
+    ;(async() => {
+        await getCoursesBySkill(skillID)
+        .then((courses) => {
+            courseList.value = []
+            for (var course of courses) {
+                if (course.Course_Status == "Active") {
+                    var courseDetails = {
+                        course_name: course.Course_Name,
+                        course_id: course.Course_ID,
+                        course_desc: course.Course_Desc
+                    }
+                    allCourseList.value.push(courseDetails)
+                }
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    })();
+}
+
+// skillID not working for some reason TT
+const selectedCourses = ref([])
+function addCourse(selectedCourses, skillID, skillsList) {
+    for(var skill of skillsList){
+        if (skill.skill_id === skillID) {
+            for(var i=0; i<selectedCourses.length; i++){
+                skill.courses_selected.push(selectedCourses[i])
+            }
+        }
+    }
+    while(selectedCourses.length > 0) {
+        selectedCourses.pop();
+    }
+}
+
+function deleteCourse(courseID, skillID, skillsList) {
+    console.log(courseID)
+    for(var skill of skillsList){
+        if (skill.skill_id === skillID) {
+            for( var i = 0; i < skill.courses_selected.length; i++){ 
+                if ( skill.courses_selected[i] === courseID) { 
+                    skill.courses_selected.splice(i, 1); 
+                }
+            }
+        }
+    }
+}
+
 
 function editLJ() {
     router.push({
@@ -122,6 +216,7 @@ function editLJ() {
     })
 }
 
+/*
 const LearningJourney = ref({
     jobRoleName: "Mechanical Engineeri",
     skills: {
@@ -143,7 +238,7 @@ const LearningJourney = ref({
     }
 })
 
-const courseList = ref({
+const coursesList = ref({
     skillName: "skill",
     courses: {
         "course1": "course description 1",
@@ -153,7 +248,7 @@ const courseList = ref({
         "course5": "course description 5"
     }
 })
-
+*/
 </script>
 
 <style scoped>
