@@ -14,17 +14,17 @@
                         <RouterLink to="/manager">Job Role</RouterLink>
                     </li> 
                     <li>
-                        {{roleName}}
+                        {{role.roleName}}
                     </li>
                 </ul>
             </div>
             <div class="grid grid-cols-2 my-4">
                 <!-- Role Name -->
                 <p class="text-3xl font-bold underline underline-offset-8">
-                    {{roleName}}
+                    {{role.roleName}}
                 </p>
                 <!-- Edit button -->
-                <button @click="handleEditClick(roleName)" class="btn btn-circle place-self-end">
+                <button @click="handleEditClick(role.roleName)" class="btn btn-circle place-self-end">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
                 </button>
             </div>
@@ -43,17 +43,17 @@
                     Skills
                 </p>
                 <!-- Skills component -->
-                <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="(courseArr, skill) in role.coursesBySkillName" :key="skill">
+                <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="(skillDetails, skillName) in role.coursesBySkillName" :key="skillName">
                     <!-- Skill -->
                     <div class="font-medium text-lg mb-5">
-                        {{skill}}
+                        {{skillName}}
                     </div>
                     <!-- Courses -->
                     <div class="grid grid-cols-3 gap-6">
-                        <div class="flex justify-evenly" v-for="courseName of courseArr">
+                        <div class="flex justify-evenly" v-for="course of skillDetails.courses">
                             <!-- Course Modal component -->
-                            <label for="course-modal" class="btn modal-button bg-gray-800 rounded-lg w-11/12" @click="handleCourseClick(courseName)">
-                                {{courseName}}
+                            <label for="course-modal" class="btn modal-button bg-gray-800 rounded-lg w-11/12" @click="handleCourseClick(skillName, course.Course_Name)">
+                                {{course.Course_Name}}
                             </label>
                             <!-- Modal pop-up -->
                             <input type="checkbox" id="course-modal" class="modal-toggle"/>
@@ -63,13 +63,13 @@
                                     <!-- Course name -->
                                     <div class="m-4">
                                         <p class="text-2xl font-bold underline underline-offset-8">
-                                            {{course.courseName}}
+                                            {{courseModal.courseName}}
                                         </p>
                                     </div>
                                     <!-- Course desc -->
                                     <div class="m-4 w-4/6">
                                         <p class="font-medium text-lg">
-                                            {{course.courseDesc}}
+                                            {{courseModal.courseDesc}}
                                         </p>
                                     </div>
                                 </label>
@@ -100,7 +100,7 @@ import NavBar from '@/components/Navbar.vue'
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useRoleStore } from '@/store/role.js'
-import { getRoleDetails, getSkillsByRole, getCoursesBySkill, getCourseDetails } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getSkillsByRole, getCoursesBySkill } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
@@ -110,12 +110,13 @@ const store = useRoleStore()
 const roleName = route.params.jobRoleName
 
 const role = reactive({
-    roleDesc: '',
+    roleName: roleName,
     roleID: '',
-    coursesBySkillName: {} // key = skill name, value = course name
+    roleDesc: '',
+    coursesBySkillName: {}
 })
 
-const course = reactive({
+const courseModal = reactive({
     courseName: '',
     courseDesc: ''
 })
@@ -127,8 +128,8 @@ const error = ref('')
     try {
         // get role name, ID, and description
         const roleDetails = await getRoleDetails(roleName)
-        role.roleDesc = roleDetails.Role_Desc
         role.roleID = roleDetails.Role_ID
+        role.roleDesc = roleDetails.Role_Desc
 
         // get skills with role ID
         const roleSkills = await getSkillsByRole(roleDetails.Role_ID)
@@ -137,17 +138,22 @@ const error = ref('')
         for (var skill of roleSkills) {
             const skillCourses = await getCoursesBySkill(skill.Skill_id)
             for (var course of skillCourses) {
-                // check if skillName exist in object
+                // skillName exist in object
                 if (role.coursesBySkillName[skill.Skill_name]) {
-                    role.coursesBySkillName[skill.Skill_name].push(course.Course_Name)
+                    role.coursesBySkillName[skill.Skill_name].courses[course.Course_Name] = course
+                // skillName does not exist in object
                 } else {
-                    role.coursesBySkillName[skill.Skill_name] = [course.Course_Name]
+                    role.coursesBySkillName[skill.Skill_name] = {
+                        'skillID': skill.Skill_id,
+                        'courses': {}
+                    }
+                    role.coursesBySkillName[skill.Skill_name].courses[course.Course_Name] = course
                 }
             }
         }
 
         // store role in global store to be use by edit job role page
-        store.storeRole(roleName, role.roleID, role.roleDesc, role.coursesBySkillName)
+        store.storeRole(role.roleName, role.roleID, role.roleDesc, role.coursesBySkillName)
 
         // after all API calls made
         loading.value = true
@@ -167,18 +173,9 @@ function handleEditClick(roleDetailsName) {
     })
 }
 
-async function handleCourseClick(courseName) {
-    course.courseName = ''
-    course.courseDesc = ''
-    try {
-        const courseDetails = await getCourseDetails(courseName)
-        course.courseName = courseName
-        course.courseDesc = courseDetails.Course_Desc
-    } 
-    catch (err) {
-        error.value = err
-        console.log(err);
-    }
+function handleCourseClick(skillName, courseName) {
+    courseModal.courseName = courseName
+    courseModal.courseDesc = role.coursesBySkillName[skillName].courses[courseName].Course_Desc
 }
 
 </script>
