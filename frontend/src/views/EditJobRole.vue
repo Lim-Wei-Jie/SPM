@@ -14,10 +14,10 @@
                         <RouterLink to="/manager">Job Role</RouterLink>
                     </li> 
                     <li>
-                        <RouterLink :to="`/jobRole/${roleName}`"> {{roleName}} </RouterLink>
+                        <RouterLink :to="`/jobRole/${store.role.roleName}`"> {{store.role.roleName}} </RouterLink>
                     </li>
                     <li>
-                        Edit role - ({{roleName}})
+                        Edit role - ({{store.role.roleName}})
                     </li>
                 </ul>
             </div>
@@ -62,11 +62,11 @@
                     <!-- Skills component -->
                     <div class="grid grid-cols-4 gap-6 bg-gray-700 rounded-lg my-6 p-8">
                         <!-- Skill -->
-                        <div class="flex justify-evenly" v-for="(courseArr, skill) in store.role.coursesBySkillName" :key="skill">
+                        <div class="flex justify-evenly" v-for="(skillDetails, skillName) in store.role.coursesBySkillName" :key="skillName">
                             <div class="text-center bg-gray-800 rounded-lg w-11/12 p-3 relative">
-                                {{ skill }}
+                                {{ skillName }}
                                 <!-- Remove skill button -->
-                                <label for="remove-modal" class="btn modal-button btn-xs btn-circle btn-error btn-outline absolute right-0 top-0">
+                                <label for="remove-modal" class="btn modal-button btn-xs btn-circle btn-error btn-outline absolute right-0 top-0" @click="handleRemoveSkill(skillName)">
                                     <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
@@ -78,8 +78,7 @@
                                         <p class="text-lg">
                                             Are you sure you want to remove skill:
                                             <section class="text-xl mt-3">
-                                                <!-- error: cannot display current skill to be deleted -->
-                                                
+                                                {{ removeModal.skillName }}
                                             </section>
                                         </p>
                                         <!-- Confirm + cancel buttons -->
@@ -141,6 +140,10 @@ const store = useRoleStore()
 // from params
 const roleName = route.params.jobRoleName
 
+const removeModal = reactive({
+    skillName: ''
+})
+
 const loading = ref(true);
 const error = ref('');
 
@@ -152,15 +155,11 @@ function handleDeleteClick(roleID) {
     console.log(roleID);
 }
 
+function handleRemoveSkill(skillName) {
+    removeModal.skillName = skillName
+}
+
 </script>
 
 <style scoped>
-.noHover{
-    pointer-events: none;
-}
-
-.hover{
-    pointer-events: auto;
-}
-
 </style>
