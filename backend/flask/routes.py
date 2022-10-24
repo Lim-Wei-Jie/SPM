@@ -1,7 +1,7 @@
 from app import app
 from db import *
 from flask import request, jsonify
-
+import json
 
 """ @app.route('/index/')
 def hello():
@@ -472,41 +472,15 @@ def get_skill_list_by_Role(Staff_ID):
         dicts[i] = spare_list
     print(dicts)
     #print(xz)
-  
     
     
-    
-    
- 
-
-        
-            
-            
    
-                
-           
-                
-                
-                
-        
-           
-                
-                
-                
-            
-                
-    #print(dicts)
-    
-    
-
-    
-
     if course_list:
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                        "deets": [LJPS_Assign for LJPS_Assign in xz]
+                        "deets": dicts
                         
                 }            
             }
