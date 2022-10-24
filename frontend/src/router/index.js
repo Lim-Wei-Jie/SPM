@@ -56,9 +56,10 @@ const routes = [
     },
 
     {
-        path: '/editRole',
+        path: '/editRole/:jobRoleName',
         name: 'editRole',
-        component: EditJobRole
+        component: EditJobRole,
+        props: true
     },
 
     {
