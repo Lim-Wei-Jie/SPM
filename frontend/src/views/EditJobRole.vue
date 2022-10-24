@@ -24,6 +24,7 @@
 
             <div class="grid grid-cols-2 my-8">
                 <p class="text-3xl"> Edit Job Role </p>
+
                 <!-- Delete button -->
                 <button @click="handleDeleteClick(store.role.roleID)" class="btn btn-circle place-self-end">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,7 +43,7 @@
                 <!-- Role name input -->
                 <div class="space-y-2">
                     <h3 class="font-medium text-lg">Job Role Name</h3>
-                    <input type="text" v-model="roleName" class="input input-bordered w-3/6 text-2xl">
+                    <input type="text" v-model="store.role.roleName" class="input input-bordered w-3/6 text-2xl">
                 </div>
                 
                 <!-- Role desc input -->
@@ -62,16 +63,54 @@
                     <div class="grid grid-cols-4 gap-6 bg-gray-700 rounded-lg my-6 p-8">
                         <!-- Skill -->
                         <div class="flex justify-evenly" v-for="(courseArr, skill) in store.role.coursesBySkillName" :key="skill">
-                            <div class="btn noHover bg-gray-800 rounded-lg w-11/12">
-                                {{skill}}
+                            <div class="text-center bg-gray-800 rounded-lg w-11/12 p-3 relative">
+                                {{ skill }}
+                                <!-- Remove skill button -->
+                                <label for="remove-modal" class="btn modal-button btn-xs btn-circle btn-error btn-outline absolute right-0 top-0">
+                                    <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </label>
+                                <!-- Modal pop-up -->
+                                <input type="checkbox" id="remove-modal" class="modal-toggle"/>
+                                <label for="remove-modal" class="modal cursor-default">
+                                    <label class="modal-box relative space-y-8">
+                                        <p class="text-lg">
+                                            Are you sure you want to remove skill:
+                                            <section class="text-xl mt-3">
+                                                <!-- error: cannot display current skill to be deleted -->
+                                                
+                                            </section>
+                                        </p>
+                                        <!-- Confirm + cancel buttons -->
+                                        <div class="grid grid-cols-2 gap-6">
+                                            <div class="flex justify-end">
+                                                <div class="btn btn-sm btn-error btn-outline w-3/5">
+                                                    Confirm
+                                                </div>
+                                            </div>
+                                            <div class="flex justify-start">
+                                                <label for="remove-modal" class="btn btn-sm btn-outline w-3/5">
+                                                    Cancel
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                
+                <!-- Save button -->
                 <button class="btn w-1/5" type="submit">Save Changes</button>
+                <!-- Cancel button -->
+                <RouterLink :to="`/jobRole/${roleName}`">
+                    <div class="btn btn-outline btn-error w-1/5">Cancel</div>
+                </RouterLink>
                 
             </form>
+
         </div>
 
         <div v-else-if="error !== ''">
@@ -118,6 +157,10 @@ function handleDeleteClick(roleID) {
 <style scoped>
 .noHover{
     pointer-events: none;
+}
+
+.hover{
+    pointer-events: auto;
 }
 
 </style>
