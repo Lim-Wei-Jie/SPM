@@ -145,13 +145,16 @@ INSERT INTO LJPS_Assignment(LJPS_ID,Staff_ID,Role_ID) VALUES
  (1,130002,3)
 ,(2,130002,4)
 ,(3,130003,5)
-,(4,130004,6);
+,(4,130004,6)
+,(5,130002,3);
 
 
 INSERT INTO LJPS_Course_Assignment(LJPS_ID,Course_ID) VALUES
  (1,'COR001'),
  (2,'COR002'),
- (3,'COR006');
+ (3,'COR006'),
+ (4,'COR006'),
+ (5,'COR007');
 
 
 
@@ -410,7 +413,7 @@ INSERT INTO registration(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status)
  (1,'COR002',130001,'Registered','Completed')
 ,(245,'COR001',130001,'Registered','Completed')
 ,(2,'COR002',130002,'Registered','Completed')
-,(200100,'COR003a',130002,'Registered','Completed')
+,(200100,'COR007',130002,'Registered','Completed')
 ,(200101,'COR004b',130002,'Registered','Completed')
 ,(3,'COR002',140001,'Registered','Completed')
 ,(111,'SAL004',140001,'Registered','Completed')
