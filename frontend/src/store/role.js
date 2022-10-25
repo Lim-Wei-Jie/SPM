@@ -11,8 +11,8 @@ export const useRoleStore = defineStore('role', () => {
         /*
         coursesBySkillName: {
             skillName1: {
-                skillID1: '',
-                courses: {
+                'skillID': '',
+                'courses': {
                     courseName1: {courseDetail1},
                     courseName2: {courseDetail2}
                 }

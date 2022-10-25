@@ -24,22 +24,17 @@
 
             <div class="grid grid-cols-2 my-8">
                 <p class="text-3xl"> Edit Job Role </p>
-
                 <!-- Delete button -->
-                <button @click="handleDeleteClick(store.role.roleID)" class="btn btn-circle place-self-end">
+                <button @click="handleDeleteRole(store.role.roleID)" class="btn btn-circle place-self-end">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                     </svg>
                 </button>
             </div>
 
             <!-- Form component -->
-            <form class="form-control space-y-6" @submit.prevent="onSubmit">
-                <!-- {{store.role.roleName}}
-                {{store.role.roleID}}
-                {{store.role.roleDesc}}
-                {{store.role.coursesBySkillName}} -->
-                
+            <form class="form-control space-y-6" @submit.prevent="handleEditRole">
+
                 <!-- Role name input -->
                 <div class="space-y-2">
                     <h3 class="font-medium text-lg">Job Role Name</h3>
@@ -56,9 +51,7 @@
 
                 <!-- Role skills -->
                 <div class="space-y-3">
-                    <p class="font-medium text-lg">
-                        Skills
-                    </p>
+                    <p class="font-medium text-lg"> Skills </p>
                     <!-- Skills component -->
                     <div class="grid grid-cols-4 gap-6 bg-gray-700 rounded-lg my-6 p-8">
                         <!-- Skill -->
@@ -84,9 +77,9 @@
                                         <!-- Confirm + cancel buttons -->
                                         <div class="grid grid-cols-2 gap-6">
                                             <div class="flex justify-end">
-                                                <div class="btn btn-sm btn-error btn-outline w-3/5">
+                                                <label for="remove-modal" class="btn btn-sm btn-error btn-outline w-3/5" @click="confirmRemoveSkill(removeModal.skillName)">
                                                     Confirm
-                                                </div>
+                                                </label>
                                             </div>
                                             <div class="flex justify-start">
                                                 <label for="remove-modal" class="btn btn-sm btn-outline w-3/5">
@@ -104,10 +97,14 @@
                 <!-- Save button -->
                 <button class="btn w-1/5" type="submit">Save Changes</button>
                 <!-- Cancel button -->
-                <RouterLink :to="`/jobRole/${roleName}`">
-                    <div class="btn btn-outline btn-error w-1/5">Cancel</div>
-                </RouterLink>
-                
+                <div>
+                    <RouterLink :to="`/jobRole/${roleName}`">
+                        <div class="btn btn-outline btn-error w-1/5">
+                            Cancel
+                        </div>
+                    </RouterLink>
+                </div>
+
             </form>
 
         </div>
@@ -141,22 +138,34 @@ const store = useRoleStore()
 const roleName = route.params.jobRoleName
 
 const removeModal = reactive({
-    skillName: ''
+    skillName: '',
+    roleID: store.role.roleID, // for API call
+    skillIDArr: [] // for API call
 })
 
 const loading = ref(true);
 const error = ref('');
 
-function onSubmit() {
-    console.log('submitted');
-}
-
-function handleDeleteClick(roleID) {
-    console.log(roleID);
-}
-
 function handleRemoveSkill(skillName) {
     removeModal.skillName = skillName
+}
+
+function confirmRemoveSkill(skillName) {
+    // store Skill ID/s in an array for API call when submit form
+    const skillID = store.role.coursesBySkillName[skillName].skillID
+    removeModal.skillIDArr.push(skillID.toString())
+
+    // removing skill key from coursesBySkillName object in pinia store only
+    delete store.role.coursesBySkillName[skillName]
+}
+
+function handleEditRole() {
+    // API call here
+    
+}
+
+function handleDeleteRole(roleID) {
+    console.log(roleID);
 }
 
 </script>
