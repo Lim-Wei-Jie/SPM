@@ -128,7 +128,7 @@ import NavBar from '../components/NavBar.vue';
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useRoleStore } from '@/store/role.js'
-import { getRoleDetails, getSkillsByRole, getCoursesBySkill, deleteRole } from "@/endpoint/endpoint.js";
+import { updateRole, deleteRole } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
@@ -139,8 +139,11 @@ const roleName = route.params.jobRoleName
 
 const removeModal = reactive({
     skillName: '',
-    roleID: store.role.roleID, // for API call
-    skillIDArr: [] // for API call
+})
+
+const removeSkills = reactive({
+    roleID: store.role.roleID,
+    skillIDArr: [] // might need to be stored in pinia
 })
 
 const loading = ref(true);
@@ -153,15 +156,22 @@ function handleRemoveSkill(skillName) {
 function confirmRemoveSkill(skillName) {
     // store Skill ID/s in an array for API call when submit form
     const skillID = store.role.coursesBySkillName[skillName].skillID
-    removeModal.skillIDArr.push(skillID.toString())
+    removeSkills.skillIDArr.push(skillID.toString())
 
     // removing skill key from coursesBySkillName object in pinia store only
     delete store.role.coursesBySkillName[skillName]
 }
 
-function handleEditRole() {
-    // API call here
-    
+async function handleEditRole() {
+    try {
+        // skillIDArr might need to be stored in store
+        const updatedRole = await updateRole(removeSkills.roleID, removeSkills.skillIDArr)
+    }
+    catch (err) {
+        error.value = err
+        console.log(err);
+    }
+
 }
 
 function handleDeleteRole(roleID) {
