@@ -417,6 +417,149 @@ def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
     ), 201 
     
     
+
+#get skills from role_ID
+@app.route("/LJAssign/<string:Staff_ID>",methods=['GET'])
+def get_skill_list_by_Role(Staff_ID):
+    list_ofID = get_course_id_by_role(Staff_ID)
+    filtered_list = filter_LJPSID(list_ofID)
+    course_list = LJPS_Course_Assignment.query.filter(LJPS_Course_Assignment.LJPS_ID.in_(filtered_list)).all()
+    role_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
+    
+    
+    #print(course_list)
+    xz = []
+    yz = []
+    
+    for i in course_list:
+        for y in role_list:
+            if (y.LJPS_ID == i.LJPS_ID):
+                print('yes')
+                
+                yz.append(y.LJPS_ID)
+                yz.append(y.Role_ID)
+                yz.append(i.Course_ID)
+                
+            
+                status_c = Registration.query.filter_by(Course_ID=i.Course_ID,Staff_ID=y.Staff_ID).first()
+                if (status_c):
+                    yz.append(status_c.Completion_Status)
+                    yz.append(status_c.Reg_Status)
+                else:
+                    yz.append("ERROR")
+               
+                    
+                    
+                
+        xz.append(yz)
+        yz=[]
+                
+    print(xz)
+    
+    
+
+    
+
+    if course_list:
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                        "deets": [LJPS_Assign for LJPS_Assign in xz]
+                        
+                }            
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There is no such skill"
+        }
+    ), 404
+
+#filter only skillID
+def filter_LJPSID(list_of_id):
+    list_onlyID = []
+    for data in list_of_id:
+        #print(data.Skill_ID)
+        list_onlyID.append(str(getattr(data,"LJPS_ID")))
+        #print(list_onlyID)
+    return list_onlyID
+
+#get skill from associative table using role_id
+def get_course_id_by_role(Staff_ID):
+    role_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
+    if role_list:
+        return role_list
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There is no such skill"
+        }
+    ), 404
+
+    
+    
+
+@app.route("/LJPS_Assignment")
+def get_LJPS_Assignment():
+    #list
+    LJPS_Assignment_Map = LJPS_Assignment.query.all()
+    if len(LJPS_Assignment_Map):
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    
+                    #turn python data into javascript object
+                    "maps": [LJPS_Assign.json() for LJPS_Assign in LJPS_Assignment_Map]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no Skills assigned to Roles."
+        } 
+    ), 404
+    
+    
+
+
+
+
+@app.route("/LJPS_Course/<string:LJPS_ID>")
+def get_LJPS_Assignment_By_Course(LJPS_ID):
+    #list
+    LJPS_Assignment_Map_By_Course = LJPS_Course_Assignment.query.filter_by(LJPS_ID=LJPS_ID).all()
+    
+    
+    if len(LJPS_Assignment_Map_By_Course):
+        
+         
+      
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        
+                        #turn python data into javascript object
+                        "maps": [LJPS_Assign_Course.json() for LJPS_Assign_Course in LJPS_Assignment_Map_By_Course]
+                        
+                        
+                    }
+                }
+            )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no Skills assigned to Roles."
+        } 
+    ), 404
+
+    
+    
     
 
 

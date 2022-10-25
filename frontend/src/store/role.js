@@ -8,12 +8,18 @@ export const useRoleStore = defineStore('role', () => {
         roleID: '',
         roleDesc: '',
         coursesBySkillName: {}
+        /*
+        coursesBySkillName: {
+            skillName1: {
+                'skillID': '',
+                'courses': {
+                    courseName1: {courseDetail1},
+                    courseName2: {courseDetail2}
+                }
+            },
+        }
+        */
     })
-
-    // // Getter using computed
-    // const someComputedValue = computed(() =>
-    //     role.value.roleName
-    // )
 
     const storeRole = (roleName, roleID, roleDesc, coursesBySkillName) => {
         role.roleName = roleName
