@@ -85,6 +85,38 @@
                                 </label>
                             </div>
                         </div>
+
+                        <!-- Add skill button -->
+                        <label for="add-modal" class="flex justify-evenly">
+                            <div class="btn btn-outline border-dashed rounded-lg w-11/12">
+                                Add New Skills
+                            </div>
+                        </label>
+                        <!-- Modal pop-up -->
+                        <input type="checkbox" id="add-modal" class="modal-toggle"/>
+                        <label for="add-modal" class="modal cursor-default">
+                            <label class="modal-box relative space-y-8">
+                                <!-- All skills in checkbox 
+                                    (assigned skills not shown) -->
+                                
+                                
+                                <!-- Add + cancel buttons -->
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="flex justify-end">
+                                        <label for="add-modal" class="btn btn-sm w-3/5" @click="handleAddSkill">
+                                            Add
+                                        </label>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <label for="add-modal" class="btn btn-sm btn-outline w-3/5">
+                                            Cancel
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </label>
+                        </label>
+
                     </div>
                 </div>
                 
@@ -136,13 +168,8 @@ const removeModal = reactive({
     skillName: '',
 })
 
-const removeSkills = reactive({
-    removeSkillsIDArr: assignSkillsStore.assignSkills.removeSkillsIDArr
-})
-
-const addSkills = reactive({
-    addSkillsIDArr: assignSkillsStore.assignSkills.addSkillsIDArr
-})
+const removeSkillsIDArr = ref(assignSkillsStore.assignSkills.removeSkillsIDArr)
+const addSkillsIDArr = ref(assignSkillsStore.assignSkills.addSkillsIDArr)
 
 const loading = ref(true);
 const error = ref('');
@@ -160,15 +187,20 @@ function handleRemoveSkill(skillName) {
 function confirmRemoveSkill(skillName) {
     // store Skill ID/s in an array for API call when submit form
     const skillID = roleStore.role.coursesBySkillName[skillName].skillID
-    removeSkills.removeSkillsIDArr.push(skillID.toString())
+    removeSkillsIDArr.value.push(skillID.toString())
 
     // removing skill key from coursesBySkillName object in pinia store only
     delete roleStore.role.coursesBySkillName[skillName]
 }
 
+function handleAddSkill() {
+    console.log('add');
+    // add to roleStore
+}
+
 async function handleEditRole() {
     try {
-        const updatedRole = await updateRole(roleStore.role.roleID, removeSkills.removeSkillsIDArr)
+        const updatedRole = await updateRole()
     }
     catch (err) {
         error.value = err
