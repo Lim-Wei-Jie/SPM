@@ -4,22 +4,16 @@
     <NavBar/>
     <div class="container mx-auto my-8">
         <div v-if="loading">
-            <!-- Breadcrumbs component -->
-            <div class="text-sm breadcrumbs">
-                <ul>
-                    <li>
-                        <RouterLink to="/login">Home</RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/manager">Job Role</RouterLink>
-                    </li> 
-                    <li>
-                        <RouterLink :to="`/jobRole/${roleStore.role.roleName}`"> {{roleStore.role.roleName}} </RouterLink>
-                    </li>
-                    <li>
-                        Edit role - ({{roleStore.role.roleName}})
-                    </li>
-                </ul>
+
+            <!-- Back button -->
+            <div>
+                <RouterLink :to="`/jobRole/${roleName}`">
+                    <button class="btn btn-circle" @click="handleBack">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                        </svg>
+                    </button>
+                </RouterLink>
             </div>
 
             <div class="grid grid-cols-2 my-8">
@@ -99,7 +93,7 @@
                 <!-- Cancel button -->
                 <div>
                     <RouterLink :to="`/jobRole/${roleName}`">
-                        <div class="btn btn-outline btn-error w-1/5">
+                        <div class="btn btn-outline btn-error w-1/5" @click="handleBack">
                             Cancel
                         </div>
                     </RouterLink>
@@ -133,6 +127,7 @@ import { updateRole, deleteRole } from "@/endpoint/endpoint.js";
 const router = useRouter()
 const route = useRoute()
 const roleStore = useRoleStore()
+const assignSkillsStore = useAssignSkillsStore()
 
 // from params
 const roleName = route.params.jobRoleName
@@ -142,15 +137,21 @@ const removeModal = reactive({
 })
 
 const removeSkills = reactive({
-    removeSkillsIDArr: [] // store in pinia
+    removeSkillsIDArr: assignSkillsStore.assignSkills.removeSkillsIDArr
 })
 
 const addSkills = reactive({
-    addSkillsIDArr: [] // store in pinia
+    addSkillsIDArr: assignSkillsStore.assignSkills.addSkillsIDArr
 })
 
 const loading = ref(true);
 const error = ref('');
+
+// reset assignSkillsStore when exit edit role page (using back or cancel btn)
+function handleBack() {
+    assignSkillsStore.assignSkills.removeSkillsIDArr = []
+    assignSkillsStore.assignSkills.addSkillsIDArr = []
+}
 
 function handleRemoveSkill(skillName) {
     removeModal.skillName = skillName
@@ -158,7 +159,6 @@ function handleRemoveSkill(skillName) {
 
 function confirmRemoveSkill(skillName) {
     // store Skill ID/s in an array for API call when submit form
-    // removeSkillsIDArr store in pinia
     const skillID = roleStore.role.coursesBySkillName[skillName].skillID
     removeSkills.removeSkillsIDArr.push(skillID.toString())
 

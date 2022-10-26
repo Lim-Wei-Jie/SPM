@@ -42,14 +42,8 @@ export const useAssignSkillsStore = defineStore('assignSkills', () => {
         addSkillsIDArr: []
     })
 
-    const storeAssignSkills = (removeSkillsIDArr, addSkillsIDArr) => {
-        assignSkills.removeSkillsIDArr = removeSkillsIDArr
-        assignSkills.addSkillsIDArr = addSkillsIDArr
-    }
-
     return {
-        assignSkills,
-        storeAssignSkills
+        assignSkills
     }
 
 })

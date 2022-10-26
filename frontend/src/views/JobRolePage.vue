@@ -110,7 +110,7 @@ const roleStore = useRoleStore()
 const roleName = route.params.jobRoleName
 
 const role = reactive({
-    roleName: roleName,
+    roleName: '',
     roleID: '',
     roleDesc: '',
     coursesBySkillName: {}
@@ -128,6 +128,7 @@ const error = ref('')
     try {
         // get role name, ID, and description
         const roleDetails = await getRoleDetails(roleName)
+        role.roleName = roleDetails.Role_Name
         role.roleID = roleDetails.Role_ID
         role.roleDesc = roleDetails.Role_Desc
 
@@ -164,11 +165,11 @@ const error = ref('')
     }
 })();
 
-function handleEditClick(roleDetailsName) {
+function handleEditClick(roleName) {
     router.push({
         name: 'editRole',
         params: {
-            jobRoleName: roleDetailsName
+            jobRoleName: roleName
         }
     })
 }
