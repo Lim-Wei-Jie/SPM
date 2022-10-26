@@ -99,12 +99,12 @@ import NavBar from '@/components/Navbar.vue'
 // import Breadcrumb from '@/components/Breadcrumb.vue'
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useRoleStore } from '@/store/role.js'
+import { useRoleStore } from '@/store/index.js'
 import { getRoleDetails, getSkillsByRole, getCoursesBySkill } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
-const store = useRoleStore()
+const roleStore = useRoleStore()
 
 // from params
 const roleName = route.params.jobRoleName
@@ -153,7 +153,7 @@ const error = ref('')
         }
 
         // store role in global store to be use by edit job role page
-        store.storeRole(role.roleName, role.roleID, role.roleDesc, role.coursesBySkillName)
+        roleStore.storeRole(role.roleName, role.roleID, role.roleDesc, role.coursesBySkillName)
 
         // after all API calls made
         loading.value = true
