@@ -420,8 +420,8 @@ def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
 
 #get skills from role_ID
 @app.route("/LJAssign/<string:Staff_ID>",methods=['GET'])
-def get_skill_list_by_Role(Staff_ID):
-    list_ofID = get_course_id_by_role(Staff_ID)
+def get_LJ_by_Staff(Staff_ID):
+    list_ofID = get_ljps_id_by_role(Staff_ID)
     filtered_list = filter_LJPSID(list_ofID)
     course_list = LJPS_Course_Assignment.query.filter(LJPS_Course_Assignment.LJPS_ID.in_(filtered_list)).all()
     role_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
@@ -502,7 +502,7 @@ def filter_LJPSID(list_of_id):
     return list_onlyID
 
 #get skill from associative table using role_id
-def get_course_id_by_role(Staff_ID):
+def get_ljps_id_by_role(Staff_ID):
     role_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
     if role_list:
         return role_list
@@ -512,6 +512,163 @@ def get_course_id_by_role(Staff_ID):
             "message": "There is no such skill"
         }
     ), 404
+    
+
+#get skills from role_ID
+@app.route("/AddLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','POST'])
+def Add_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
+    
+
+
+
+        
+        staff_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
+        
+        if staff_list:
+            
+            check_course_assignment = LJPS_Course_Assignment.query.filter_by(LJPS_ID=LJPS_ID,Course_ID=Course_ID).first()
+    
+    
+            if check_course_assignment:
+                
+                return jsonify(
+                        {
+                            "code": 201,
+                            "data": "entry already exist"
+                        }
+                    ), 201 
+            else:
+                
+                new_course_assignment = LJPS_Course_Assignment(LJPS_ID,Course_ID)
+                try:
+                    db.session.add(new_course_assignment)
+                    db.session.commit()
+                except:
+                    return jsonify(
+                        {
+                            "code": 500,
+                            "data": {
+                                "message":"data not successfully added"
+                            
+                            },
+                            "message": "An error occurred creating the registration."
+                        }
+                    ), 500
+                
+            
+            
+            job_check = LJPS_Assignment.query.filter_by(Role_ID=Role_ID).first()
+            
+        
+            
+            if job_check == None:
+                
+                print(job_check)
+                
+                
+                new_ljps_assignment = LJPS_Assignment(LJPS_ID,Staff_ID,Role_ID)
+                
+            
+                try:
+                    db.session.add(new_ljps_assignment)
+                    db.session.commit()
+                except:
+                    return jsonify(
+                        {
+                            "code": 500,
+                            "data": {
+                                "reg_id": "data added successfully"
+                            
+                            },
+                            "message": "An error occurred creating the registration."
+                        }
+                    ), 500
+            
+                return jsonify(
+                    {
+                        "code": 201,
+                        "data": new_ljps_assignment.json()
+                    }
+                ), 201 
+
+   
+
+#get skills from role_ID
+@app.route("/DeleteLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','POST'])
+def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
+    
+
+
+
+        
+        staff_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
+        
+        if staff_list:
+            
+            check_course_assignment = LJPS_Course_Assignment.query.filter_by(LJPS_ID=LJPS_ID,Course_ID=Course_ID).first()
+    
+    
+            if check_course_assignment:
+                
+                try:
+                
+                    
+                    db.session.delete(check_course_assignment)
+                    db.session.commit()
+                
+                except:
+                    
+                    return jsonify(
+                            {
+                                "code": 201,
+                                "data": "DATA ERROR"
+                            }
+                        ), 201 
+            else:
+                
+                    return jsonify(
+                        {
+                            "code": 500,
+                            "data": {
+                                "message":"data not successfully removed"
+                            
+                            },
+                            "message": "An error occurred creating the registratertregrion."
+                        }
+                    ), 500
+                
+            
+            
+            job_check = LJPS_Assignment.query.filter_by(LJPS_ID=LJPS_ID,Staff_ID=Staff_ID,Role_ID=Role_ID).first()
+            
+        
+            
+            if job_check:
+                
+                
+                try:
+                    db.session.delete(job_check)
+                    db.session.commit()
+                except:
+                    return jsonify(
+                        {
+                            "code": 500,
+                            "data": {
+                                "reg_id": "data removed successfully"
+                            
+                            },
+                            "message": "An error occurred creating the registration."
+                        }
+                    ), 500
+            
+                return jsonify(
+                    {
+                        "code": 201,
+                        "data": "data being removed"
+                    }
+                ), 201 
+  
+    
 
     
     
