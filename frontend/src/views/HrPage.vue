@@ -3,6 +3,7 @@
     <NavBar/>
 
     <div class="container mx-auto my-8">
+        <div v-if="loading">
         <p class="text-xl font-bold my-4">
             Current Skills ({{numOfSkills}})
         </p>
@@ -20,23 +21,32 @@
                 </button>
             </div>
 
-            <!-- Add new role button -->
+            <!-- Add new skill button -->
             <div class='place-self-end'>
                 <button class="btn" @click="handleAddNewSkill">Create New Skill</button>
             </div>
 
         </div>
 
-        <div class="grid grid-cols-1 gap-6 bg-gray-700 rounded-lg my-6 p-8">
+        <div class="grid grid-cols-1 gap-6 bg-gray-400 rounded-lg my-6 p-8">
 
-            <!-- Job role component -->
-            <div class="flex" v-for="skill in skills">
-                <div class="btn btn-lg w-11/12 grid grid-cols-2 " @click="handleSkillClick(skill)">
+            <!-- display skill component -->
+            <div class="flex" v-for="skill in allSkills">
+                <div class="btn btn-lg w-11/12" @click="handleSkillClick(skill)">
                     <p class="">{{skill}}</p>
-                    <p class="">Created on: {{skill.Date_created}}</p>
+                    <!-- <p class="">Created on: {{skill.Date_created}}</p> -->
                 </div>
             </div>
 
+        </div>
+        </div>
+
+        <div v-else-if="error !== ''">
+            {{ error }}
+        </div>
+        
+        <div v-else>
+            <button class="btn loading">loading</button>
         </div>
 
     </div>
@@ -49,47 +59,43 @@ import { useRouter } from 'vue-router'
 import { getAllSkills } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
-const skills = ref([])
-// const  =  [
-//       {
-//         "Skill_Desc": "MES Desc", 
-//         "Skill_Id": 1234567, 
-//         "Skill_Name": "Mechanical Engineeri", 
-//         "Date_created": "25 Aug 2022"
-//       }, 
-//       {
-//         "Skill_Desc": "CES Desc", 
-//         "Skill_Id": 9741827, 
-//         "Skill_Name": "Computer Science Ski", 
-//         "Date_created": "20 Aug 2022"
-//       }
-//     ]
-
+const allSkills = ref([])
 const numOfSkills = ref()
+const loading = ref(false);
+const error = ref('');
 
-//get all skills
+// //get all skills
+
 ;(async() => {
-    await getAllSkills()
-    .then((skills) => {
+    try {
+        const skills = await getAllSkills()
         for (var skill of skills) {
-            skills.value.push(skill)
+            allSkills.value.push(skill.Skill_name)
         }
-        numOfSkills.value = skills.value.length
-    })
-    .catch((err) => {
+        allSkills.value.sort();
+        numOfSkills.value = allSkills.value.length
+
+        // after all API calls made
+        loading.value = true
+    }
+    catch(err) {
+        error.value = err
         console.log(err);
-    });
+    }
 })();
 
-function handleSkillClick(skillName) {
+function handleSkillClick(skill) {
     router.push({
-        path: `/skill/${skillName}`
+        name: 'skill',
+        params: {
+            skillName: skill
+        }
     })
 }
 
 function handleAddNewSkill() {
     router.push({
-        path: '/newSkill'
+        name: 'newSkill'
     })
 }
 </script>

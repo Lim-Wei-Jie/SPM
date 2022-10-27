@@ -10,6 +10,9 @@ import NewRolePage from "../views/NewRolePage.vue"
 import EditJobRole from "../views/EditJobRole.vue"
 import SearchJobRole from "../views/SearchRole.vue"
 import createLJ from "../views/CreateLJ.vue"
+import NewSkillPage from "../views/NewSkillPage.vue"
+import SkillPage from "../views/SkillPage.vue"
+import EditSkill from "../views/EditSkill.vue"
 
 const routes = [
     {
@@ -76,18 +79,25 @@ const routes = [
     },
 
 
-    // {
-    //     path: '/newSkill',
-    //     name: 'newSkill',
-    //     component: NewSkillPage
-    // },
+    {
+        path: '/newSkill',
+        name: 'newSkill',
+        component: NewSkillPage
+    },
 
-    // {
-    //     path: '/skill/:skillName',
-    //     name: 'skill',
-    //     component: SkillPage,
-    //     props: true
-    // },
+    {
+        path: '/skill/:skillName',
+        name: 'skill',
+        component: SkillPage,
+        props: true
+    },
+
+    {
+        path: '/editSkill/:skillName',
+        name: 'editSkill',
+        component: EditSkill,
+        props: true
+    },
 ]
 
 const router = createRouter({
