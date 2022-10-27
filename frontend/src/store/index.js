@@ -54,25 +54,20 @@ export const useSkillStore = defineStore('skill', () => {
         skillName: '',
         skillID: '',
         skillDesc: '',
-        coursesBySkillName: {}
+        courses: {}
         /*
-        coursesBySkillName: {
-            skillName1: {
-                'skillID': '',
-                'courses': {
-                    courseName1: {courseDetail1},
-                    courseName2: {courseDetail2}
-                }
-            },
+        courses: {
+            courseName1: {courseDetail1},
+            courseName2: {courseDetail2}
         }
         */
     })
 
-    const storeSkill = (skillName, skillID, skillDesc, coursesBySkillName) => {
+    const storeSkill = (skillName, skillID, skillDesc, courses) => {
         skill.skillName = skillName
         skill.skillID = skillID
         skill.skillDesc = skillDesc
-        skill.coursesBySkillName = coursesBySkillName
+        skill.courses = courses
     }
 
     return {
