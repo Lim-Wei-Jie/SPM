@@ -103,7 +103,7 @@
     // import Breadcrumb from '@/components/Breadcrumb.vue'
     import { reactive, ref } from 'vue'
     import { useRouter, useRoute } from 'vue-router'
-    import { useSkillStore } from '@/store/skill.js'
+    import { useSkillStore } from '@/store/index.js'
     import { getCoursesBySkill, getAllSkills } from "@/endpoint/endpoint.js";
     
     const router = useRouter()
