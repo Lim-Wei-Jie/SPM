@@ -33,7 +33,7 @@ const router = useRouter()
 
 //check for existing LJ
 const staff_ID = '140002'
-const staff_ID2 = '130002'
+const staff_ID2 = '130003'
 const numOfLJ = ref()
 var LJs = ref([])
 
@@ -91,33 +91,64 @@ var LJs2 = ref([])
 ;(async() => {
     await getLJs(staff_ID2)
     .then((res) => {
-        // for each LJ => LJ id, Role ID, Course IDs
+        // for each LJ => LJ id, Role ID, Course ID, Status
+        var ljIdList = []
         for (var LJ of res) {
-            var LJ_id = LJ[0]
-            var Role_id = LJ[1]
-            var courseList = LJ[2]
+            var LJid = LJ[0]
+            if (!ljIdList.includes(LJid)) {
+                ljIdList.push(LJid)
+            }
+        }
+        var jobNameList = []
+        for (var LJ of res) {
+            var jobName = LJ[1]
+            if (!jobNameList.includes(jobName)) {
+                jobNameList.push(jobName)
+            }
+        }
+        
+        for (let i = 0; i < ljIdList.length; i++) {
+            //get role name
             const Role_Name = ref()
-
             ;(async() => {
-                await getRoleNameByID(Role_id)
+                await getRoleNameByID(jobNameList[i])
                 .then((res) => {
-                    // for each LJ => LJ id, Role ID, Course IDs
                     Role_Name.value = res
                 }).catch((err) => {
                     console.log(err);
                 });
             })();
+
+            //get all courses and status
+            var oneCourseList = []
+            for (var LJ of res) {
+                if (LJ[0] == ljIdList[i]) {
+                    oneCourseList.push([LJ[2], LJ[3]])
+                }
+            }
+
+            var completedCourseList = []
+            var onGoingCourseList = []
+            for (var x in oneCourseList) {
+                if (oneCourseList[x][1] == 'Completed') {
+                    completedCourseList.push(oneCourseList[x][0])
+                } else {
+                    onGoingCourseList.push(oneCourseList[x][0])
+                }
+            }
+            var completedNo = completedCourseList.length
+            var totalNo = oneCourseList.length
+            var completedPer = Math.ceil((completedNo/totalNo) * 100)
             
-            //add to overall LJ
             LJs2.value.push(
                 {
-                    LJ_id: LJ_id,
+                    LJ_id: ljIdList[i],
                     jobRoleName: Role_Name,
                     courses: {
-                        completed: [],
-                        onGoing: [courseList]
+                        completed: completedCourseList,
+                        onGoing: onGoingCourseList
                     },
-                    progress: 0
+                    progress: completedPer
                 }
             ) 
         }
