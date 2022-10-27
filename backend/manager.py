@@ -411,7 +411,6 @@ def get_skill_id_by_role(Role_ID):
     if role_list:
         return role_list
 
-
 #mapping skills to role
 @app.route("/role/roleassignskills/<string:Role_ID>/<string:Skill_ID>", methods=['GET','POST'])
 def role_to_skill_assignment(Role_ID,Skill_ID):
@@ -449,6 +448,7 @@ def role_to_skill_assignment(Role_ID,Skill_ID):
         }
     ), 201 
 
+#delete skills from role
 @app.route("/role/roledeleteskills/<string:Role_ID>/<string:Skill_ID>", methods=['GET','POST'])
 def role_to_skill_delete(Role_ID,Skill_ID):
     
