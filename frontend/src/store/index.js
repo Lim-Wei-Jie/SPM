@@ -34,3 +34,16 @@ export const useRoleStore = defineStore('role', () => {
     }
 
 })
+
+export const useAssignSkillsStore = defineStore('assignSkills', () => {
+
+    const assignSkills = reactive({
+        removeSkillsIDArr: [],
+        addSkillsIDArr: []
+    })
+
+    return {
+        assignSkills
+    }
+
+})

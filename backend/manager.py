@@ -371,7 +371,7 @@ def get_mapped_skill_to_role():
 #get skills from role_ID
 @app.route("/role/getskill/<string:Role_ID>",methods=['GET'])
 def get_skill_list_by_Role(Role_ID):
-    list_ofID = get_skill_id_by_role(Role_ID)
+    list_ofID = get_skill_id_by_role(Role_ID) #Need to add a validator here to check if it returns a list or error
     filtered_list = filter_skillID(list_ofID)
     skill_list = Skill.query.filter(Skill.Skill_ID.in_(filtered_list)).all()
 

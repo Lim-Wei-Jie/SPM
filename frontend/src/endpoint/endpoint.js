@@ -16,7 +16,7 @@ export function getAllRoles() {
     })
 }
 
-// Get specific Job role using Job Role ID / Name
+// Get specific Job Role details using Job Role ID / Name
 export function getRoleDetails(jobRoleName) {
     return new Promise((resolve, reject) => {
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/name/${jobRoleName}`
@@ -27,12 +27,12 @@ export function getRoleDetails(jobRoleName) {
             })
             .catch((err) => {
                 console.log(err);
-                reject('Fail to fetch all job roles, check WAMP/MAMP server')
+                reject('Fail to fetch job role details, check WAMP/MAMP server')
             })
     })
 }
 
-// Get all skills using Job Role ID / Name
+// Get all skills assigned to Job Role using Job Role ID
 export function getSkillsByRole(jobRoleID) {
     return new Promise((resolve, reject) => {
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/getskill/${jobRoleID}`
@@ -43,12 +43,12 @@ export function getSkillsByRole(jobRoleID) {
             })
             .catch((err) => {
                 console.log(err);
-                reject('Fail to fetch all skills, check WAMP/MAMP server')
+                reject('Fail to fetch all skills by role, check WAMP/MAMP server')
             })
     })
 }
 
-// Get specific courses using skill ID / Name
+// Get all Courses that fulfils the Skill using Skill ID
 export function getCoursesBySkill(skillID) {
     return new Promise((resolve, reject) => {
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill/getcourse/${skillID}`
@@ -59,7 +59,7 @@ export function getCoursesBySkill(skillID) {
             })
             .catch((err) => {
                 console.log(err);
-                reject('Fail to fetch all courses, check WAMP/MAMP server')
+                reject('Fail to fetch all courses by skill, check WAMP/MAMP server')
             })
     })
 }
@@ -81,20 +81,36 @@ export function createRole(newJobRoleData) {
             })
             .catch((err) => {
                 console.log(err.message);
-                // job_err_msg = err.message;
-                // BE_error = true;
-                reject('Fail to create role, check WAMP/MAMP server');
-                // if(err.code == '400'){
-                //     err_msg = "Role already exists.";
-                //     BE_error = true;
-                // }
-                // else if (err.code == '500'){
-                //     err_msg = "An error occurred creating the Role.";
-                //     BE_error = true;
-                // }
-                // else{
-                //     reject('Fail to create role, check WAMP/MAMP server')
-                // }
+                reject('Fail to create role, check WAMP/MAMP server')
+            })
+    })
+}
+
+// Update job role
+export function updateRole(roleID, skillIDArr) {
+    // const roleID = updateDetails
+    console.log(JSON.parse(JSON.stringify(skillIDArr)))
+    /*
+    Will make 3 concurrent API calls for:
+    1. Changes in role name and desc
+    2. Addition of skills
+    3. Removal of skills
+    Can use Promise.all() or Axios.all()
+    */
+}
+
+// Delete job role
+export function deleteRole(roleID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/delete/${roleID}`
+        axios
+        .post(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to delete role, check WAMP/MAMP server');
             })
     })
 }
@@ -130,23 +146,6 @@ export function mapSkillsToJob(skillstoJobRoleData) {
             .catch((err) => {
                 console.log(err.message);
                 reject('Fail to fetch all skills, check WAMP/MAMP server')
-            })
-    })
-}
-
-// Delete job role
-export function deleteRole(roleDetailsID) {
-  
-    return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/delete/${roleDetailsID}`
-        axios
-        .post(apiEndpoint)
-            .then((res) => {
-                resolve(res.data)
-            })
-            .catch((err) => {
-                console.log(err.message);
-                reject('Fail to create role, check WAMP/MAMP server');
             })
     })
 }

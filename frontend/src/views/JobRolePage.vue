@@ -99,18 +99,18 @@ import NavBar from '@/components/Navbar.vue'
 // import Breadcrumb from '@/components/Breadcrumb.vue'
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useRoleStore } from '@/store/role.js'
+import { useRoleStore } from '@/store/index.js'
 import { getRoleDetails, getSkillsByRole, getCoursesBySkill } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
-const store = useRoleStore()
+const roleStore = useRoleStore()
 
 // from params
 const roleName = route.params.jobRoleName
 
 const role = reactive({
-    roleName: roleName,
+    roleName: '',
     roleID: '',
     roleDesc: '',
     coursesBySkillName: {}
@@ -128,6 +128,7 @@ const error = ref('')
     try {
         // get role name, ID, and description
         const roleDetails = await getRoleDetails(roleName)
+        role.roleName = roleDetails.Role_Name
         role.roleID = roleDetails.Role_ID
         role.roleDesc = roleDetails.Role_Desc
 
@@ -153,7 +154,7 @@ const error = ref('')
         }
 
         // store role in global store to be use by edit job role page
-        store.storeRole(role.roleName, role.roleID, role.roleDesc, role.coursesBySkillName)
+        roleStore.storeRole(role.roleName, role.roleID, role.roleDesc, role.coursesBySkillName)
 
         // after all API calls made
         loading.value = true
@@ -164,11 +165,11 @@ const error = ref('')
     }
 })();
 
-function handleEditClick(roleDetailsName) {
+function handleEditClick(roleName) {
     router.push({
         name: 'editRole',
         params: {
-            jobRoleName: roleDetailsName
+            jobRoleName: roleName
         }
     })
 }
