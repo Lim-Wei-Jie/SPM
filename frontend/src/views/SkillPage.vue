@@ -142,12 +142,10 @@ const error = ref('')
         
         // get courses with particular skill ID
         const courses = await getCoursesBySkill(skill.skillID)
-
         for (var course of courses) {
             skill.courses[course.Course_Name] = course
         }
         
-
         // store role in global store to be use by edit job role page
         skillStore.storeSkill(skill.skillName, skill.skillID, skill.skillDesc, skill.courses)
 
