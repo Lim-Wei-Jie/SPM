@@ -165,3 +165,21 @@ export function getCourseDetails(Course_Name) {
             })
     })
 }
+
+// Delete skill
+
+// Get all courses
+export function getAllCourses() {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/course`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.courses)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch all courses, check WAMP/MAMP server')
+            })
+    })
+}

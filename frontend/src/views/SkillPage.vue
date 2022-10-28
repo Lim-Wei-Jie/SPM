@@ -46,7 +46,7 @@
 
                 <!-- display course component -->
                 <div class="flex" v-for="course of skill.courses">
-                    <label for="course-modal" class="btn btn-lg w-11/12" @click="handleCourseClick(skillName, course.Course_Name)">
+                    <label for="course-modal" class="btn btn-lg w-11/12" @click="handleCourseClick( course.Course_Name)">
                         <p class="">{{course.Course_ID}}: {{course.Course_Name}}</p>
                         <!-- <p class="">Created on: {{skill.Date_created}}</p> -->
                     </label>
@@ -167,10 +167,9 @@ function handleEditClick(skillName) {
     })
 }
 
-function handleCourseClick(skillName, courseName) {
+function handleCourseClick(courseName) {
     courseModal.courseName = courseName
-    console.log(skill.coursesBySkillName[skillName])
-    courseModal.courseDesc = skill.coursesBySkillName[skillName].courses[courseName].Course_Desc
+    courseModal.courseDesc = skill.courses[courseName].Course_Desc
 }
 
 </script>

@@ -98,6 +98,7 @@ const routes = [
         component: EditSkill,
         props: true
     },
+
 ]
 
 const router = createRouter({
