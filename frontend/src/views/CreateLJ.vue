@@ -113,7 +113,7 @@ const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
 
 //JOB ROLE
 const roleDetailsName = ref()
-var roleDetailsID = ref()
+const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const staffID = ref('130002')
 
@@ -130,7 +130,6 @@ const staffID = ref('130002')
 
 //SKILLS
 const skillsList = ref([])
-console.log(roleDetailsID)
 
 ;(async() => {
     await getSkillsByRole(1)
@@ -245,7 +244,6 @@ function createRegis(skillsList, staffID) {
 }
 
 //NOT WORKING 
-/*
 function addReg(regID, courseID, staffID) {
     ;(async() => {
         await createRegistration(regID, courseID, staffID, "Registered", "Ongoing")
@@ -256,7 +254,6 @@ function addReg(regID, courseID, staffID) {
         });
     })
 }
-*/
 
 /*
 function createLJ() {
