@@ -76,7 +76,7 @@ const routes = [
     },
 
     {
-        path: '/staff/edit/:ljID',
+        path: '/staff/edit/:jobRoleID',
         name: 'editLJ',
         component: EditLJ,
         props: true

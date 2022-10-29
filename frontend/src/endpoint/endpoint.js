@@ -201,6 +201,21 @@ export function getAllRegistrationNo() {
     })
 }
 
+export function getAllLJPSNo() {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/LJPS_Assignment`
+            axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data.maps.length + 1)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to fetch all registrations, check WAMP/MAMP server')
+            })
+    })
+}
+
 // Get registration with Staff ID
 export function getRegistration(staffID) {
     return new Promise((resolve, reject) => {
@@ -250,6 +265,22 @@ export function getLJs(staffID) {
     })
 }
 
+// create LJ assignment
+export function createLJAssign(courseID, roleID, staffID, ljpsID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssign/${staffID}/${roleID}/${courseID}/${ljpsID}`
+        axios
+        .post(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to create registration, check WAMP/MAMP server');
+            })
+    })
+}
+
 export function getRoleNameByID(jobID) {
     return new Promise((resolve, reject) => {
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/${jobID}`
@@ -276,6 +307,43 @@ export function getRoleByID(jobID) {
             .catch((err) => {
                 console.log(err);
                 reject('Fail to fetch registration of staff, check WAMP/MAMP server')
+            })
+    })
+}
+
+export function getSkillIdByCourseName(CourseID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill_course_assignment`
+        axios
+            .get(apiEndpoint)
+            .then((res) => {
+                var assignments = res.data.data.maps
+                var b = []
+                for (var a of assignments) {
+                    if (CourseID == a.Course_ID) {
+                        b.push(a.Skill_ID)
+                    }
+                }
+                resolve(b)
+            })
+            .catch((err) => {
+                console.log(err);
+                reject('Fail to fetch registration of staff, check WAMP/MAMP server')
+            })
+    })
+}
+
+export function getStaffCreate() {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/Registration`
+            axios
+            .get(apiEndpoint)
+            .then((res) => {
+                resolve(res.data.data.registration.length + 1)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to fetch all registrations, check WAMP/MAMP server')
             })
     })
 }
