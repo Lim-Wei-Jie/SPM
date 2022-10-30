@@ -79,7 +79,10 @@ class Role(db.Model):
         self.Role_ID = Role_ID
         self.Role_Name = Role_Name
         self.Role_Desc = Role_Desc
-        self.Date_Created = Date_Created
+        if Date_Created is None:
+            self.Date_Created = datetime.utcnow()
+        else:
+            self.Date_Created = Date_Created
 
         # self.imageLink = imageLink
  
@@ -132,7 +135,7 @@ class Skill(db.Model):
    #Courses = relationship("Course", secondary=skill_assignment)
     def json(self):
 
-        return {"Skill_id": self.Skill_ID , "Skill_name": self.Skill_Name, "Skill_desc": self.Skill_Desc , "Date_created": self.Date_created}
+        return {"Skill_ID": self.Skill_ID , "Skill_Name": self.Skill_Name, "Skill_Desc": self.Skill_Desc , "Date_created": self.Date_created}
     
     
     def __init__(self, Skill_ID, Skill_Name, Skill_Desc, Date_created=None):
@@ -140,9 +143,9 @@ class Skill(db.Model):
         self.Skill_Name = Skill_Name
         self.Skill_Desc = Skill_Desc
         if Date_created is None:
-            self.created_time = datetime.utcnow()
+            self.Date_created = datetime.utcnow()
         else:
-            self.created_time = Date_created
+            self.Date_created = Date_created
 
 class Skill_Assign(db.Model):
     __tablename__ = 'Skill_Assignment'
@@ -342,9 +345,8 @@ def get_role_name(role_Name):
         }
     ), 404
 
-
 #viewing the role_assignment table
-@app.route("/skill_role_assignment")
+@app.route("/role/getskill")
 def get_mapped_skill_to_role():
     #list
     Skill_Role_Map = Role_Assign.query.all()
@@ -367,30 +369,35 @@ def get_mapped_skill_to_role():
         } 
     ), 404
 
-
 #get skills from role_ID
 @app.route("/role/getskill/<string:Role_ID>",methods=['GET'])
 def get_skill_list_by_Role(Role_ID):
-    list_ofID = get_skill_id_by_role(Role_ID) #Need to add a validator here to check if it returns a list or error
-    filtered_list = filter_skillID(list_ofID)
-    skill_list = Skill.query.filter(Skill.Skill_ID.in_(filtered_list)).all()
-
-    if skill_list:
+    list_ofID = get_skill_id_by_role(Role_ID) 
+    #check list of ID ##Need to add a validator here to check if it returns a list or error
+    print(list_ofID)
+    if list_ofID:
+        filtered_list = filter_skillID(list_ofID)
+        skill_list = Skill.query.filter(Skill.Skill_ID.in_(filtered_list)).all()
+        if skill_list:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                            "Skill": [skill.json() for skill in skill_list]
+                    }            
+                }
+            )
         return jsonify(
             {
-                "code": 200,
-                "data": {
-                        "Skill": [skill.json() for skill in skill_list]
-                }            
+                "code": 404,
+                "message": "There is no such skill"
             }
-        )
+        ), 404
     return jsonify(
-        {
-            "code": 404,
-            "message": "There is no such skill"
-        }
-    ), 404
-
+    {
+        "code": 404,
+        "message": "There is no such skill"
+    }), 404     
 #filter only skillID
 def filter_skillID(list_of_id):
     list_onlyID = []
@@ -398,27 +405,13 @@ def filter_skillID(list_of_id):
         #print(data.Skill_ID)
         list_onlyID.append(str(getattr(data,"Skill_ID")))
     return list_onlyID
-
 #get skill from associative table using role_id
 def get_skill_id_by_role(Role_ID):
     role_list = Role_Assign.query.filter_by(Role_ID=Role_ID).all()
     if role_list:
         return role_list
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There is no such skill"
-        }
-    ), 404
-
-
-
-
-
-
 
 #mapping skills to role
-
 @app.route("/role/roleassignskills/<string:Role_ID>/<string:Skill_ID>", methods=['GET','POST'])
 def role_to_skill_assignment(Role_ID,Skill_ID):
     Skill_ID = Skill_ID.replace("[","")
@@ -428,7 +421,6 @@ def role_to_skill_assignment(Role_ID,Skill_ID):
 
     for skill in skill_arr:
         print(skill)
-        skip    
         if (Role_Assign.query.filter(Role_Assign.Role_ID.like(Role_ID),Role_Assign.Skill_ID.like(skill)).first()):
             if_duplicate_err += str(skill)
         
@@ -456,6 +448,32 @@ def role_to_skill_assignment(Role_ID,Skill_ID):
         }
     ), 201 
 
+#delete skills from role
+@app.route("/role/roledeleteskills/<string:Role_ID>/<string:Skill_ID>", methods=['GET','POST'])
+def role_to_skill_delete(Role_ID,Skill_ID):
+    
+    Skill_ID = Skill_ID.replace("[","")
+    Skill_ID = Skill_ID.replace("]","")
+    skill_arr = Skill_ID.split(",")
+
+    for skill in skill_arr:
+        print(skill)
+        role_skill_assignment = Role_Assign.query.filter(Role_Assign.Role_ID.like(Role_ID),Role_Assign.Skill_ID.like(skill)).first()
+        if role_skill_assignment:
+                db.session.delete(role_skill_assignment)
+                db.session.commit()
+        else:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Delete unsuccessful as role does not exist."
+                } ), 404
+    return jsonify(
+        {
+            "code": 201,
+            "data": str(skill_arr)
+        }
+    ), 201 
 
 
 
@@ -555,6 +573,9 @@ def get_course_list_by_Skill(Skill_ID):
             "message": "There is no course"
         }
     ), 404
+
+
+
 #filter only courseID
 def filterID(list_of_id):
     list_onlyID = []
