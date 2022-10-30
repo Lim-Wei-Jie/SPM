@@ -171,7 +171,7 @@ export function getCourseDetails(Course_Name) {
 // Get all courses
 export function getAllCourses() {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/course`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/course`
         axios
             .get(apiEndpoint)
             .then((res) => {

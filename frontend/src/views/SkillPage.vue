@@ -146,7 +146,7 @@ const error = ref('')
             skill.courses[course.Course_Name] = course
         }
         
-        // store role in global store to be use by edit job role page
+        // store role in global store to be use by edit skill page
         skillStore.storeSkill(skill.skillName, skill.skillID, skill.skillDesc, skill.courses)
 
         // after all API calls made

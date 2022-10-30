@@ -52,6 +52,42 @@
                     <!-- Skill courses -->
                     <div class="space-y-3">
                         <p class="font-medium text-lg"> Courses </p>
+
+                        <!--Add course button-->
+                        <label for="add-modal" class="btn w-1/5" @click="handleAddCourseClick()">
+                            Add Course
+                        </label>
+                        <!-- Modal pop-up -->
+                            <input type="checkbox" id="add-modal" class="modal-toggle"/>
+                            <label for="add-modal" class="modal cursor-default">
+                                <label class="modal-box relative" for="">
+                                    <!-- All the available course names in the form of checkboxes-->
+                                    <!-- v-model="checkboxes" -->
+                                    <p class="font-medium text-lg">Courses:</p>
+                                    <div class="m-4" v-for="each of allCourses" >
+                                        <input v-bind:value="each.course_id" v-bind:id="each.course_id" class="text-2xl font-bold underline underline-offset-8" type="checkbox"  name='checkbox' v-model="checkboxes"/>
+                                            <label v-bind:for="each.course_id">
+                                                {{each.Course_Name}}
+                                            </label>
+                                    </div> 
+                                        
+                                            <!-- Confirm + cancel buttons for adding of course(s) -->
+                                            <div class="grid grid-cols-2 gap-6">
+                                                <div class="flex justify-end">
+                                                    <!-- <label for="add-modal" class="btn btn-sm btn-error btn-outline w-3/5" @click="confirmAddCourse(checkedCourses)"> -->
+                                                        <button class="btn btn-sm btn-error btn-outline w-3/5" type="submit" @click="confirmAddCourse()">Confirm</button>
+                                                        
+                                                    <!-- </label> -->
+                                                </div>
+                                                <div class="flex justify-start">
+                                                    <label for="add-modal" class="btn btn-sm btn-outline w-3/5">
+                                                        Cancel
+                                                    </label>
+                                                </div>
+                                            </div>
+                                </label>
+                            </label>
+                        
                         <!-- Courses component -->
                         <div class="grid grid-cols-4 gap-6 bg-gray-700 rounded-lg my-6 p-8">
                             <!-- Course -->
@@ -136,6 +172,9 @@
     const route = useRoute()
     const store = useSkillStore()
     const viewAllCourses = ref([])
+    const allCourses = ref([])
+    const checkboxes = ref([])
+   
 
     // from params
     const skillName = route.params.skillName
@@ -143,52 +182,98 @@
     const removeModal = reactive({
         courseName: '',
         courseID: '', 
-        courseIDArr: [] // for API call
+        removeCourseID: [] // for API call
+    })
+
+    const addModal = reactive({
+        skillID: store.skill.skillID, // for API call for skill and course assignment 
+        skillName: store.skill.skillName, // for API call for skill and course assignment 
+        courseName: '',
+        courseID: '', 
+        addCourseIDArr: [] // for API call for skill and course assignment 
     })
     
     const loading = ref(true);
     const error = ref('');
 
-    ;(async() => {
-    try {
-        // get all courses available
-        const allCourses = await getAllCourses()
-        for (var each of allCourses) {
-            viewAllCourses.value.push(each.Course_Name)
-        }
-        
-        // store role in global store to be use by edit job role page
-        //skillStore.storeSkill(skill.skillName, skill.skillID, skill.skillDesc, skill.courses)
-
-        // after all API calls made
-        //loading.value = true
-    }
-    catch(err) {
-        error.value = err
-        console.log(err);
-    }
-})();
     
     function handleRemoveCourse(courseName) {
         removeModal.courseName = courseName
     }
     
     function confirmRemoveCourse(courseName) {
-        // store Skill ID/s in an array for API call when submit form
-        const skillID = store.role.coursesBySkillName[skillName].skillID
-        removeModal.skillIDArr.push(skillID.toString())
+        // store course ID/s in an array for API call when submit form
+        const removeCourseID = store.skill.courses[courseName].Course_ID
+        removeModal.removeCourseID.push(courseID.toString())
     
         // removing skill key from coursesBySkillName object in pinia store only
-        delete store.role.coursesBySkillName[skillName]
+        //delete store.role.coursesBySkillName[skillName]
     }
     
-    function handleEditRole() {
+    function handleEditSkill() {
         // API call here
         
     }
     
     function handleDeleteSkill(skillID) {
         console.log(skillID);
+    }
+
+    function handleAddCourseClick() {
+        allCourses.value = [
+            {
+                "Course_Category": "Core",
+                "Course_Desc": "This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking,",
+                "Course_Name": "Systems Thinking and Design",
+                "Course_Status": "Active",
+                "Course_Type": "Internal",
+                "course_id": "COR001"
+            },
+            {
+                "Course_Category": "Core",
+                "Course_Desc": "Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics",
+                "Course_Name": "Lean Six Sigma Green Belt Certification",
+                "Course_Status": "Active",
+                "Course_Type": "Internal",
+                "course_id": "COR002"
+            },
+            {
+                "Course_Category": "Core",
+                "Course_Desc": "The programme provides the learner with the key foundations of what builds customer confidence in the service industr",
+                "Course_Name": "Service Excellence",
+                "Course_Status": "Pending",
+                "Course_Type": "Internal",
+                "course_id": "COR004"
+            }
+            
+            ]
+        }
+    //async function handleAddCourseClick() {
+        // try {
+        //     const allCourses = await getAllCourses()
+        //     console.log(allCourses)
+        //     for (var each of allCourses) {
+        //         viewAllCourses.value.push(each)
+        //     }
+        // } 
+        // catch (err) {
+        //     error.value = err
+        //     console.log(err);
+        // }
+    //}
+
+    function confirmAddCourse(){
+        //this is an array
+        console.log(checkboxes.value) 
+        
+    //    const checkboxes = document.getElementsByName('checkboxes');
+    //    for(let checkbox of checkboxes){
+    //     if(checkbox.checked){
+    //         checkedCourses.value.push(checkbox.value);
+    //     }
+    //    } 
+    //    console.log(checkedCourses.value);
+       //after confirm adding a course, need to store in store.skill.courses to display on the ui again
     }
     
     </script>
