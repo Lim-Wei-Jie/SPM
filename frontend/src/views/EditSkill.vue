@@ -25,7 +25,7 @@
                 <div class="grid grid-cols-2 my-8">
                     <p class="text-3xl"> Edit Skill </p>
                     <!-- Delete button -->
-                    <button @click="handleDeleteSkill(store.skill.skillID)" class="btn btn-circle place-self-end">
+                    <button @click="deleteSkill(store.skill.skillID)" class="btn btn-circle place-self-end">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                         </svg>
@@ -62,10 +62,10 @@
                             <label for="add-modal" class="modal cursor-default">
                                 <label class="modal-box relative" for="">
                                     <!-- All the available course names in the form of checkboxes-->
-                                    <!-- v-model="checkboxes" -->
+                                    <!-- binding the entire object as each -->
                                     <p class="font-medium text-lg">Courses:</p>
-                                    <div class="m-4" v-for="each of allCourses" >
-                                        <input v-bind:value="each.course_id" v-bind:id="each.course_id" class="text-2xl font-bold underline underline-offset-8" type="checkbox"  name='checkbox' v-model="checkboxes"/>
+                                    <div class="m-4" v-for="each of viewAllCourses" >
+                                        <input v-bind:value="each"  class="text-2xl font-bold underline underline-offset-8" type="checkbox"  name='checkbox' v-model="checkedCourses"/>
                                             <label v-bind:for="each.course_id">
                                                 {{each.Course_Name}}
                                             </label>
@@ -133,7 +133,7 @@
                     </div>
                     
                     <!-- Save button -->
-                    <button class="btn w-1/5" type="submit">Save Changes</button>
+                    <button class="btn w-1/5" type="submit"  v-on:click="handleUpdateSkill()">Save Changes</button>
                     <!-- Cancel button -->
                     <div>
                         <RouterLink :to="`/skill/${skillName}`">
@@ -166,14 +166,15 @@
     import { reactive, ref } from 'vue'
     import { useRouter, useRoute } from 'vue-router'
     import { useSkillStore } from '@/store/index.js'
-    import { getCoursesBySkill, getAllCourses } from "@/endpoint/endpoint.js";
+    import { getCoursesBySkill, getAllCourses, deleteSkill, updateSkill, addCoursesToSkill } from "@/endpoint/endpoint.js";
     
     const router = useRouter()
     const route = useRoute()
     const store = useSkillStore()
     const viewAllCourses = ref([])
-    const allCourses = ref([])
-    const checkboxes = ref([])
+    const allCourses = ref()
+    const checkedCourses = ref([])
+    const addCourseIDArr = ref([])
    
 
     // from params
@@ -190,7 +191,7 @@
         skillName: store.skill.skillName, // for API call for skill and course assignment 
         courseName: '',
         courseID: '', 
-        addCourseIDArr: [] // for API call for skill and course assignment 
+        //addCourseIDArr: []  for API call for skill and course assignment 
     })
     
     const loading = ref(true);
@@ -203,15 +204,22 @@
     
     function confirmRemoveCourse(courseName) {
         // store course ID/s in an array for API call when submit form
-        const removeCourseID = store.skill.courses[courseName].Course_ID
-        removeModal.removeCourseID.push(courseID.toString())
+        //const removeCourseID = store.skill.courses[courseName].Course_ID
+        //removeModal.removeCourseID.push(courseID.toString())
     
         // removing skill key from coursesBySkillName object in pinia store only
-        //delete store.role.coursesBySkillName[skillName]
+        delete store.skill.courses[courseName]
     }
     
-    function handleEditSkill() {
+    async function handleEditSkill() {
         // API call here
+        try {
+        const deletedSkill = await deleteSkill(store.skill.skillID);
+        }
+        catch (err) {
+            error.value = err
+            console.log(err);
+        }
         
     }
     
@@ -219,61 +227,55 @@
         console.log(skillID);
     }
 
-    function handleAddCourseClick() {
-        allCourses.value = [
-            {
-                "Course_Category": "Core",
-                "Course_Desc": "This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking,",
-                "Course_Name": "Systems Thinking and Design",
-                "Course_Status": "Active",
-                "Course_Type": "Internal",
-                "course_id": "COR001"
-            },
-            {
-                "Course_Category": "Core",
-                "Course_Desc": "Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics",
-                "Course_Name": "Lean Six Sigma Green Belt Certification",
-                "Course_Status": "Active",
-                "Course_Type": "Internal",
-                "course_id": "COR002"
-            },
-            {
-                "Course_Category": "Core",
-                "Course_Desc": "The programme provides the learner with the key foundations of what builds customer confidence in the service industr",
-                "Course_Name": "Service Excellence",
-                "Course_Status": "Pending",
-                "Course_Type": "Internal",
-                "course_id": "COR004"
+    async function handleAddCourseClick() {
+        try {
+            const allCourses = await getAllCourses()
+            //console.log(allCourses)
+            for (var each of allCourses) {
+                viewAllCourses.value.push(each)
             }
-            
-            ]
+        } 
+        catch (err) {
+            error.value = err
+            console.log(err);
         }
-    //async function handleAddCourseClick() {
+    }
+
+    function confirmAddCourse(){
+        //this is an array of objects
+        //console.log(checkedCourses.value) 
+    //after confirm adding a course, need to store in store.skill.courses to display on the ui again    
+        for(var checkedCourse of checkedCourses.value){
+           //console.log(checkedCourse.Course_Name);
+           store.skill.courses[checkedCourse.Course_Name] = checkedCourse.Course_Name;
+
+           addCourseIDArr.value.push(checkedCourse.Course_ID.toString());
+           console.log(addCourseIDArr.value);
+        }
+    }
+
+    async function handleUpdateSkill(){
+        //first api to update skill name and desc
+        try {
+        const updatedSkill = await updateSkill(store.skill.skillID, store.skill.skillName, store.skill.skillDesc);
+        const updateCourses = await addCoursesToSkill(store.skill.skillID, addCourseIDArr);
+        }
+        catch (err) {
+            error.value = err
+            console.log(err);
+        }
+        //second api to update new courses added
         // try {
-        //     const allCourses = await getAllCourses()
-        //     console.log(allCourses)
-        //     for (var each of allCourses) {
-        //         viewAllCourses.value.push(each)
-        //     }
-        // } 
+        // const updateCourses = await addCoursesToSkill(store.skill.skillID, addModal.addCourseIDArr)
+        // }
         // catch (err) {
         //     error.value = err
         //     console.log(err);
         // }
-    //}
 
-    function confirmAddCourse(){
-        //this is an array
-        console.log(checkboxes.value) 
+        //third api to update courses removed
         
-    //    const checkboxes = document.getElementsByName('checkboxes');
-    //    for(let checkbox of checkboxes){
-    //     if(checkbox.checked){
-    //         checkedCourses.value.push(checkbox.value);
-    //     }
-    //    } 
-    //    console.log(checkedCourses.value);
-       //after confirm adding a course, need to store in store.skill.courses to display on the ui again
+
     }
     
     </script>

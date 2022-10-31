@@ -167,19 +167,71 @@ export function getCourseDetails(Course_Name) {
 }
 
 // Delete skill
+export function deleteSkill(skillID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill/delete/${skillID}`
+        axios
+        .delete(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to delete role, check WAMP/MAMP server');
+            })
+    })
+}
 
 // Get all courses
 export function getAllCourses() {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/course`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/course`
         axios
             .get(apiEndpoint)
             .then((res) => {
-                resolve(res.data.courses)
+                resolve(res.data.data.courses)
             })
             .catch((err) => {
                 console.log(err);
                 reject('Fail to fetch all courses, check WAMP/MAMP server')
+            })
+    })
+}
+
+// Update skill
+// need to call the update skill details api
+// need to call the delete courses from skill /skill/<string:Skill_ID>/<string:Course_ID>
+// add course to skill api
+export function updateSkill(skillID, skillName, skillDesc) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill/update/${skillID}/${skillName}/${skillDesc}`
+        axios
+        .put(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to update skill details, check WAMP/MAMP server');
+            })
+    })
+}
+
+// add courses to skill
+export function addCoursesToSkill(skillID, addCourseIDArr) {
+    return new Promise((resolve, reject) => {
+        const addedCourses = JSON.parse(JSON.stringify(addCourseIDArr._rawValue))
+        //console.log(addCourseIDArr);
+        //console.log(addedCourses);
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill/${skillID}/${addedCourses}`
+        axios
+        .post(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to update skill to course details, check WAMP/MAMP server');
             })
     })
 }
