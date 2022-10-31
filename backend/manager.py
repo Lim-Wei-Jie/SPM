@@ -90,7 +90,7 @@ class Skill(db.Model):
 
     def json(self):
 
-        return {"Skill_ID": self.Skill_ID , "Skill_Name": self.Skill_Name, "Skill_Desc": self.Skill_Desc , "Date_created": self.Date_created}
+        return {"Skill_ID": self.Skill_ID , "Skill_Name": self.Skill_Name, "Skill_Desc": self.Skill_Desc}
     
     def __init__(self, Skill_ID, Skill_Name, Skill_Desc, Date_created=None):
         self.Skill_ID = Skill_ID 
@@ -495,8 +495,8 @@ def find_by_course(Course_Name):
         }
     ), 404
 
-@app.route("/skill/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>/<string:Date_created>", methods=['GET','POST'])
-def create_skill(Skill_ID,Skill_Name,Skill_Desc,Date_created):
+@app.route("/skill/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>", methods=['GET','POST'])
+def create_skill(Skill_ID,Skill_Name,Skill_Desc):
 
     if (Skill.query.filter_by(Skill_ID = Skill_ID ).first()):
         return jsonify(
@@ -505,8 +505,7 @@ def create_skill(Skill_ID,Skill_Name,Skill_Desc,Date_created):
                 "data": {
                     "Skill_ID": Skill_ID,
                     "Skill_Name": Skill_Name,
-                    "Skill_Name": Skill_Desc,
-                    "Date_created":Date_created
+                    "Skill_Name": Skill_Desc
                 },
                 "message": "Skill already exists."
             }
@@ -514,7 +513,7 @@ def create_skill(Skill_ID,Skill_Name,Skill_Desc,Date_created):
  
     #data = request.get_json()
     #print("poopo" + data)
-    new_skill = Skill(Skill_ID,Skill_Name,Skill_Desc,Date_created)
+    new_skill = Skill(Skill_ID,Skill_Name,Skill_Desc)
  
     try:
         db.session.add(new_skill)
@@ -526,8 +525,7 @@ def create_skill(Skill_ID,Skill_Name,Skill_Desc,Date_created):
                 "data": {
                     "Skill_ID": Skill_ID,
                     "Skill_Name": Skill_Name,
-                    "Skill_Name": Skill_Desc,
-                    "Date_created":Date_created
+                    "Skill_Name": Skill_Desc
                 },
                 "message": "An error occurred creating the Skill."
             }

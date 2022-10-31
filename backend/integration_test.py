@@ -42,8 +42,9 @@ class TestCreateSkill(TestApp):
     def test_create_Skill(self): 
         d1 = Skill(Skill_ID= 6, 
             Skill_Name= 'Business Process Analysis and Modelling', 
-            Skill_Desc= 'Signavio') 
-        request_body = "/skill/"+str(d1.Skill_ID)+"/"+d1.Skill_Name+"/"+d1.Skill_Desc 
+            Skill_Desc= 'Signavio',
+            Date_created="10/11/2022") 
+        request_body = "/skill/"+str(d1.Skill_ID)+"/"+d1.Skill_Name+"/"+d1.Skill_Desc
         request_body2 = "/Skill" 
  
         response = self.client.get(request_body) 
@@ -52,9 +53,7 @@ class TestCreateSkill(TestApp):
             'data':{ 
                 'Skill_Desc': 'Signavio', 
                 'Skill_ID': 6, 
-                'Skill_Name': 'Business Process Analysis and Modelling', 
-                 
-                 
+                'Skill_Name': 'Business Process Analysis and Modelling'
                 }}) 
  
 if __name__ == '__main__': 
