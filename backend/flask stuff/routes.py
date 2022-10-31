@@ -565,7 +565,7 @@ def Add_Course_by_LJ(Course_ID,LJPS_ID):
     
 
        
-        check_course = LJPS_Course_Assignment.query.filter_by(Course_ID =Course_ID,LJPS_ID = LJPS_ID)
+        check_course = LJPS_Course_Assignment.query.filter_by(Course_ID =Course_ID,LJPS_ID = LJPS_ID).all()
         
         
         if check_course:

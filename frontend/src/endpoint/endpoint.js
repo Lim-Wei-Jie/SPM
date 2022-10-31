@@ -207,7 +207,9 @@ export function getAllLJPSNo() {
             axios
             .get(apiEndpoint)
             .then((res) => {
-                resolve(res.data.data.maps.length + 1)
+                var lastLJPS = res.data.data.maps.slice(-1)[0].LJPS_ID
+
+                resolve(lastLJPS + 1)
             })
             .catch((err) => {
                 console.log(err.message);

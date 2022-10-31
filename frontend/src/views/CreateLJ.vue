@@ -123,7 +123,7 @@ const ljpsID = ref()
 try {
     // get all courses available
     ljpsID.value = await getAllLJPSNo()
-    
+    console.log(ljpsID)
     // store role in global store to be use by edit job role page
     //skillStore.storeSkill(skill.skillName, skill.skillID, skill.skillDesc, skill.courses)
 
@@ -223,7 +223,7 @@ function addCourse(selectedCourses, skillID, skillsList) {
         selectedCourses.pop();
     }
 }
-console.log(skillsList)
+
 function deleteCourse(courseID, skillID, skillsList) {
     for(var skill of skillsList){
         if (skill.skill_id === skillID) {
@@ -252,12 +252,23 @@ function createRegis(skillsList, staffID, roleID, ljpsID) {
         regID+=1
     }
     //add assignment
+    for (var i = 0; i < allSelectedCourses.length; i++) {
+        if (i == 0 ) {
+            createLJ(staffID, roleID, allSelectedCourses[0], ljpsID)
+            addToLJ(allSelectedCourses[0], ljpsID)
+        } else {
+            addToLJ(allSelectedCourses[i], ljpsID)
+        }
+    }
+    /*
     for (var courseID of allSelectedCourses) {
         createLJ(staffID, roleID, courseID, ljpsID)
     }
+    */
 
     //route to staff page
     router.push('/staff')
+    
 }
 
 //add to registration
@@ -287,6 +298,16 @@ function createLJ(staffID, roleID, courseID, ljpsID) {
     })();
 }
 
+function addToLJ(courseID, ljpsID) {
+    ;(async() => {
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssignCourse/${courseID}/${ljpsID}`)
+        .then((res) => {
+            
+        }).catch((err) => {
+            console.log(err);
+        });
+    })();
+}
 </script>
 
 <style scoped>

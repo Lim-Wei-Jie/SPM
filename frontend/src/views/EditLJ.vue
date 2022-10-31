@@ -79,7 +79,10 @@
             </div>
         </div>
         <!-- send edited data back-->
-        <button class="btn btn-outline btn-success" @click="editLJ()">Done</button>
+        <div class="flex justify-evenly gap-6 w-full">
+            <button class="btn btn-outline btn-success w-2/6" @click="editLJ()">Done</button>
+            <button class="btn btn-outline btn-error w-2/6" @click="deleteLJ(staffID, jobRoleID, courseID, ljpsID)">Delete</button>
+        </div>
     </div>
 </template>
 
@@ -110,7 +113,7 @@ const { jobRoleID } = toRefs(props)
 const { ljpsID } = toRefs(props)
 
 
-const staff_ID2 = '130003'
+const staffID = '130003'
 const courseList = ref()
 const roleDetailsName = ref()
 const roleDetailsDesc = ref()
@@ -131,6 +134,7 @@ const skillsIdList = []
 const registeredCourses = ref([])
 const registeredCourses2 = ref([])
 const skillsList = ref([])
+const courseID = ref()
 
 ;(async() => {
 try {
@@ -140,10 +144,11 @@ try {
     roleDetailsDesc.value = role.Role_Desc
 
     //SHOW REGISTERED COURSES
-    const resA = await getLJs(staff_ID2)
+    const resA = await getLJs(staffID)
     for (var course of resA[jobRoleID.value]) {
             registeredCourses.value.push(course)
     }
+    courseID.value = registeredCourses.value[0][2]
     for (var a in registeredCourses.value) {
         var courseName = registeredCourses.value[a][2]
         const skillIDs = await getSkillIdByCourseName(courseName)
@@ -220,6 +225,7 @@ function addCourse(selectedCourses, skillID, skillsList) {
     }
 }
 
+var deletedCourses = []
 function deleteCourse(courseID, skillID, skillsList) {
     console.log(courseID)
     for(var skill of skillsList){
@@ -233,6 +239,16 @@ function deleteCourse(courseID, skillID, skillsList) {
     }
 }
 
+function deleteLJ(staffID, roleID, courseID, ljpsID) {
+    ;(async() => {
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/DeleteLJAssign/${staffID}/${roleID}/${courseID}/${ljpsID}`)
+        .then((res) => {
+            router.push('/staff')
+        }).catch((err) => {
+            console.log(err);
+        });
+    })();
+}
 
 function editLJ() {
     router.push({
@@ -240,39 +256,7 @@ function editLJ() {
     })
 }
 
-/*
-const LearningJourney = ref({
-    jobRoleName: "Mechanical Engineeri",
-    skills: {
-        "skill1": {
-            "course1": "course description 1",
-            "course2": "course description 2"
-        },
-        "skill2": {
-            "course3": "course description 3",
-            "course4": "course description 4",
-            "course5": "course description 5"
-        },
-        "skill3": {
-            "course6": "course description 6",
-            "course7": "course description 7",
-            "course8": "course description 8",
-            "course9": "course description 9"
-        }
-    }
-})
 
-const coursesList = ref({
-    skillName: "skill",
-    courses: {
-        "course1": "course description 1",
-        "course2": "course description 2",
-        "course3": "course description 3",
-        "course4": "course description 4",
-        "course5": "course description 5"
-    }
-})
-*/
 </script>
 
 <style scoped>
