@@ -71,7 +71,6 @@
                                 </li>
                             </ul>
                             <div class="modal-action">
-                                <!--skill.skill_id not working!-->
                                 <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course</label>
                             </div>
                         </div>
@@ -80,124 +79,126 @@
             </div>
         </div>
         <!-- send edited data back-->
-        <button class="btn btn-outline btn-success" @click="createRegis(skillsList, staffID, roleDetailsID, ljpsID)">Create Learning Journey</button>
+        <button class="btn btn-outline btn-success" @click="editLJ()">Done</button>
     </div>
 </template>
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
-import { onBeforeMount, ref, toRefs } from 'vue'
+import { ref, toRefs, onBeforeMount, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getCoursesBySkill, getSkillsByRole, getAllLJPSNo, getAllRegistration, getAllRegistrationNo } from "@/endpoint/endpoint.js";
+import { getLJs, getRoleByID, getSkillsByRole, getCoursesBySkill, getSkillIdByCourseName } from "@/endpoint/endpoint.js";
 
-//route back for breadcrumb
 const router = useRouter()
-function HomePage() {
-    router.push('/staff')
-}
 function JobRolePage() {
     router.push('/staff/searchRole')
 }
-
+function HomePage() {
+    router.push('/staff')
+}
 
 const props = defineProps({
-    jobRoleName: {
+    jobRoleID: {
         type: String
     }
 });
 // props to be use in script setup, break down proxy
-const { jobRoleName } = toRefs(props)
-const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
+const { jobRoleID } = toRefs(props)
 
-const loading = ref(true);
-const error = ref('');
-
-//JOB ROLE
+const staff_ID2 = '130003'
+const courseList = ref()
 const roleDetailsName = ref()
-const roleDetailsID = ref()
 const roleDetailsDesc = ref()
-const staffID = ref('130003')
 
-;(async() => {
-try {
-    // get all courses available
-    const ljpsID = await getAllLJPSNo()
-    
-    // store role in global store to be use by edit job role page
-    //skillStore.storeSkill(skill.skillName, skill.skillID, skill.skillDesc, skill.courses)
-
-    // after all API calls made
-    //loading.value = true
-}
-catch(err) {
-    error.value = err
-    console.log(err);
-}
-})();
-
-;(async() => {
-    await getRoleDetails(roleName)
+onBeforeMount(async() => {
+    await getRoleByID(jobRoleID.value)
     .then((role) => {
         roleDetailsName.value = role.Role_Name
-        roleDetailsID.value = role.Role_ID
         roleDetailsDesc.value = role.Role_Desc
     }).catch((err) => {
         console.log(err);
     });
-})();
+});
 
-// get regID and ljpsID
-var regID = 0
-var ljpsID = 7
-
-
-onBeforeMount(
-    async() => {
-    await getAllRegistrationNo()
-    .then((res) => {
-        if (regID == 0) {
-            regID += res
+const skillsIdList = []
+;(async() => {
+    await getSkillsByRole(jobRoleID.value)
+    .then((skills) => {
+        for(var skill of skills){
+            skillsIdList.push(skill.Skill_ID)
         }
     }).catch((err) => {
         console.log(err);
     });
-
-    
 })();
 
+// REGISTERED COURSES
+var registeredCourses = []
+var registeredCourses2 = reactive([])
 ;(async() => {
-    try {
-        const ljpsID = await getAllLJPSNo()
-        loading.value=true
-    }
-    catch(err) {
-        console.log(err)
-    }
+    await getLJs(staff_ID2)
+    .then((res) => {
+        for (var course of res[jobRoleID.value]) {
+            registeredCourses.push(course)
+        }
+        for (var a in registeredCourses) {
+            var courseName = registeredCourses[a][2]
+            ;(async() => {
+                await getSkillIdByCourseName(courseName)
+                .then((res) => {
+                    var skillIds = res
+                    // filter out skillID of courrse of specific LJ
+                    for (var x in skillsIdList) {
+                        for (var y in skillIds) {
+                            if (skillsIdList[x] == skillIds[y]) {
+                                registeredCourses2.push(skillsIdList[x])
+                            }
+                        }
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                });
+            })();
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
 })();
 
 //SKILLS
 const skillsList = ref([])
-
 ;(async() => {
-    await getSkillsByRole(1)
+    await getSkillsByRole(jobRoleID.value)
     .then((skills) => {
         for(var skill of skills){
+
+            // add registered courses to display
+            var regCourses = []
+            for (let i=0; i < registeredCourses2; i++) {
+                if (registeredCourses2[i] == skill.Skill_ID) {
+                    regCourses.push(registeredCourses[i])
+                }
+            }
             var skillDetails = {
                 skill_id: skill.Skill_ID,
                 skill_name: skill.Skill_Name,
                 skill_desc: skill.Skill_Desc,
-                courses_selected: []
+                courses_selected: regCourses
             }
             skillsList.value.push(skillDetails) 
         }
+        //console.log(skillsList)
     }).catch((err) => {
         console.log(err);
     });
 })();
 
 
+
+
+
 //COURSES
-const courseList = ref([])
+const allCourseList = ref([])
 
 function getAllCourses(skillID) {
     ;(async() => {
@@ -211,7 +212,7 @@ function getAllCourses(skillID) {
                         course_id: course.Course_ID,
                         course_desc: course.Course_Desc
                     }
-                    courseList.value.push(courseDetails)
+                    allCourseList.value.push(courseDetails)
                 }
             }
         }).catch((err) => {
@@ -236,6 +237,7 @@ function addCourse(selectedCourses, skillID, skillsList) {
 }
 
 function deleteCourse(courseID, skillID, skillsList) {
+    console.log(courseID)
     for(var skill of skillsList){
         if (skill.skill_id === skillID) {
             for( var i = 0; i < skill.courses_selected.length; i++){ 
@@ -248,50 +250,45 @@ function deleteCourse(courseID, skillID, skillsList) {
 }
 
 
+function editLJ() {
+    router.push({
+        path: '/staff'
+    })
+}
 
-
-function createRegis(skillsList, staffID, roleID, ljpsID) {
-    const allSelectedCourses = []
-    for (var skill of skillsList) {
-        for(var course of skill.courses_selected) {
-            allSelectedCourses.push(course)
+/*
+const LearningJourney = ref({
+    jobRoleName: "Mechanical Engineeri",
+    skills: {
+        "skill1": {
+            "course1": "course description 1",
+            "course2": "course description 2"
+        },
+        "skill2": {
+            "course3": "course description 3",
+            "course4": "course description 4",
+            "course5": "course description 5"
+        },
+        "skill3": {
+            "course6": "course description 6",
+            "course7": "course description 7",
+            "course8": "course description 8",
+            "course9": "course description 9"
         }
     }
+})
 
-    for (var courseID of allSelectedCourses) {
-        addReg(regID, courseID, staffID)
-        regID+=1
-        createLJ(staffID, roleID, courseID, ljpsID)
+const coursesList = ref({
+    skillName: "skill",
+    courses: {
+        "course1": "course description 1",
+        "course2": "course description 2",
+        "course3": "course description 3",
+        "course4": "course description 4",
+        "course5": "course description 5"
     }
-}
-
-//add to registration
-function addReg(regID, courseID, staffID) {
-    var regStatus = 'Registered'
-    var completionStatus = 'Ongoing'
-    ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/Registration/addRegis/${regID}/${courseID}/${staffID}/${regStatus}/${completionStatus}`)
-        .then((res) => {
-            console.log(res)
-
-        }).catch((err) => {
-            console.log(err);
-        });
-    })();
-}
-
-//add to learning journey assignment
-function createLJ(staffID, roleID, courseID, ljpsID) {
-    ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssign/${staffID}/${roleID}/${courseID}/${ljpsID}`)
-        .then((res) => {
-            console.log(res)
-        }).catch((err) => {
-            console.log(err);
-        });
-    })();
-}
-
+})
+*/
 </script>
 
 <style scoped>
