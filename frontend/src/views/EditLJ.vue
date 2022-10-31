@@ -47,7 +47,7 @@
                             <div class="modal-box">
                                 <h3 class="font-bold text-lg">{{ course }}</h3>
                                 <div class="modal-action">
-                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(course, skill.skill_id, skillsList)">Remove Course</label>
+                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(course, ljpsID)">Remove Course</label>
                                 </div>
                             </div>
                         </div>
@@ -225,19 +225,19 @@ function addCourse(selectedCourses, skillID, skillsList) {
     }
 }
 
-var deletedCourses = []
-function deleteCourse(courseID, skillID, skillsList) {
-    console.log(courseID)
-    for(var skill of skillsList){
-        if (skill.skill_id === skillID) {
-            for( var i = 0; i < skill.courses_selected.length; i++){ 
-                if ( skill.courses_selected[i] === courseID) { 
-                    skill.courses_selected.splice(i, 1); 
-                }
-            }
-        }
-    }
+function deleteCourse(courseID, ljpsID) {
+    ;(async() => {
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/DeLJAssignCourse/${courseID}/${ljpsID}`)
+        .then((res) => {
+            router.go(0)
+        }).catch((err) => {
+            console.log(err);
+        });
+    })();
+
+
 }
+
 
 function deleteLJ(staffID, roleID, courseID, ljpsID) {
     ;(async() => {
