@@ -88,7 +88,7 @@
 
                         <!-- Add skill button -->
                         <label for="add-modal" class="flex justify-evenly">
-                            <div class="btn btn-outline border-dashed rounded-lg w-11/12">
+                            <div class="btn btn-outline border-dashed rounded-lg w-11/12 h-full">
                                 Add New Skills
                             </div>
                         </label>
