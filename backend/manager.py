@@ -232,7 +232,7 @@ def updateRole(Role_ID,Role_Name,Role_Desc):
 
     if role:
 
-        Role.query.filter_by(Role_ID=Role_ID).update(dict(Role_Name=Role_Name,description=Role_Desc))
+        Role.query.filter_by(Role_ID=Role_ID).update(dict(Role_Name=Role_Name,Role_Desc=Role_Desc))
 
         db.session.commit()
         
@@ -247,7 +247,7 @@ def updateRole(Role_ID,Role_Name,Role_Desc):
             {
                 "code": 500,
                 "data": {
-                    "foodName": Role_Name
+                    "Role": Role_Name
                 },
                 "message": "Role does not exist"
             }
@@ -565,48 +565,125 @@ def get_mapped_skill_to_course():
     ), 404
 
 
-@app.route("/skill/<string:Skill_ID>/<string:Course_ID>/", methods=['GET','POST'])
+@app.route("/skill/<string:Skill_ID>/<string:Course_ID>", methods=['GET','POST'])
 def skill_to_course_assignment(Skill_ID,Course_ID):
 
-    if (Skill_Assign.query.filter_by(Skill_ID = Skill_ID ,Course_ID=Course_ID).first()):
-        return jsonify(
-            {
-                "code": 400,
-                "data": {
-                    
-                    "Skill_ID": Skill_ID,
-                    "Course_ID": Course_ID
-                    
-                },
-                "message": "Skill-course already exists."
-            }
-        ), 400
-    new_skill_assignment = Skill_Assign(Course_ID,Skill_ID)
- 
-    try:
-        db.session.add(new_skill_assignment)
-        db.session.commit()
-    except:
-        return jsonify(
-            {
-                "code": 500,
-                "data": {
-                    
-                    "Skill_ID": Skill_ID,
-                    "Course_ID": Course_ID
-                },
-                "message": "An error occurred when assigning the skill to course."
-            }
-        ), 500
+    Course_ID = Course_ID.replace("[","")
+    Course_ID = Course_ID.replace("]","")
+    course_arr = Course_ID.split(",")
+
+    if_duplicate_err = ""
+    for course in course_arr:
+        if (Skill_Assign.query.filter_by(Skill_ID = Skill_ID ,Course_ID=course).first()):
+            return jsonify(
+                {
+                    "code": 400,
+                    "data": {
+                        
+                        "Skill_ID": Skill_ID,
+                        "Course_ID": Course_ID
+                        
+                    },
+                    "message": "Skill-course already exists."
+                }
+            ), 400
+        new_skill_assignment = Skill_Assign(Skill_ID,course)
+    
+        try:
+            db.session.add(new_skill_assignment)
+            db.session.commit()
+        except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "data": {
+                        
+                        "Skill_ID": Skill_ID,
+                        "Course_ID": Course_ID
+                    },
+                    "message": "An error occurred when assigning the skill to course."
+                }
+            ), 500
  
     return jsonify(
         {
             "code": 201,
-            "data": new_skill_assignment.json()
+            "data":str(course_arr)
         }
     ), 201 
 
+#delete skills from role
+@app.route("/skill/skilldeletecourse/<string:Skill_ID>/<string:Course_ID>", methods=['GET','POST'])
+def course_to_skill_delete(Skill_ID,Course_ID):
+    
+    Course_ID = Course_ID.replace("[","")
+    Course_ID = Course_ID.replace("]","")
+    course_arr = Course_ID.split(",")
 
+    for course in course_arr:
+        print(course)
+        course_skill_assignment = Skill_Assign.query.filter(Skill_Assign.Skill_ID.like(Skill_ID),Skill_Assign.Course_ID.like(course)).first()
+        if course_skill_assignment:
+                db.session.delete(course_skill_assignment)
+                db.session.commit()
+        else:
+            return jsonify(
+                {
+                    "code": 404,
+                    "message": "Delete unsuccessful as course does not exist."
+                } ), 404
+    return jsonify(
+        {
+            "code": 201,
+            "data": str(course_arr)
+        }
+    ), 201 
+
+@app.route('/skill/delete/<string:Skill_ID>',methods=['DELETE'])
+def delete_skill(Skill_ID):
+    skill = Role.query.filter_by(Skill_ID=Skill_ID).first()
+    if skill:
+        db.session.delete(skill)
+        db.session.commit()
+                
+        return jsonify(
+            {
+                "code": 201,
+                "message": "Delete Successful."
+            } ), 201
+    else:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Delete unsuccessful as skill does not exist."
+            } ), 404
+
+@app.route('/skill/update/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>',methods=['PUT'])
+def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
+    skill = Role.query.filter_by(Skill_ID=Skill_ID).first()
+
+    if skill:
+
+        Role.query.filter_by(Skill_ID=Skill_ID).update(dict(Skill_Name=Skill_Name,Skill_Desc=Skill_Desc))
+
+        db.session.commit()
+        
+        return jsonify(
+            {
+                "code": 201,
+                "data": skill.json(),
+                "message": "Role Updated sucessfully"
+            } ), 201
+    
+    return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "Skill": Skill_Name
+                },
+                "message": "Role does not exist"
+            }
+        ), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5004, debug=True)
