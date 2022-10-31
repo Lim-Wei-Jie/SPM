@@ -33,7 +33,7 @@
             <div class="grid grid-cols-1 gap-6 bg-gray-400 rounded-lg my-6 p-8">
 
                 <!-- display skill component -->
-                <div class="flex" v-for="skill in allSkills">
+                <div class="flex justify-evenly" v-for="skill in allSkills">
                     <div class="btn btn-lg w-11/12" @click="handleSkillClick(skill)">
                         <p class="">{{skill}}</p>
                         <!-- <p class="">Created on: {{skill.Date_created}}</p> -->
