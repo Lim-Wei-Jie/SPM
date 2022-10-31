@@ -569,10 +569,10 @@ def Add_Course_by_LJ(Course_ID,LJPS_ID):
     
 
        
-        check_course = LJPS_Course_Assignment.query.filter_by(Course_ID =Course_ID,LJPS_ID = LJPS_ID).all()
+        add_course = LJPS_Course_Assignment.query.filter_by(Course_ID =Course_ID,LJPS_ID = LJPS_ID).all()
         
         
-        if check_course:
+        if add_course:
         
                         return jsonify(
                                 {
@@ -611,7 +611,53 @@ def Add_Course_by_LJ(Course_ID,LJPS_ID):
                         
                         
             
+
+#get skills from role_ID
+@app.route("/DeLJAssignCourse/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','DELETE'])
+def Del_Course_by_LJ(Course_ID,LJPS_ID):
+    
+
+       
+        del_course = LJPS_Course_Assignment.query.filter_by(Course_ID=Course_ID,LJPS_ID = LJPS_ID).first()
+        
+        
+        if del_course:
             
+            
+                        try:
+                            
+                             db.session.delete(del_course)
+                             db.session.commit()
+                            
+                        except:
+                            return jsonify(
+                                {
+                                    "code": 201,
+                                    "data": {
+                                        "message":"data not successfully removed"
+                                    
+                                    },
+                                    "message": "An error occurred removing the course."
+                                }
+                            ), 500
+        
+                        return jsonify(
+                                {
+                                    "code": 201,
+                                    "data": "course from learning journey has been successfully removed"
+                                }
+                            ), 201 
+                    
+        else:
+                        
+                        return jsonify(
+                            {
+                                "code": 500,
+                                "data": "Course does not exist"
+                            }
+                        ), 201 
+                        
+                                   
            
                 
                
@@ -619,7 +665,7 @@ def Add_Course_by_LJ(Course_ID,LJPS_ID):
    
 
 #get skills from role_ID
-@app.route("/DeleteLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','POST'])
+@app.route("/DeleteLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','DELETE'])
 def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
     
 
