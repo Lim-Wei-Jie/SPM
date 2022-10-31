@@ -137,18 +137,18 @@ const error = ref('')
 
         // get courses with each skill ID
         for (var skill of roleSkills) {
-            const skillCourses = await getCoursesBySkill(skill.Skill_id)
+            const skillCourses = await getCoursesBySkill(skill.Skill_ID)
             for (var course of skillCourses) {
                 // skillName exist in object
-                if (role.coursesBySkillName[skill.Skill_name]) {
-                    role.coursesBySkillName[skill.Skill_name].courses[course.Course_Name] = course
+                if (role.coursesBySkillName[skill.Skill_Name]) {
+                    role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
                 // skillName does not exist in object
                 } else {
-                    role.coursesBySkillName[skill.Skill_name] = {
-                        'skillID': skill.Skill_id,
+                    role.coursesBySkillName[skill.Skill_Name] = {
+                        'skillID': skill.Skill_ID,
                         'courses': {}
                     }
-                    role.coursesBySkillName[skill.Skill_name].courses[course.Course_Name] = course
+                    role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
                 }
             }
         }
