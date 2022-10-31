@@ -72,7 +72,7 @@
                             </ul>
                             <div class="modal-action">
                                 <!--skill.skill_id not working!-->
-                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course</label>
+                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course {{skill.skill_id}}</label>
                             </div>
                         </div>
                     </div>
@@ -117,11 +117,12 @@ const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const staffID = ref('130003')
+const ljpsID = ref()
 
 ;(async() => {
 try {
     // get all courses available
-    const ljpsID = await getAllLJPSNo()
+    ljpsID.value = await getAllLJPSNo()
     
     // store role in global store to be use by edit job role page
     //skillStore.storeSkill(skill.skillName, skill.skillID, skill.skillDesc, skill.courses)
@@ -146,11 +147,8 @@ catch(err) {
     });
 })();
 
-// get regID and ljpsID
+
 var regID = 0
-var ljpsID = 7
-
-
 onBeforeMount(
     async() => {
     await getAllRegistrationNo()
@@ -163,16 +161,6 @@ onBeforeMount(
     });
 
     
-})();
-
-;(async() => {
-    try {
-        const ljpsID = await getAllLJPSNo()
-        loading.value=true
-    }
-    catch(err) {
-        console.log(err)
-    }
 })();
 
 //SKILLS
@@ -220,11 +208,12 @@ function getAllCourses(skillID) {
     })();
 }
 
-// skillID not working for some reason TT
 const selectedCourses = ref([])
 function addCourse(selectedCourses, skillID, skillsList) {
     for(var skill of skillsList){
-        if (skill.skill_id === skillID) {
+        
+        if (skill.skill_id == skillID) {
+            console.log(skill.skill_id, skillID)
             for(var i=0; i<selectedCourses.length; i++){
                 skill.courses_selected.push(selectedCourses[i])
             }
@@ -234,7 +223,7 @@ function addCourse(selectedCourses, skillID, skillsList) {
         selectedCourses.pop();
     }
 }
-
+console.log(skillsList)
 function deleteCourse(courseID, skillID, skillsList) {
     for(var skill of skillsList){
         if (skill.skill_id === skillID) {
@@ -257,12 +246,18 @@ function createRegis(skillsList, staffID, roleID, ljpsID) {
             allSelectedCourses.push(course)
         }
     }
-
+    //add registration
     for (var courseID of allSelectedCourses) {
         addReg(regID, courseID, staffID)
         regID+=1
+    }
+    //add assignment
+    for (var courseID of allSelectedCourses) {
         createLJ(staffID, roleID, courseID, ljpsID)
     }
+
+    //route to staff page
+    router.push('/staff')
 }
 
 //add to registration
@@ -285,7 +280,7 @@ function createLJ(staffID, roleID, courseID, ljpsID) {
     ;(async() => {
         await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssign/${staffID}/${roleID}/${courseID}/${ljpsID}`)
         .then((res) => {
-            console.log(res)
+            
         }).catch((err) => {
             console.log(err);
         });

@@ -100,25 +100,20 @@ function HomePage() {
 const props = defineProps({
     jobRoleID: {
         type: String
+    },
+    ljpsID: {
+        type: String
     }
 });
 // props to be use in script setup, break down proxy
 const { jobRoleID } = toRefs(props)
+const { ljpsID } = toRefs(props)
+
 
 const staff_ID2 = '130003'
 const courseList = ref()
 const roleDetailsName = ref()
 const roleDetailsDesc = ref()
-
-onBeforeMount(async() => {
-    await getRoleByID(jobRoleID.value)
-    .then((role) => {
-        roleDetailsName.value = role.Role_Name
-        roleDetailsDesc.value = role.Role_Desc
-    }).catch((err) => {
-        console.log(err);
-    });
-});
 
 const skillsIdList = []
 ;(async() => {
@@ -133,68 +128,57 @@ const skillsIdList = []
 })();
 
 // REGISTERED COURSES
-var registeredCourses = []
-var registeredCourses2 = reactive([])
-;(async() => {
-    await getLJs(staff_ID2)
-    .then((res) => {
-        for (var course of res[jobRoleID.value]) {
-            registeredCourses.push(course)
-        }
-        for (var a in registeredCourses) {
-            var courseName = registeredCourses[a][2]
-            ;(async() => {
-                await getSkillIdByCourseName(courseName)
-                .then((res) => {
-                    var skillIds = res
-                    // filter out skillID of courrse of specific LJ
-                    for (var x in skillsIdList) {
-                        for (var y in skillIds) {
-                            if (skillsIdList[x] == skillIds[y]) {
-                                registeredCourses2.push(skillsIdList[x])
-                            }
-                        }
-                    }
-                }).catch((err) => {
-                    console.log(err);
-                });
-            })();
-        }
-    }).catch((err) => {
-        console.log(err);
-    });
-})();
-
-//SKILLS
+const registeredCourses = ref([])
+const registeredCourses2 = ref([])
 const skillsList = ref([])
-;(async() => {
-    await getSkillsByRole(jobRoleID.value)
-    .then((skills) => {
-        for(var skill of skills){
 
-            // add registered courses to display
-            var regCourses = []
-            for (let i=0; i < registeredCourses2; i++) {
-                if (registeredCourses2[i] == skill.Skill_ID) {
-                    regCourses.push(registeredCourses[i])
+;(async() => {
+try {
+    //SHOW JOB DETAILS
+    const role = await getRoleByID(jobRoleID.value)
+    roleDetailsName.value = role.Role_Name
+    roleDetailsDesc.value = role.Role_Desc
+
+    //SHOW REGISTERED COURSES
+    const resA = await getLJs(staff_ID2)
+    for (var course of resA[jobRoleID.value]) {
+            registeredCourses.value.push(course)
+    }
+    for (var a in registeredCourses.value) {
+        var courseName = registeredCourses.value[a][2]
+        const skillIDs = await getSkillIdByCourseName(courseName)
+
+        for (var x in skillsIdList) {
+            for (var y in skillIDs) {
+                if (skillsIdList[x] == skillIDs[y]) {
+                    registeredCourses2.value.push(skillsIdList[x])
                 }
             }
-            var skillDetails = {
+        }
+    }
+
+    const skills = await getSkillsByRole(jobRoleID.value)
+    for (var skill of skills) {
+        var regCourses = []
+        for (let i = 0; i < registeredCourses2.value.length; i++) {
+            if (registeredCourses2.value[i] == skill.Skill_ID) {
+                regCourses.push(registeredCourses.value[i][2])
+            }
+        }
+        var skillDetails = {
                 skill_id: skill.Skill_ID,
                 skill_name: skill.Skill_Name,
                 skill_desc: skill.Skill_Desc,
                 courses_selected: regCourses
             }
-            skillsList.value.push(skillDetails) 
-        }
-        //console.log(skillsList)
-    }).catch((err) => {
-        console.log(err);
-    });
+        skillsList.value.push(skillDetails) 
+    }
+}
+catch(err) {
+
+    console.log(err);
+}
 })();
-
-
-
 
 
 //COURSES

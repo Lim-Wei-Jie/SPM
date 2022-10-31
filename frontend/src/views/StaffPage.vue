@@ -15,7 +15,7 @@
         </div>
 
         <div v-for="LJ in LJs2">
-            <LearningJourney2 :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :onGoingCourses="LJ.courses.onGoing" :progress="LJ.progress" :jobRoleID="LJ.jobRoleID"/>
+            <LearningJourney2 :ljpsID="LJ.LJ_id" :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :onGoingCourses="LJ.courses.onGoing" :progress="LJ.progress" :jobRoleID="LJ.jobRoleID"/>
         </div>
     </div>
 </template>
