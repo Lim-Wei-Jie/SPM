@@ -515,82 +515,153 @@ def get_ljps_id_by_role(Staff_ID):
 def Add_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
     
 
+       
+        check_staff = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID,Role_ID = Role_ID).first()
+        
+        
+        if check_staff:
+        
+                        return jsonify(
+                                {
+                                    "code": 201,
+                                    "data": "learning journey already exist"
+                                }
+                            ), 201 
+                    
+        else:
+                    
 
+                        
+                        new_ljps_assignment = LJPS_Assignment(LJPS_ID,Staff_ID,Role_ID)
+                        
+                        
+                        
+                        try:
+                            db.session.add(new_ljps_assignment)
+                            db.session.commit()
+                        except:
+                            return jsonify(
+                                {
+                                    "code": 500,
+                                    "data": {
+                                        "message":"data not successfully added"
+                                    
+                                    },
+                                    "message": "An error occurred creating the registration."
+                                }
+                            ), 500
+                        
+                        return jsonify(
+                            {
+                                "code": 201,
+                                "data": "New learning journey created"
+                            }
+                        ), 201 
+                        
+                        
+#get skills from role_ID
+@app.route("/AddLJAssignCourse/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','POST'])
+def Add_Course_by_LJ(Course_ID,LJPS_ID):
+    
 
+       
+        add_course = LJPS_Course_Assignment.query.filter_by(Course_ID =Course_ID,LJPS_ID = LJPS_ID).all()
         
-        staff_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
         
-        if staff_list:
+        if add_course:
+        
+                        return jsonify(
+                                {
+                                    "code": 201,
+                                    "data": "learning journey course already exist"
+                                }
+                            ), 201 
+                    
+        else:
+                    
+
+                        
+                        new_course_assignment = LJPS_Course_Assignment(LJPS_ID,Course_ID)
+                        
+                        try:
+                            db.session.add(new_course_assignment)
+                            db.session.commit()
+                        except:
+                            return jsonify(
+                                {
+                                    "code": 500,
+                                    "data": {
+                                        "message":"data not successfully added"
+                                    
+                                    },
+                                    "message": "An error occurred adding the course."
+                                }
+                            ), 500
+                        
+                        return jsonify(
+                            {
+                                "code": 201,
+                                "data": "Course added to learning journey"
+                            }
+                        ), 201 
+                        
+                        
             
-            check_course_assignment = LJPS_Course_Assignment.query.filter_by(LJPS_ID=LJPS_ID,Course_ID=Course_ID).first()
+
+#get skills from role_ID
+@app.route("/DeLJAssignCourse/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','DELETE'])
+def Del_Course_by_LJ(Course_ID,LJPS_ID):
     
-    
-            if check_course_assignment:
-                
-                return jsonify(
-                        {
-                            "code": 201,
-                            "data": "entry already exist"
-                        }
-                    ), 201 
-            else:
-                
-                new_course_assignment = LJPS_Course_Assignment(LJPS_ID,Course_ID)
-                try:
-                    db.session.add(new_course_assignment)
-                    db.session.commit()
-                except:
-                    return jsonify(
-                        {
-                            "code": 500,
-                            "data": {
-                                "message":"data not successfully added"
-                            
-                            },
-                            "message": "An error occurred creating the registration."
-                        }
-                    ), 500
-                
-            
-            
-            job_check = LJPS_Assignment.query.filter_by(Role_ID=Role_ID).first()
-            
+
+       
+        del_course = LJPS_Course_Assignment.query.filter_by(Course_ID=Course_ID,LJPS_ID = LJPS_ID).first()
         
+        
+        if del_course:
             
-            if job_check == None:
-                
-                print(job_check)
-                
-                
-                new_ljps_assignment = LJPS_Assignment(LJPS_ID,Staff_ID,Role_ID)
-                
             
-                try:
-                    db.session.add(new_ljps_assignment)
-                    db.session.commit()
-                except:
-                    return jsonify(
-                        {
-                            "code": 500,
-                            "data": {
-                                "reg_id": "data added successfully"
+                        try:
                             
-                            },
-                            "message": "An error occurred creating the registration."
-                        }
-                    ), 500
-            
-                return jsonify(
-                    {
-                        "code": 201,
-                        "data": new_ljps_assignment.json()
-                    }
-                ), 201 
+                             db.session.delete(del_course)
+                             db.session.commit()
+                            
+                        except:
+                            return jsonify(
+                                {
+                                    "code": 201,
+                                    "data": {
+                                        "message":"data not successfully removed"
+                                    
+                                    },
+                                    "message": "An error occurred removing the course."
+                                }
+                            ), 500
+        
+                        return jsonify(
+                                {
+                                    "code": 201,
+                                    "data": "course from learning journey has been successfully removed"
+                                }
+                            ), 201 
+                    
+        else:
+                        
+                        return jsonify(
+                            {
+                                "code": 500,
+                                "data": "Course does not exist"
+                            }
+                        ), 201 
+                        
+                                   
+           
+                
+               
 
    
 
 #get skills from role_ID
-@app.route("/DeleteLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','POST'])
+@app.route("/DeleteLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','DELETE'])
 def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
     
 
@@ -619,7 +690,9 @@ def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
                                 "code": 201,
                                 "data": "DATA ERROR"
                             }
-                        ), 201 
+                        ), 201
+                    
+   
             else:
                 
                     return jsonify(
