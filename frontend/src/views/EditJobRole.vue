@@ -88,22 +88,33 @@
 
                         <!-- Add skill button -->
                         <label for="add-modal" class="flex justify-evenly">
-                            <div class="btn btn-outline border-dashed rounded-lg w-11/12 h-full">
+                            <div class="btn btn-outline border-dashed rounded-lg w-11/12 h-full" @click="handleAddSkill">
                                 Add New Skills
                             </div>
                         </label>
                         <!-- Modal pop-up -->
                         <input type="checkbox" id="add-modal" class="modal-toggle"/>
-                        <label for="add-modal" class="modal cursor-default">
-                            <label class="modal-box relative space-y-8">
+                        <div class="modal">
+                            <div class="modal-box space-y-8">
                                 <!-- All skills in checkbox 
                                     (assigned skills not shown) -->
-                                
+                                <ul class="space-y-3">
+                                    <li v-for="skill of addModal.skillArr" class="bg-gray-800 hover:shadow-lg hover:bg-black rounded-lg">
+                                        <label :for="skill.Skill_ID">
+                                            <div class="flex justify-between cursor-pointer p-4">
+                                                <p class="font-medium">
+                                                    {{skill.Skill_Name}}
+                                                </p>
+                                                <input type="checkbox" class="checkbox" v-model="addModal.selectedSkills"  :value="skill" :id="skill.Skill_ID"/>
+                                            </div>
+                                        </label>
+                                    </li>
+                                </ul>
                                 
                                 <!-- Add + cancel buttons -->
                                 <div class="grid grid-cols-2 gap-6">
                                     <div class="flex justify-end">
-                                        <label for="add-modal" class="btn btn-sm w-3/5" @click="handleAddSkill">
+                                        <label for="add-modal" class="btn btn-sm w-3/5" @click="confirmAddSkill">
                                             Add
                                         </label>
                                     </div>
@@ -114,8 +125,8 @@
                                     </div>
                                 </div>
 
-                            </label>
-                        </label>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -154,7 +165,7 @@ import NavBar from '../components/NavBar.vue';
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useRoleStore, useAssignSkillsStore } from '@/store/index.js'
-import { updateRole, deleteRole } from "@/endpoint/endpoint.js";
+import { getAllSkills, getCoursesBySkill, updateRole, deleteRole } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
@@ -166,6 +177,11 @@ const roleName = route.params.jobRoleName
 
 const removeModal = reactive({
     skillName: '',
+})
+
+const addModal = reactive({
+    skillArr: [],
+    selectedSkills: [],
 })
 
 const removeSkillsIDArr = ref(assignSkillsStore.assignSkills.removeSkillsIDArr)
@@ -187,15 +203,59 @@ function handleRemoveSkill(skillName) {
 function confirmRemoveSkill(skillName) {
     // store Skill ID/s in an array for API call when submit form
     const skillID = roleStore.role.coursesBySkillName[skillName].skillID
-    removeSkillsIDArr.value.push(skillID.toString())
+    // check if skill id in addSkillsIDArr
+    if (addSkillsIDArr.value.includes(skillID.toString())) {
+        addSkillsIDArr.value.pop(skillID)
+    } else {
+        removeSkillsIDArr.value.push(skillID.toString())
+    }
 
     // removing skill key from coursesBySkillName object in pinia store only
     delete roleStore.role.coursesBySkillName[skillName]
 }
 
-function handleAddSkill() {
-    console.log('add');
-    // add to roleStore
+async function handleAddSkill() {
+    // get all skills
+    try {
+        const allSkills = await getAllSkills()
+        addModal.skillArr = []
+        for (var skill of allSkills) {
+            if (!(skill.Skill_Name in roleStore.role.coursesBySkillName)) {
+                addModal.skillArr.push(skill)
+            }
+        }
+        // add to roleStore
+
+    }
+    catch (err) {
+        error.value = err
+        console.log(err);
+    }
+}
+
+async function confirmAddSkill() {
+    try {
+        for (var skill of addModal.selectedSkills) {
+            const skillCourses = await getCoursesBySkill(skill.Skill_ID)
+            for (var course of skillCourses) {
+                roleStore.role.coursesBySkillName[skill.Skill_Name] = {
+                    'skillID': skill.Skill_ID,
+                    'courses': {}
+                }
+                roleStore.role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
+            }
+            // check if skill id in removeSkillsIDArr
+            if (removeSkillsIDArr.value.includes((skill.Skill_ID).toString())) {
+                removeSkillsIDArr.value.pop(skill.Skill_ID)
+            } else {
+                addSkillsIDArr.value.push((skill.Skill_ID).toString())
+            }
+        }
+    }
+    catch (err) {
+        error.value = err
+        console.log(err);
+    }
 }
 
 async function handleEditRole() {
