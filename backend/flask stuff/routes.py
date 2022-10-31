@@ -538,10 +538,9 @@ def Add_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
                         
                         new_ljps_assignment = LJPS_Assignment(LJPS_ID,Staff_ID,Role_ID)
                         
-                        new_course_assignment = LJPS_Course_Assignment(LJPS_ID,Course_ID)
+                        
                         
                         try:
-                            db.session.add(new_course_assignment)
                             db.session.add(new_ljps_assignment)
                             db.session.commit()
                         except:
@@ -562,6 +561,54 @@ def Add_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
                                 "data": "New learning journey created"
                             }
                         ), 201 
+                        
+                        
+#get skills from role_ID
+@app.route("/AddLJAssignCourse/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','POST'])
+def Add_Course_by_LJ(Course_ID,LJPS_ID):
+    
+
+       
+        check_course = LJPS_Course_Assignment.query.filter_by(Course_ID =Course_ID,LJPS_ID = LJPS_ID)
+        
+        
+        if check_course:
+        
+                        return jsonify(
+                                {
+                                    "code": 201,
+                                    "data": "learning journey course already exist"
+                                }
+                            ), 201 
+                    
+        else:
+                    
+
+                        
+                        new_course_assignment = LJPS_Course_Assignment(LJPS_ID,Course_ID)
+                        
+                        try:
+                            db.session.add(new_course_assignment)
+                            db.session.commit()
+                        except:
+                            return jsonify(
+                                {
+                                    "code": 500,
+                                    "data": {
+                                        "message":"data not successfully added"
+                                    
+                                    },
+                                    "message": "An error occurred adding the course."
+                                }
+                            ), 500
+                        
+                        return jsonify(
+                            {
+                                "code": 201,
+                                "data": "Course added to learning journey"
+                            }
+                        ), 201 
+                        
                         
             
             
