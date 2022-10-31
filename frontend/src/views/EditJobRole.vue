@@ -260,7 +260,7 @@ async function confirmAddSkill() {
 
 async function handleEditRole() {
     try {
-        const updatedRole = await updateRole()
+        const updatedRole = await updateRole(roleStore.role, removeSkillsIDArr.value, addSkillsIDArr.value)
     }
     catch (err) {
         error.value = err

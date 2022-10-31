@@ -87,16 +87,28 @@ export function createRole(newJobRoleData) {
 }
 
 // Update job role
-export function updateRole(roleID, skillIDArr) {
-    // const roleID = updateDetails
-    console.log(JSON.parse(JSON.stringify(skillIDArr)))
-    /*
-    Will make 3 concurrent API calls for:
-    1. Changes in role name and desc
-    2. Addition of skills
-    3. Removal of skills
-    Can use Promise.all() or Axios.all()
-    */
+export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
+    const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
+    const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
+    return new Promise((resolve, reject) => {
+        let updateEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/update/${roleDetails.roleID}/${roleDetails.roleName}/${roleDetails.roleDesc}`
+        let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
+        let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
+        axios.all([
+            axios.post(updateEndpoint),
+            axios.post(assignRemoveEndpoint),
+            axios.post(assignAddEndpoint)
+        ])
+        .then(axios.spread((obj1, obj2, obj3) => {
+            console.log(obj1.data);
+            console.log(obj2.data);
+            console.log(obj3.data);
+        }))
+        .catch((err) => {
+            console.log(err.message);
+            reject('Fail to delete role, check WAMP/MAMP server');
+        })
+    })
 }
 
 // Delete job role
@@ -104,7 +116,7 @@ export function deleteRole(roleID) {
     return new Promise((resolve, reject) => {
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/delete/${roleID}`
         axios
-        .post(apiEndpoint)
+            .post(apiEndpoint)
             .then((res) => {
                 resolve(res.data)
             })
