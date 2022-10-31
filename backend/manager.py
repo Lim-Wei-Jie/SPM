@@ -22,121 +22,75 @@ CORS(app)
 
 class Staff(db.Model):
     __tablename__ = 'staff'
-    # inventoryId = db.Column(db.Integer, primary_key=True)
-    # storeName = db.Column(db.String(64), nullable=False)
     Staff_ID = db.Column(db.String(64), primary_key=True)
     Staff_FName = db.Column(db.String(64), nullable=False, unique=True)
     Staff_LName = db.Column(db.String(64), nullable=False, unique=True)
     Dept = db.Column(db.String(64), nullable=False, unique=True)
     Email = db.Column(db.String(64), nullable=False, unique=True)
     System_Role = db.Column(db.Integer, primary_key=True)
-
-
-    # staff_id = db.Column(db.String(64), nullable=False, primary_key=True)
-    #price = db.Column(db.Float(precision=2), nullable=False)
-    #stockCount = db.Column(db.Integer)
-    # imageLink= db.Column(db.String(100), nullable=False)
-    #userId = db.Column(db.Integer, primary_key=True)
-    #username = db.Column(db.String(64), nullable=False, unique=True)
     
 
     def __init__(self, Staff_ID, Staff_FName, Staff_LName, Dept, Email, System_Role):
-        # self.inventoryId = inventoryId
-        # self.storeName = storeName
         self.Staff_ID = Staff_ID
         self.Staff_FName = Staff_FName
         self.Staff_LName = Staff_LName
         self.Dept = Dept
         self.Email = Email
         self.System_Role = System_Role
-        # self.imageLink = imageLink
  
     def json(self):
-        # "inventoryId": self.inventoryId,
         return {"staffID": self.Staff_ID, "Staff_FName": self.Staff_FName, "Staff_LName": self.Staff_LName, "Department": self.Dept, "Email": self.Email, "System Role": self.System_Role}
 
 class Role(db.Model):
     __tablename__ = 'role'
-    # inventoryId = db.Column(db.Integer, primary_key=True)
-    # storeName = db.Column(db.String(64), nullable=False)
     Role_ID = db.Column(db.Integer, primary_key=True)
     Role_Name = db.Column(db.String(64), nullable=False, unique=True)
     Role_Desc = db.Column(db.String(512), nullable=False, unique=True)
     Date_Created = db.Column(db.String(64), nullable=False, unique=True, default=datetime.utcnow)
-
-
-    # staff_id = db.Column(db.String(64), nullable=False, primary_key=True)
-    #price = db.Column(db.Float(precision=2), nullable=False)
-    #stockCount = db.Column(db.Integer)
-    # imageLink= db.Column(db.String(100), nullable=False)
-    #userId = db.Column(db.Integer, primary_key=True)
-    #username = db.Column(db.String(64), nullable=False, unique=True)
     
 
-    def __init__(self, Role_ID, Role_Name,Role_Desc,Date_Created):
-        # self.inventoryId = inventoryId
-        # self.storeName = storeName
+    def __init__(self, Role_ID, Role_Name,Role_Desc,Date_Created=datetime.now()):
         self.Role_ID = Role_ID
         self.Role_Name = Role_Name
         self.Role_Desc = Role_Desc
-        if Date_Created is None:
-            self.Date_Created = datetime.utcnow()
-        else:
-            self.Date_Created = Date_Created
-
-        # self.imageLink = imageLink
+        self.Date_Created = Date_Created
  
     def json(self):
-        # "inventoryId": self.inventoryId,
-        return {"Role_ID": self.Role_ID, "Role_Name": self.Role_Name, "Role_Desc": self.Role_Desc, "Date_Created": self.Date_Created} 
+        #return {"Role_ID": self.Role_ID, "Role_Name": self.Role_Name, "Role_Desc": self.Role_Desc, "Date_Created": self.Date_Created} 
+        return {"Role_ID": self.Role_ID, "Role_Name": self.Role_Name, "Role_Desc": self.Role_Desc} 
+
 
 class Course(db.Model):
     __tablename__ = 'course'
-    # inventoryId = db.Column(db.Integer, primary_key=True)
-    # storeName = db.Column(db.String(64), nullable=False)
     Course_ID = db.Column(db.Integer, primary_key=True)
     Course_Name = db.Column(db.String(64), nullable=False, unique=True)
     Course_Desc = db.Column(db.String(512), nullable=False, unique=True)
     Course_Status = db.Column(db.String(64), nullable=False, unique=True)
     Course_Type = db.Column(db.String(64), nullable=False, unique=True)
     Course_Category = db.Column(db.String(64), nullable=False, unique=True)
-    # staff_id = db.Column(db.String(64), nullable=False, primary_key=True)
-    #price = db.Column(db.Float(precision=2), nullable=False)
-    #stockCount = db.Column(db.Integer)
-    # imageLink= db.Column(db.String(100), nullable=False)
-    #userId = db.Column(db.Integer, primary_key=True)
-    #username = db.Column(db.String(64), nullable=False, unique=True)
     
 
     def __init__(self, Course_ID, Course_Name,Course_Desc,Course_Status,Course_Type,Course_Category):
-        # self.inventoryId = inventoryId
-        # self.storeName = storeName
         self.Course_ID = Course_ID
         self.Course_Name = Course_Name
         self.Course_Desc = Course_Desc
         self.Course_Status = Course_Status
         self.Course_Type = Course_Type
         self.Course_Category = Course_Category
-
-        # self.imageLink = imageLink
  
     def json(self):
-        # "inventoryId": self.inventoryId,
         return {"Course_ID": self.Course_ID, "Course_Name": self.Course_Name, "Course_Desc": self.Course_Desc, "Course_Status": self.Course_Status, "Course_Type":self.Course_Type, "Course_Category":self.Course_Category} 
 
 class Skill(db.Model):
-
     __tablename__ = 'Skill'
-    
     Skill_ID = db.Column(db.Integer, primary_key=True)
     Skill_Name = db.Column(db.String(64), nullable=False)
     Skill_Desc = db.Column(db.String(255), nullable=False)
     Date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-   #Courses = relationship("Course", secondary=skill_assignment)
+
     def json(self):
 
         return {"Skill_ID": self.Skill_ID , "Skill_Name": self.Skill_Name, "Skill_Desc": self.Skill_Desc , "Date_created": self.Date_created}
-    
     
     def __init__(self, Skill_ID, Skill_Name, Skill_Desc, Date_created=None):
         self.Skill_ID = Skill_ID 
@@ -149,13 +103,10 @@ class Skill(db.Model):
 
 class Skill_Assign(db.Model):
     __tablename__ = 'Skill_Assignment'
-
     Course_ID = db.Column(db.String(64), nullable=False, primary_key=True)
     Skill_ID = db.Column(db.Integer, nullable=False, primary_key=True)
 
     def __init__(self, Skill_ID,Course_ID):
-        
-        
         self.Skill_ID = Skill_ID
         self.Course_ID = Course_ID
  
@@ -164,7 +115,6 @@ class Skill_Assign(db.Model):
 
 class Role_Assign(db.Model):
     __tablename__ = 'Role_Assignment'
-    
     Role_ID = db.Column(db.Integer, nullable=False, primary_key=True)
     Skill_ID = db.Column(db.Integer, nullable=False, primary_key=True)
 
@@ -215,7 +165,7 @@ def get_all_role():
         }
     ), 404
 
-@app.route("/role/create/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>", methods=['POST'])
+@app.route("/role/create/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>", methods=['GET','POST'])
 def create_role(Role_ID,Role_Name,Role_Desc):
 
     if (Role.query.filter_by(Role_ID=Role_ID).first()):
@@ -225,12 +175,12 @@ def create_role(Role_ID,Role_Name,Role_Desc):
                 "data": {
                     "Role_ID": Role_ID,
                     "Role_Name": Role_Name,
-                    "Role_Name": Role_Desc
+                    "Role_Desc": Role_Desc
                 },
                 "message": "Role already exists."
             }
         ), 400
-    new_role = Role(Role_ID, Role_Name,Role_Desc)
+    new_role = Role(Role_ID, Role_Name,Role_Desc,datetime.utcnow())
     try:
         db.session.add(new_role)
         db.session.commit()
@@ -241,7 +191,7 @@ def create_role(Role_ID,Role_Name,Role_Desc):
                 "data": {
                     "Role_ID": Role_ID,
                     "Role_Name": Role_Name,
-                    "description": Role_Desc,
+                    "Role_Desc": Role_Desc,
                 },
                 "message": "An error occurred creating the Role."
             }
@@ -258,21 +208,22 @@ def create_role(Role_ID,Role_Name,Role_Desc):
 def delete_role(Role_ID):
     role = Role.query.filter_by(Role_ID=Role_ID).first()
     if role:
-            db.session.delete(role)
-            db.session.commit()
-            
-            return jsonify(
-                {
-                    "code": 201,
-                    "message": "Delete Successful."
-                } ), 201
+        db.session.delete(role)
+        db.session.commit()
+                
+        return jsonify(
+            {
+                "code": 201,
+                "message": "Delete Successful."
+            } ), 201
+
 
     else:
-            return jsonify(
-                {
-                    "code": 404,
-                    "message": "Delete unsuccessful as role does not exist."
-                } ), 404
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Delete unsuccessful as role does not exist."
+            } ), 404
 
 #update role by ID
 @app.route('/role/update/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>',methods=['PUT'])
