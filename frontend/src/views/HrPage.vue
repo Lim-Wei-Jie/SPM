@@ -75,7 +75,7 @@ const error = ref('');
     try {
         const skills = await getAllSkills()
         for (var skill of skills) {
-            allSkills.value.push(skill.Skill_name)
+            allSkills.value.push(skill.Skill_Name)
         }
         // allSkills.value.sort(); i think order doesnt matter
         numOfSkills.value = allSkills.value.length
