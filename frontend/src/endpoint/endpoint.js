@@ -42,8 +42,7 @@ export function getSkillsByRole(jobRoleID) {
                 resolve(res.data.data.Skill)
             })
             .catch((err) => {
-                console.log(err);
-                reject('Fail to fetch all skills by role, check WAMP/MAMP server')
+                reject(err.response.data)
             })
     })
 }
@@ -58,8 +57,7 @@ export function getCoursesBySkill(skillID) {
                 resolve(res.data.data.Course)
             })
             .catch((err) => {
-                console.log(err);
-                reject('Fail to fetch all courses by skill, check WAMP/MAMP server')
+                reject(err.response.data)
             })
     })
 }
@@ -88,6 +86,7 @@ export function createRole(newJobRoleData) {
 
 // Update job role
 export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
+    console.log(roleDetails.roleName);
     const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
     const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
     return new Promise((resolve, reject) => {
@@ -95,7 +94,7 @@ export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
         let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
         let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
         axios.all([
-            axios.post(updateEndpoint),
+            axios.put(updateEndpoint),
             axios.post(assignRemoveEndpoint),
             axios.post(assignAddEndpoint)
         ])

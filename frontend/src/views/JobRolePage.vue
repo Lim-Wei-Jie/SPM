@@ -43,13 +43,19 @@
                     Skills
                 </p>
                 <!-- Skills component -->
-                <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="(skillDetails, skillName) in role.coursesBySkillName" :key="skillName">
+                <div v-if="noSkills != ''">
+                    {{noSkills}}
+                </div>
+                <div v-else class="bg-gray-700 rounded-lg my-6 p-8" v-for="(skillDetails, skillName) in role.coursesBySkillName" :key="skillName">
                     <!-- Skill -->
                     <div class="font-medium text-lg mb-5">
                         {{skillName}}
                     </div>
                     <!-- Courses -->
-                    <div class="grid grid-cols-3 gap-6">
+                    <div v-if="noCourses">
+                        {{noCourses}}
+                    </div>
+                    <div v-else class="grid grid-cols-3 gap-6">
                         <div class="flex justify-evenly" v-for="course of skillDetails.courses">
                             <!-- Course Modal component -->
                             <label for="course-modal" class="btn modal-button bg-gray-800 rounded-lg w-11/12" @click="handleCourseClick(skillName, course.Course_Name)">
@@ -122,7 +128,9 @@ const courseModal = reactive({
 })
 
 const loading = ref(false)
-const error = ref('')
+const noSkills = ref('');
+const noCourses = ref('');
+const error = ref(null)
 
 ;(async() => {
     try {
@@ -133,24 +141,36 @@ const error = ref('')
         role.roleDesc = roleDetails.Role_Desc
 
         // get skills with role ID
-        const roleSkills = await getSkillsByRole(roleDetails.Role_ID)
-
-        // get courses with each skill ID
-        for (var skill of roleSkills) {
-            const skillCourses = await getCoursesBySkill(skill.Skill_ID)
-            for (var course of skillCourses) {
-                // skillName exist in object
-                if (role.coursesBySkillName[skill.Skill_Name]) {
-                    role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
-                // skillName does not exist in object
-                } else {
-                    role.coursesBySkillName[skill.Skill_Name] = {
-                        'skillID': skill.Skill_ID,
-                        'courses': {}
+        try {
+            const roleSkills = await getSkillsByRole(roleDetails.Role_ID)
+            // get courses with each skill ID
+            try {
+                for (var skill of roleSkills) {
+                    // fk error here
+                    const skillCourses = await getCoursesBySkill(skill.Skill_ID)
+                    for (var course of skillCourses) {
+                        // skillName exist in object
+                        if (role.coursesBySkillName[skill.Skill_Name]) {
+                            role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
+                        // skillName does not exist in object
+                        } else {
+                            role.coursesBySkillName[skill.Skill_Name] = {
+                                'skillID': skill.Skill_ID,
+                                'courses': {}
+                            }
+                            role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
+                        }
                     }
-                    role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
                 }
             }
+            catch (err) {
+                console.log(err.message);
+                // noCourses.value = err.message
+            }
+
+        }
+        catch (err) {
+            noSkills.value = err.message
         }
 
         // store role in global store to be use by edit job role page

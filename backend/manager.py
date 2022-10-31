@@ -341,13 +341,13 @@ def get_skill_list_by_Role(Role_ID):
         return jsonify(
             {
                 "code": 404,
-                "message": "There is no such skill"
+                "message": "No assigned skills"
             }
         ), 404
     return jsonify(
     {
         "code": 404,
-        "message": "There is no such skill"
+        "message": "No assigned skills"
     }), 404     
 #filter only skillID
 def filter_skillID(list_of_id):
@@ -557,7 +557,7 @@ def get_course_list_by_Skill(Skill_ID):
     return jsonify(
         {
             "code": 404,
-            "message": "There is no course"
+            "message": "No assigned course"
         }
     ), 404
 
