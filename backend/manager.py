@@ -698,11 +698,11 @@ def delete_skill(Skill_ID):
 
 @app.route('/skill/update/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>',methods=['PUT'])
 def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
-    skill = Role.query.filter_by(Skill_ID=Skill_ID).first()
+    skill = Skill.query.filter_by(Skill_ID=Skill_ID).first()
 
     if skill:
 
-        Role.query.filter_by(Skill_ID=Skill_ID).update(dict(Skill_Name=Skill_Name,Skill_Desc=Skill_Desc))
+        Skill.query.filter_by(Skill_ID=Skill_ID).update(dict(Skill_Name=Skill_Name,Skill_Desc=Skill_Desc))
 
         db.session.commit()
         
