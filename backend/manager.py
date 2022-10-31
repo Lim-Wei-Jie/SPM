@@ -454,8 +454,46 @@ def get_all_skill():
         }
     ), 404
     
+#https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
+@app.route("/course")
+def get_all_course():
+    #list
+    courselist = Course.query.all()
+    if len(courselist):
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    
+                    #turn python data into javascript object
+                    "courses": [course.json() for course in courselist]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no courses."
+        }
+    ), 404
 
-
+@app.route("/searchcourse/<string:Course_Name>",methods=['GET'])
+def find_by_course(Course_Name):
+    course = Course.query.filter_by(Course_Name = Course_Name).first()
+    if course:
+        return jsonify(
+            {
+                "code": 200,
+                "data": course.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Course not found."
+        }
+    ), 404
 
 @app.route("/skill/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>/<string:Date_created>", methods=['GET','POST'])
 def create_skill(Skill_ID,Skill_Name,Skill_Desc,Date_created):
