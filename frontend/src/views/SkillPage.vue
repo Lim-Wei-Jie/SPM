@@ -133,10 +133,10 @@ const error = ref('')
         // get skill details with chosen skill name
         const skills = await getAllSkills()
         for (var each of skills) {
-            if(each.Skill_name == skillName) {
-                skill.skillName = each.Skill_name
-                skill.skillID = each.Skill_id
-                skill.skillDesc = each.Skill_desc
+            if(each.Skill_Name == skillName) {
+                skill.skillName = each.Skill_Name
+                skill.skillID = each.Skill_ID
+                skill.skillDesc = each.Skill_Desc
             }
         }
         
