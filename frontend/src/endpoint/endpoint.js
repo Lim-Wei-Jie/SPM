@@ -199,9 +199,6 @@ export function getAllCourses() {
 }
 
 // Update skill
-// need to call the update skill details api
-// need to call the delete courses from skill /skill/<string:Skill_ID>/<string:Course_ID>
-// add course to skill api
 export function updateSkill(skillID, skillName, skillDesc) {
     return new Promise((resolve, reject) => {
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill/update/${skillID}/${skillName}/${skillDesc}`
@@ -231,7 +228,26 @@ export function addCoursesToSkill(skillID, addCourseIDArr) {
             })
             .catch((err) => {
                 console.log(err.message);
-                reject('Fail to update skill to course details, check WAMP/MAMP server');
+                reject('Fail to add courses to skill, check WAMP/MAMP server');
+            })
+    })
+}
+
+// remove course from skill 
+export function removeCoursesFromSkill(skillID, removeCourseIDArr) {
+    return new Promise((resolve, reject) => {
+        const removedCourses = JSON.parse(JSON.stringify(removeCourseIDArr._rawValue))
+        console.log(removeCourseIDArr);
+        //console.log(addedCourses);
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill/skilldeletecourse/${skillID}/${removedCourses}`
+        axios
+        .post(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to remove course from skill, check WAMP/MAMP server');
             })
     })
 }

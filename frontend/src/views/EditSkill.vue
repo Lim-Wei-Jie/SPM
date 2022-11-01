@@ -25,23 +25,44 @@
                 <div class="grid grid-cols-2 my-8">
                     <p class="text-3xl"> Edit Skill </p>
                     <!-- Delete button -->
-                    <button @click="deleteSkill(store.skill.skillID)" class="btn btn-circle place-self-end">
+                    <label for="delete-skill-modal"  @click="handleDeleteSkill()" class="btn btn-circle place-self-end">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                         </svg>
-                    </button>
+                    </label>
+                    <!-- Modal pop-up -->
+                    <input type="checkbox" id="delete-skill-modal" class="modal-toggle"/>
+                                    <label for="delete-skill-modal" class="modal cursor-default">
+                                        <label class="modal-box relative space-y-8">
+                                            <div v-if="noErr">
+                                                <p class="text-lg">
+                                                    <section class="text-xl mt-3">
+                                                        {{ store.skill.skillName }} has been deleted
+                                                    </section>
+                                                </p>   
+                                            </div>
+                                            <div v-else>
+                                                <p class="text-lg">
+                                                    <section class="text-xl mt-3">
+                                                        {{ error }} 
+                                                    </section>
+                                                </p>   
+                                            </div>
+                                        </label>
+                                    </label>
+                <!--end of modal pop up-->
                 </div>
     
                 <!-- Form component -->
                 <form class="form-control space-y-6" @submit.prevent="handleEditSkill">
     
-                    <!-- Role name input -->
+                    <!-- skill name input -->
                     <div class="space-y-2">
                         <h3 class="font-medium text-lg">Skill Name</h3>
                         <input type="text" v-model="store.skill.skillName" class="input input-bordered w-3/6 text-2xl">
                     </div>
                     
-                    <!-- Role desc input -->
+                    <!-- skill desc input -->
                     <div class="space-y-2 w-4/6">
                         <p class="font-medium text-lg">
                             Skill Description
@@ -133,7 +154,29 @@
                     </div>
                     
                     <!-- Save button -->
-                    <button class="btn w-1/5" type="submit"  v-on:click="handleUpdateSkill()">Save Changes</button>
+                    <label for="update-skill-modal" class="btn w-1/5" type="submit"  v-on:click="handleUpdateSkill()">Save Changes</label>
+                    <!-- Modal pop-up -->
+                    <input type="checkbox" id="update-skill-modal" class="modal-toggle"/>
+                                    <label for="update-skill-modal" class="modal cursor-default">
+                                        <label class="modal-box relative space-y-8">
+                                            <div v-if="noUpdateErr">
+                                                <p class="text-lg">
+                                                    <section class="text-xl mt-3">
+                                                        Changes was made succesfully
+                                                    </section>
+                                                </p>   
+                                            </div>
+                                            <div v-else>
+                                                <p class="text-lg">
+                                                    <section class="text-xl mt-3">
+                                                        {{ updateError }} 
+                                                    </section>
+                                                </p>   
+                                            </div>
+                                        </label>
+                                    </label>
+                <!--end of modal pop up-->
+                    
                     <!-- Cancel button -->
                     <div>
                         <RouterLink :to="`/skill/${skillName}`">
@@ -166,7 +209,7 @@
     import { reactive, ref } from 'vue'
     import { useRouter, useRoute } from 'vue-router'
     import { useSkillStore } from '@/store/index.js'
-    import { getCoursesBySkill, getAllCourses, deleteSkill, updateSkill, addCoursesToSkill } from "@/endpoint/endpoint.js";
+    import { getCoursesBySkill, getAllCourses, deleteSkill, updateSkill, addCoursesToSkill, removeCoursesFromSkill } from "@/endpoint/endpoint.js";
     
     const router = useRouter()
     const route = useRoute()
@@ -175,6 +218,9 @@
     const allCourses = ref()
     const checkedCourses = ref([])
     const addCourseIDArr = ref([])
+    const removeCourseIDArr = ref([])
+    const noErr = ref(true);
+    const noUpdateErr = ref(true);
    
 
     // from params
@@ -196,6 +242,7 @@
     
     const loading = ref(true);
     const error = ref('');
+    const updateError = ref('');
 
     
     function handleRemoveCourse(courseName) {
@@ -204,27 +251,29 @@
     
     function confirmRemoveCourse(courseName) {
         // store course ID/s in an array for API call when submit form
-        //const removeCourseID = store.skill.courses[courseName].Course_ID
-        //removeModal.removeCourseID.push(courseID.toString())
+        const removeCourseID = store.skill.courses[courseName].Course_ID;
+        removeCourseIDArr.value.push(removeCourseID.toString());
     
         // removing skill key from coursesBySkillName object in pinia store only
-        delete store.skill.courses[courseName]
+        delete store.skill.courses[courseName];
+        
+        console.log(removeCourseIDArr);
     }
     
     async function handleEditSkill() {
         // API call here
+        
+    }
+    
+    async function handleDeleteSkill() {
         try {
         const deletedSkill = await deleteSkill(store.skill.skillID);
         }
         catch (err) {
             error.value = err
             console.log(err);
+            noErr.value = false;
         }
-        
-    }
-    
-    function handleDeleteSkill(skillID) {
-        console.log(skillID);
     }
 
     async function handleAddCourseClick() {
@@ -244,7 +293,7 @@
     function confirmAddCourse(){
         //this is an array of objects
         //console.log(checkedCourses.value) 
-    //after confirm adding a course, need to store in store.skill.courses to display on the ui again    
+        //after confirm adding a course, need to store in store.skill.courses to display on the ui again    
         for(var checkedCourse of checkedCourses.value){
            //console.log(checkedCourse.Course_Name);
            store.skill.courses[checkedCourse.Course_Name] = checkedCourse.Course_Name;
@@ -258,22 +307,23 @@
         //first api to update skill name and desc
         try {
         const updatedSkill = await updateSkill(store.skill.skillID, store.skill.skillName, store.skill.skillDesc);
-        const updateCourses = await addCoursesToSkill(store.skill.skillID, addCourseIDArr);
+
+            //second api to update courses added
+            if(addCourseIDArr.value.length > 0){
+                const addCourses = await addCoursesToSkill(store.skill.skillID, addCourseIDArr);
+            }
+
+            //third api to update courses removed
+            if(removeCourseIDArr.value.length > 0){
+                const removeCourses = await removeCoursesFromSkill(store.skill.skillID, removeCourseIDArr);
+            }
+        
         }
         catch (err) {
-            error.value = err
+            updateError.value = err
             console.log(err);
+            noUpdateErr.value = false;
         }
-        //second api to update new courses added
-        // try {
-        // const updateCourses = await addCoursesToSkill(store.skill.skillID, addModal.addCourseIDArr)
-        // }
-        // catch (err) {
-        //     error.value = err
-        //     console.log(err);
-        // }
-
-        //third api to update courses removed
         
 
     }
