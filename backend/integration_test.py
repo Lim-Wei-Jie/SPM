@@ -25,10 +25,7 @@ class TestCreateRole(TestApp):
             Role_Name= 'Process Analyst', 
             Role_Desc= 'RPA and BPM') 
  
-        request_body = "/role/create/"+str(d1.Role_ID)+"/"+d1.Role_Name+"/"+d1.Role_Desc 
- 
-        request_body2 = "/role" 
- 
+        request_body = "/role/create/"+str(d1.Role_ID)+"/"+d1.Role_Name+"/"+d1.Role_Desc  
  
         response = self.client.get(request_body) 
  
@@ -45,7 +42,6 @@ class TestCreateSkill(TestApp):
             Skill_Desc= 'Signavio',
             Date_created="10/11/2022") 
         request_body = "/skill/"+str(d1.Skill_ID)+"/"+d1.Skill_Name+"/"+d1.Skill_Desc
-        request_body2 = "/Skill" 
  
         response = self.client.get(request_body) 
         self.assertEqual(response.json, { 

@@ -677,7 +677,7 @@ def course_to_skill_delete(Skill_ID,Course_ID):
 
 @app.route('/skill/delete/<string:Skill_ID>',methods=['DELETE'])
 def delete_skill(Skill_ID):
-    skill = Role.query.filter_by(Skill_ID=Skill_ID).first()
+    skill = Skill.query.filter_by(Skill_ID=Skill_ID).first()
     if skill:
         db.session.delete(skill)
         db.session.commit()
