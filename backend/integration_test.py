@@ -1,7 +1,7 @@
 import unittest 
 import flask_testing 
 import json 
-from routes import app, db, Course, Skill,Role,Skill_Assign,Role_Assign ,Registration
+from routes import app, db, Course, Skill,Role,Skill_Assign,Role_Assign ,Registration,LJPS_Assignment,LJPS_Course_Assignment 
  
 class TestApp(flask_testing.TestCase): 
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://" 
@@ -19,8 +19,8 @@ class TestApp(flask_testing.TestCase):
         db.session.remove() 
         db.drop_all() 
  
-class TestCreateRole(TestApp): 
-    def test_create_role(self): 
+class TestCreateLJ(TestApp): 
+    def test_create_LJ(self): 
         d1 = Role(Role_ID= '60', 
             Role_Name= 'Process Analyst', 
             Role_Desc= 'RPA and BPM') 
@@ -72,6 +72,40 @@ class TestCreateRegistration(TestApp):
                 'Reg_Status': 'Completed',
                 'Completion_Status': 'done'
                 }})
+        
+        
+ 
+        
+class TestAddLJ(TestApp): 
+    def test_add_LJ(self): 
+        d1 = LJPS_Assignment (LJPS_ID= 27, 
+            Staff_ID = '130010',
+            Role_ID  = 7) 
+        request_body = "/AddLJAssign/" + d1.Staff_ID + "/" + str(d1.Role_ID) + "/" + str(d1.LJPS_ID) 
+
+        response = self.client.get(request_body) 
+        self.assertEqual(response.json, { 
+            'code':201, 
+            'data':  'New learning journey created'
+                
+                })
+ 
+   
+        
+class TestAddLJCourse(TestApp): 
+    def test_add_LJ_Course(self): 
+        d1 = LJPS_Course_Assignment (Course_ID= "COR003A", 
+            LJPS_ID = '33') 
+        request_body = "/AddLJAssignCourse/" + d1.Course_ID + "/" + str(d1.LJPS_ID) 
+
+        response = self.client.get(request_body) 
+        self.assertEqual(response.json, { 
+            'code':201, 
+            'data':  'Course added to learning journey'
+                
+                })
+        
+
 
 if __name__ == '__main__': 
     unittest.main()

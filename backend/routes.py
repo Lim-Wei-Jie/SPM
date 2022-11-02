@@ -379,8 +379,8 @@ def get_ljps_id_by_role(Staff_ID):
     
 
 #get skills from role_ID
-@app.route("/AddLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','POST'])
-def Add_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
+@app.route("/AddLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:LJPS_ID>",methods=['GET','POST'])
+def Add_LJ_by_Staff(Staff_ID,Role_ID,LJPS_ID):
     
 
        
