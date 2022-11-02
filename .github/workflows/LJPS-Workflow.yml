@@ -55,7 +55,7 @@ jobs:
         run: |
           #TODO: Add the command to run all the unittest here.
 
-          python -m unittest ./backend/unit_tests.py
-          pyhont -m flask_testing ./backend/integration_test.py
+          python -m unittest unit_tests.py
+          python -m flask_testing integration_test.py
 
         #test
