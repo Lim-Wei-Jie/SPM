@@ -218,8 +218,8 @@ export function updateSkill(skillID, skillName, skillDesc) {
 export function addCoursesToSkill(skillID, addCourseIDArr) {
     return new Promise((resolve, reject) => {
         const addedCourses = JSON.parse(JSON.stringify(addCourseIDArr._rawValue))
-        //console.log(addCourseIDArr);
-        //console.log(addedCourses);
+        console.log(addCourseIDArr);
+        console.log(addedCourses);
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill/${skillID}/${addedCourses}`
         axios
         .post(apiEndpoint)
@@ -248,6 +248,24 @@ export function removeCoursesFromSkill(skillID, removeCourseIDArr) {
             .catch((err) => {
                 console.log(err.message);
                 reject('Fail to remove course from skill, check WAMP/MAMP server');
+            })
+    })
+}
+
+// Create skill
+export function createSkill(skillID, skillName, skillDesc) {
+    return new Promise((resolve, reject) => {
+        // const newSkillName = JSON.parse(JSON.stringify(skillName._rawValue));
+        // const newSkillDesc = JSON.parse(JSON.stringify(skillDesc._rawValue))
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/skill/${skillID}/${skillName}/${skillDesc}`
+        axios
+        .post(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to create skill, check WAMP/MAMP server');
             })
     })
 }

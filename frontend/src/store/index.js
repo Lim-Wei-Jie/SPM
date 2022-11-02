@@ -76,3 +76,16 @@ export const useSkillStore = defineStore('skill', () => {
     }
 
 })
+
+// export const useAssignSkillsStore = defineStore('assignSkillsCourses', () => {
+
+//     const assignSkillsCourses = reactive({
+//         removeSkillsIDArr: [],
+//         addSkillsIDArr: []
+//     })
+
+//     return {
+//         assignSkills
+//     }
+
+// })

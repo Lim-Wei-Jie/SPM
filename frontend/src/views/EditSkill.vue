@@ -165,6 +165,21 @@
                                                         Changes was made succesfully
                                                     </section>
                                                 </p>   
+                                                <!-- Ok button -->
+                                                    <div class="grid grid-cols-2 gap-6">
+                                                        <RouterLink :to="`/hr`">
+                                                            <div class="flex justify-end">    
+                                                                Ok
+                                                           </div> 
+                                                        </RouterLink>
+                                                    </div>
+                                            </div>
+                                            <div v-if="notEnoughCourses">
+                                                <p class="text-lg">
+                                                    <section class="text-xl mt-3">
+                                                        You need to have at least 1 course
+                                                    </section>
+                                                </p>   
                                             </div>
                                             <div v-else>
                                                 <p class="text-lg">
@@ -173,6 +188,7 @@
                                                     </section>
                                                 </p>   
                                             </div>
+                                            
                                         </label>
                                     </label>
                 <!--end of modal pop up-->
@@ -221,6 +237,7 @@
     const removeCourseIDArr = ref([])
     const noErr = ref(true);
     const noUpdateErr = ref(true);
+    const notEnoughCourses = ref(false);
    
 
     // from params
@@ -304,26 +321,34 @@
     }
 
     async function handleUpdateSkill(){
-        //first api to update skill name and desc
-        try {
-        const updatedSkill = await updateSkill(store.skill.skillID, store.skill.skillName, store.skill.skillDesc);
+        if(Object.keys(store.skill.courses).length < 0){
+            notEnoughCourses.value = true;
+            return;
+        }
 
-            //second api to update courses added
-            if(addCourseIDArr.value.length > 0){
-                const addCourses = await addCoursesToSkill(store.skill.skillID, addCourseIDArr);
-            }
+        else{
+            try {
+                //first api to update skill name and desc
+                const updatedSkill = await updateSkill(store.skill.skillID, store.skill.skillName, store.skill.skillDesc);
 
-            //third api to update courses removed
-            if(removeCourseIDArr.value.length > 0){
-                const removeCourses = await removeCoursesFromSkill(store.skill.skillID, removeCourseIDArr);
+                //second api to update courses added
+                if(addCourseIDArr.value.length > 0){
+                    const addCourses = await addCoursesToSkill(store.skill.skillID, addCourseIDArr);
+                }
+
+                //third api to update courses removed
+                if(removeCourseIDArr.value.length > 0){
+                    const removeCourses = await removeCoursesFromSkill(store.skill.skillID, removeCourseIDArr);
+                }
+            
             }
+            catch (err) {
+                updateError.value = err
+                console.log(err);
+                noUpdateErr.value = false;
+            }
+        }
         
-        }
-        catch (err) {
-            updateError.value = err
-            console.log(err);
-            noUpdateErr.value = false;
-        }
         
 
     }

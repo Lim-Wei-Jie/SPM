@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `course` (
 CREATE TABLE IF NOT EXISTS `skill` (
 	`Skill_ID` int NOT NULL,
     `Skill_Name` varchar(20)  NOT NULL,
-    `Skill_Desc` varchar(20)  NULL,
+    `Skill_Desc` text(8000)  NULL,
     
     
     -- extra
