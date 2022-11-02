@@ -43,7 +43,7 @@
                     Skills
                 </p>
                 <!-- Skills component -->
-                <div v-if="noSkills != ''">
+                <div v-if="noSkills">
                     {{noSkills}}
                 </div>
                 <div v-else class="bg-gray-700 rounded-lg my-6 p-8" v-for="(skillDetails, skillName) in role.coursesBySkillName" :key="skillName">
@@ -144,10 +144,23 @@ const error = ref(null)
         try {
             const roleSkills = await getSkillsByRole(roleDetails.Role_ID)
             // get courses with each skill ID
-            try {
-                for (var skill of roleSkills) {
-                    // fk error here
-                    const skillCourses = await getCoursesBySkill(skill.Skill_ID)
+            for (var skill of roleSkills) {
+                let skillCourses = null
+                try {
+                    skillCourses = await getCoursesBySkill(skill.Skill_ID)
+                }
+                catch (err) {
+                    noCourses.value = err.message
+                }
+
+                if (noCourses.value) {
+                    // if there are no courses assigned to skill
+                    role.coursesBySkillName[skill.Skill_Name] = {
+                        'skillID': skill.Skill_ID,
+                        'courses': {}
+                    }
+                } else {
+                    // if there are courses assigned to skill
                     for (var course of skillCourses) {
                         // skillName exist in object
                         if (role.coursesBySkillName[skill.Skill_Name]) {
@@ -162,10 +175,6 @@ const error = ref(null)
                         }
                     }
                 }
-            }
-            catch (err) {
-                console.log(err.message);
-                // noCourses.value = err.message
             }
 
         }
