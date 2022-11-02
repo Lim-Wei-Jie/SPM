@@ -28,7 +28,7 @@ class Registration(db.Model):
   
 
     def json(self):
-        return {"reg_id": self.Reg_ID, "course_id": self.Course_ID , "staff_id": self.Staff_ID, "reg_status": self.Reg_Status, "completion_status":self.Completion_Status}
+        return {"Reg_ID": self.Reg_ID, "Course_ID": self.Course_ID , "Staff_ID": self.Staff_ID, "Reg_Status": self.Reg_Status, "Completion_Status":self.Completion_Status}
     
     
     def __init__(self, Reg_ID, Course_ID, Staff_ID, Reg_Status,Completion_Status):

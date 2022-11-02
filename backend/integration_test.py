@@ -1,7 +1,7 @@
 import unittest 
 import flask_testing 
 import json 
-from routes import app, db, Course, Skill,Role,Skill_Assign,Role_Assign 
+from routes import app, db, Course, Skill,Role,Skill_Assign,Role_Assign ,Registration
  
 class TestApp(flask_testing.TestCase): 
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://" 
@@ -51,6 +51,27 @@ class TestCreateSkill(TestApp):
                 'Skill_ID': 6, 
                 'Skill_Name': 'Business Process Analysis and Modelling'
                 }}) 
- 
+
+
+class TestCreateRegistration(TestApp): 
+    def test_create_Regis(self): 
+        d1 = Registration(Reg_ID= 6, 
+            Course_ID = 'COR0003', 
+            Staff_ID = '130002',
+            Reg_Status ="Completed",
+            Completion_Status = "done") 
+        request_body = "/Registration/addRegis/"+str(d1.Reg_ID)+"/"+d1.Course_ID+"/"+d1.Staff_ID + "/" + d1.Reg_Status + "/" + d1.Completion_Status
+
+        response = self.client.get(request_body) 
+        self.assertEqual(response.json, { 
+            'code':201, 
+            'data':{ 
+                'Reg_ID': 6, 
+                'Course_ID' : 'COR0003', 
+                'Staff_ID': '130002',
+                'Reg_Status': 'Completed',
+                'Completion_Status': 'done'
+                }})
+
 if __name__ == '__main__': 
     unittest.main()
