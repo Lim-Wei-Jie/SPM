@@ -35,10 +35,16 @@
                                     <label for="delete-skill-modal" class="modal cursor-default">
                                         <label class="modal-box relative space-y-8">
                                             <div v-if="noErr">
+                                                <!-- Ok button -->
                                                 <p class="text-lg">
-                                                    <section class="text-xl mt-3">
-                                                        {{ store.skill.skillName }} has been deleted
-                                                    </section>
+                                                    <RouterLink :to="`/hr`">
+                                                        <section class="text-xl mt-3">
+                                                            {{ store.skill.skillName }} has been deleted
+                                                        </section>
+                                                        <div class="btn btn-sm flex justify-end">    
+                                                            Ok
+                                                        </div> 
+                                                    </RouterLink>
                                                 </p>   
                                             </div>
                                             <div v-else>
@@ -168,7 +174,7 @@
                                                 <!-- Ok button -->
                                                     <div class="grid grid-cols-2 gap-6">
                                                         <RouterLink :to="`/hr`">
-                                                            <div class="flex justify-end">    
+                                                            <div class="btn btn-sm flex justify-end">    
                                                                 Ok
                                                            </div> 
                                                         </RouterLink>
@@ -321,8 +327,9 @@
     }
 
     async function handleUpdateSkill(){
-        if(Object.keys(store.skill.courses).length < 0){
+        if(Object.keys(store.skill.courses).length === 0){
             notEnoughCourses.value = true;
+            noUpdateErr.value = false;
             return;
         }
 

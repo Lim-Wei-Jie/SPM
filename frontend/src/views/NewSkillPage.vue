@@ -124,28 +124,47 @@
                     </div>
                     
                     <!-- Save button -->
-                    <label for="update-skill-modal" class="btn w-1/5" type="submit"  v-on:click.prevent="handleCreateSkill()">Save Changes</label>
+                    <label for="create-skill-modal" class="btn w-1/5" type="submit"  v-on:click="handleCreateSkill()">Create Skill</label>
                     <!-- Modal pop-up -->
-                    <input type="checkbox" id="update-skill-modal" class="modal-toggle"/>
-                                    <label for="update-skill-modal" class="modal cursor-default">
+                    <input type="checkbox" id="create-skill-modal" class="modal-toggle"/>
+                                    <label for="create-skill-modal" class="modal cursor-default">
                                         <label class="modal-box relative space-y-8">
                                             <div v-if="noCreateErr">
                                                 <p class="text-lg">
                                                     <section class="text-xl mt-3">
-                                                        Skill was created succesfully
+                                                        Skill created succesfully
                                                     </section>
+                                                </p>   
+                                                <!-- Ok button -->
+                                                    <div class="grid grid-cols-2 gap-6">
+                                                        <RouterLink :to="`/hr`">
+                                                            <div class="btn btn-sm flex justify-end">    
+                                                                Ok
+                                                           </div> 
+                                                        </RouterLink>
+                                                    </div>
+                                            </div>
+                                            <div v-if="haveError">
+                                                <p class="text-lg">
+                                                   <section class="text-xl mt-3">
+                                                        {{ error }} 
+                                                    </section>    
                                                 </p>   
                                             </div>
                                             <div v-else>
                                                 <p class="text-lg">
-                                                    <section class="text-xl mt-3">
-                                                        {{ createError }} 
-                                                    </section>
+                                                    <div v-for="error of createErrArr">
+                                                        <section class="text-xl mt-3">
+                                                            {{ error }} 
+                                                        </section>
+                                                    </div>
                                                 </p>   
                                             </div>
+                                            
                                         </label>
                                     </label>
                 <!--end of modal pop up-->
+                    
                     
                     <!-- Cancel button -->
                     <div>
@@ -190,6 +209,7 @@ import { getAllSkills } from '../endpoint/endpoint';
     const addCourseIDArr = ref([]) //used to call api
     const removeCourseIDArr = ref([])
     const noCreateErr = ref(true);
+    const createErrArr = ref([]);
     const addedCourses = ref([])
    
 
@@ -209,7 +229,7 @@ import { getAllSkills } from '../endpoint/endpoint';
     
     const loading = ref(true);
     const error = ref('');
-    const createError = ref('');
+    const haveError = ref(false);
 
     
     function handleRemoveCourse(courseName) {
@@ -255,8 +275,7 @@ import { getAllSkills } from '../endpoint/endpoint';
         //console.log(checkedCourses.value) 
         //after confirm adding a course, need to store in store.skill.courses to display on the ui again    
         for(var checkedCourse of checkedCourses.value){
-           //console.log(checkedCourse.Course_Name);
-           //store.skill.courses[checkedCourse.Course_Name] = checkedCourse.Course_Name;
+           
             addedCourses.value.push(checkedCourse.Course_Name.toString());
             addCourseIDArr.value.push(checkedCourse.Course_ID.toString());
             console.log(addCourseIDArr.value);
@@ -264,30 +283,46 @@ import { getAllSkills } from '../endpoint/endpoint';
     }
 
     async function handleCreateSkill(){
-        //skillName.toString();
-        //console.log(skillName.value);
-        //console.log(skillDesc.value);
-        
-        try {
-        //getting the latest skillID + 1 
-        const skillID = ref();
-        const allSkills = await getAllSkills(); 
-        skillID.value = (allSkills.length) + 1; 
-
-        //first api to update skill name and desc
-        const createdSkill = await createSkill(skillID.value, skillName.value, skillDesc.value);
-
-            //second api to update courses added
-            //if(addCourseIDArr.value.length > 0){
-                const addCourses = await addCoursesToSkill(skillID.value, addCourseIDArr);
-            //}
-        
-        }
-        catch (err) {
-            createError.value = err
-            console.log(err);
+        if(skillName.value.length === 0){
+            createErrArr.value.push('Please enter skill name')
             noCreateErr.value = false;
+            return;
         }
+        if(skillDesc.value.length === 0){
+            createErrArr.value.push('Please enter skill description')
+            noCreateErr.value = false;
+            return;
+        }
+        if(addCourseIDArr.value.length === 0){
+            createErrArr.value.push('Please select at least 1 course')
+            noCreateErr.value = false;
+            return;
+        }
+        
+
+        else{
+            try {
+            //getting the latest skillID + 1 
+            const skillID = ref();
+            const allSkills = await getAllSkills(); 
+            skillID.value = (allSkills.length) + 1; 
+
+            //first api to update skill name and desc
+            const createdSkill = await createSkill(skillID.value, skillName.value, skillDesc.value);
+
+                //second api to update courses added
+                //if(addCourseIDArr.value.length > 0){
+                    const addCourses = await addCoursesToSkill(skillID.value, addCourseIDArr);
+                //}
+            
+            }
+            catch (err) {
+                error.value = err;
+                console.log(err);
+                haveError.value = true;
+            }
+        }
+        
         
 
     }
