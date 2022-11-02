@@ -1,7 +1,7 @@
 import unittest 
 import flask_testing 
 import json 
-from manager import app, db, Course, Skill,Role,Skill_Assign,Role_Assign 
+from routes import app, db, Course, Skill,Role,Skill_Assign,Role_Assign 
  
 class TestApp(flask_testing.TestCase): 
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://" 

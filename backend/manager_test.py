@@ -1,5 +1,5 @@
 import unittest
-from manager import Course, Skill, Role, Role_Assign, Staff, Skill_Assign
+from routes import Course, Skill, Role, Role_Assign, Staff, Skill_Assign
 from db import LJPS_Assignment, LJPS_Course_Assignment
 
 
@@ -28,7 +28,7 @@ class TestSkill(unittest.TestCase):
             'Skill_ID': 'BPM020',
             'Skill_Name': 'Process Modelling',
             'Skill_Desc': 'RPA and BPM',
-            'Date_created' : '2022-01-21' }
+             }
         )
 
 
