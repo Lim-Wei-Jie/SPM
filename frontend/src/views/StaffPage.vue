@@ -11,7 +11,7 @@
         </div>
 
         <div v-for="LJ in LJs">
-            <LearningJourney2 :ljpsID="LJ.LJ_id" :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :onGoingCourses="LJ.courses.onGoing" :progress="LJ.progress" :jobRoleID="LJ.jobRoleID"/>
+            <LearningJourney :ljpsID="LJ.LJ_id" :jobRoleName="LJ.jobRoleName" :completedCourses="LJ.courses.completed" :onGoingCourses="LJ.courses.onGoing" :progress="LJ.progress" :jobRoleID="LJ.jobRoleID"/>
         </div>
     </div>
 </template>
@@ -21,8 +21,8 @@ import NavBar from '@/components/Navbar.vue'
 import Hero from '@/components/Hero.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue';
-import { getRegistration, getLJs, getRoleNameByID } from "@/endpoint/endpoint.js";
-import LearningJourney2 from '../components/LearningJourney2.vue';
+import { getLJs, getRoleNameByID } from "@/endpoint/endpoint.js";
+import LearningJourney from '../components/LearningJourney.vue';
 
 const router = useRouter()
 

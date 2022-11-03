@@ -109,43 +109,46 @@ const props = defineProps({
 const { jobRoleName } = toRefs(props)
 const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
 
-const loading = ref(true);
-const error = ref('');
-
 //JOB ROLE
 const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const staffID = ref('130003')
 const ljpsID = ref()
+const skillsList = ref([])
 
 ;(async() => {
 try {
-    // get all courses available
-    ljpsID.value = await getAllLJPSNo()
-    console.log(ljpsID)
-    // store role in global store to be use by edit job role page
-    //skillStore.storeSkill(skill.skillName, skill.skillID, skill.skillDesc, skill.courses)
+    //ROLE DETAILS
+    const role = await getRoleDetails(roleName)
+    roleDetailsName.value = role.Role_Name
+    roleDetailsID.value = role.Role_ID
+    roleDetailsDesc.value = role.Role_Desc
 
-    // after all API calls made
-    //loading.value = true
+    //SKILLS DETAILS
+    const skills = await getSkillsByRole(roleDetailsID.value)
+    for(var skill of skills){
+        var skillDetails = {
+            skill_id: skill.Skill_ID,
+            skill_name: skill.Skill_Name,
+            skill_desc: skill.Skill_Desc,
+            courses_selected: []
+        }
+        skillsList.value.push(skillDetails) 
+    }
+
+
+    //LJPS ID
+    ljpsID.value = await getAllLJPSNo()
+
+
 }
 catch(err) {
-    error.value = err
     console.log(err);
 }
 })();
 
-;(async() => {
-    await getRoleDetails(roleName)
-    .then((role) => {
-        roleDetailsName.value = role.Role_Name
-        roleDetailsID.value = role.Role_ID
-        roleDetailsDesc.value = role.Role_Desc
-    }).catch((err) => {
-        console.log(err);
-    });
-})();
+
 
 
 var regID = 0
@@ -159,10 +162,9 @@ onBeforeMount(
     }).catch((err) => {
         console.log(err);
     });
-
-    
 })();
 
+/*
 //SKILLS
 const skillsList = ref([])
 
@@ -182,6 +184,7 @@ const skillsList = ref([])
         console.log(err);
     });
 })();
+*/
 
 
 //COURSES
@@ -213,7 +216,6 @@ function addCourse(selectedCourses, skillID, skillsList) {
     for(var skill of skillsList){
         
         if (skill.skill_id == skillID) {
-            console.log(skill.skill_id, skillID)
             for(var i=0; i<selectedCourses.length; i++){
                 skill.courses_selected.push(selectedCourses[i])
             }
@@ -246,29 +248,29 @@ function createRegis(skillsList, staffID, roleID, ljpsID) {
             allSelectedCourses.push(course)
         }
     }
-    //add registration
-    for (var courseID of allSelectedCourses) {
-        addReg(regID, courseID, staffID)
-        regID+=1
-    }
-    //add assignment
-    for (var i = 0; i < allSelectedCourses.length; i++) {
-        if (i == 0 ) {
-            createLJ(staffID, roleID, allSelectedCourses[0], ljpsID)
-            addToLJ(allSelectedCourses[0], ljpsID)
-        } else {
-            addToLJ(allSelectedCourses[i], ljpsID)
-        }
-    }
-    /*
-    for (var courseID of allSelectedCourses) {
-        createLJ(staffID, roleID, courseID, ljpsID)
-    }
-    */
 
-    //route to staff page
-    router.push('/staff')
-    
+    //checks for selected courses
+    if (allSelectedCourses.length == 0) {
+        alert('Please add at least one learning journey')
+    } else {
+        //add registration
+        for (var courseID of allSelectedCourses) {
+            addReg(regID, courseID, staffID)
+            regID+=1
+        }
+        //add assignment
+        for (var i = 0; i < allSelectedCourses.length; i++) {
+            if (i == 0 ) {
+                createLJ(staffID, roleID, allSelectedCourses[0], ljpsID)
+                addToLJ(allSelectedCourses[0], ljpsID)
+            } else {
+                addToLJ(allSelectedCourses[i], ljpsID)
+            }
+        }
+
+        //route to staff page
+        router.push('/staff')
+    }
 }
 
 //add to registration

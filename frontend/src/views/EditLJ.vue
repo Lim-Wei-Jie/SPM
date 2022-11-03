@@ -47,7 +47,7 @@
                             <div class="modal-box">
                                 <h3 class="font-bold text-lg">{{ course }}</h3>
                                 <div class="modal-action">
-                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(course, ljpsID)">Remove Course</label>
+                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(course, ljpsID, skillsList)">Remove Course</label>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                         <div class="modal-box h-fit w-11/12">
                             <h3 class="font-bold text-lg">{{ skill.skill_name }}</h3>
                             <ul>
-                                <li v-for="course in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
+                                <li v-for="course in coursesList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
                                     <div class="flex justify-between">
                                         <div>
                                             <p class="font-medium">{{ course.course_id}} - {{ course.course_name }}</p>
@@ -80,7 +80,7 @@
         </div>
         <!-- send edited data back-->
         <div class="flex justify-evenly gap-6 w-full">
-            <button class="btn btn-outline btn-success w-2/6" @click="editLJ()">Done</button>
+            <button class="btn btn-outline btn-success w-2/6" @click="createRegis(skillsList, staffID, ljpsID)">Done</button>
             <button class="btn btn-outline btn-error w-2/6" @click="deleteLJ(staffID, jobRoleID, courseID, ljpsID)">Delete</button>
         </div>
     </div>
@@ -90,7 +90,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { ref, toRefs, onBeforeMount, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { getLJs, getRoleByID, getSkillsByRole, getCoursesBySkill, getSkillIdByCourseName } from "@/endpoint/endpoint.js";
+import { getLJs, getRoleByID, getSkillsByRole, getCoursesBySkill, getSkillIdByCourseName, getAllRegistrationNo } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 function JobRolePage() {
@@ -184,15 +184,28 @@ catch(err) {
 }
 })();
 
+var regID = 0
+onBeforeMount(
+    async() => {
+    await getAllRegistrationNo()
+    .then((res) => {
+        if (regID == 0) {
+            regID += res
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
+})();
+
 
 //COURSES
-const allCourseList = ref([])
+const coursesList = ref([])
 
 function getAllCourses(skillID) {
     ;(async() => {
         await getCoursesBySkill(skillID)
         .then((courses) => {
-            courseList.value = []
+            coursesList.value = []
             for (var course of courses) {
                 if (course.Course_Status == "Active") {
                     var courseDetails = {
@@ -200,7 +213,7 @@ function getAllCourses(skillID) {
                         course_id: course.Course_ID,
                         course_desc: course.Course_Desc
                     }
-                    allCourseList.value.push(courseDetails)
+                    coursesList.value.push(courseDetails)
                 }
             }
         }).catch((err) => {
@@ -209,11 +222,12 @@ function getAllCourses(skillID) {
     })();
 }
 
-// skillID not working for some reason TT
 const selectedCourses = ref([])
 function addCourse(selectedCourses, skillID, skillsList) {
     for(var skill of skillsList){
-        if (skill.skill_id === skillID) {
+        
+        if (skill.skill_id == skillID) {
+            console.log(skill.skill_id, skillID)
             for(var i=0; i<selectedCourses.length; i++){
                 skill.courses_selected.push(selectedCourses[i])
             }
@@ -224,17 +238,84 @@ function addCourse(selectedCourses, skillID, skillsList) {
     }
 }
 
-function deleteCourse(courseID, ljpsID) {
+function createRegis(skillsList, staffID, ljpsID) {
+    var remainingSkillsNo = 0
+    for (var skill of skillsList) {
+        remainingSkillsNo += skill.courses_selected.length
+    }
+    if (remainingSkillsNo != 0) {
+        if (selectedCourses.value != []) {
+            const allSelectedCourses = []
+            for (var skill of skillsList) {
+                for(var course of skill.courses_selected) {
+                    allSelectedCourses.push(course)
+                }
+            }
+
+            //add registration
+            for (var courseID of allSelectedCourses) {
+                addReg(regID, courseID, staffID)
+                regID+=1
+            }
+            //add assignment
+            for (var i = 0; i < allSelectedCourses.length; i++) {
+                addToLJ(allSelectedCourses[i], ljpsID)
+            }
+        }
+        
+        //route to staff page
+        router.push('/staff')
+    } else {
+        alert('You need at least one course to continue')
+    }
+    
+}
+
+
+//add to registration
+function addReg(regID, courseID, staffID) {
+    var regStatus = 'Registered'
+    var completionStatus = 'Ongoing'
     ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/DeLJAssignCourse/${courseID}/${ljpsID}`)
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/Registration/addRegis/${regID}/${courseID}/${staffID}/${regStatus}/${completionStatus}`)
         .then((res) => {
-            router.go(0)
+            console.log(res)
+
         }).catch((err) => {
             console.log(err);
         });
     })();
+}
 
+function addToLJ(courseID, ljpsID) {
+    ;(async() => {
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssignCourse/${courseID}/${ljpsID}`)
+        .then((res) => {
+            
+        }).catch((err) => {
+            console.log(err);
+        });
+    })();
+}
 
+function deleteCourse(courseID, ljpsID, skillsList) {
+    var remainingSkillsNo = 0
+    for (var skill of skillsList) {
+        remainingSkillsNo += skill.courses_selected.length
+        console.log(remainingSkillsNo)
+    }
+    if (remainingSkillsNo > 1) {
+        ;(async() => {
+            await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/DeLJAssignCourse/${courseID}/${ljpsID}`)
+            .then((res) => {
+                router.go(0)
+            }).catch((err) => {
+                console.log(err);
+            });
+        })();
+    } else {
+        alert('You need at least one course to continue.')
+    }
 }
 
 
