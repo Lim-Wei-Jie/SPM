@@ -40,6 +40,7 @@ jobs:
           pip3 install flask
           pip3 install flask_sqlalchemy
           pip3 install flask_cors 
+          pip3 install mysql
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Display Python version
