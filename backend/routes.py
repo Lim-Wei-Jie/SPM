@@ -149,28 +149,7 @@ def update_book(Course_Name):
 
     
 
-
-    
-
-@app.route("/skill/delete/<string:Skill_ID>",methods=['GET', 'DELETE'])
-def deleteSkill(Skill_ID):
-    skill = Skill.query.filter_by(Skill_ID=Skill_ID).first()
-    if skill:
-            db.session.delete(skill)
-            db.session.commit()
-            
-            return jsonify(
-                {
-                    "code": 201,
-                    "message": "Delete success"
-                } ), 201
-
-    else:
-            return jsonify(
-                {
-                    "code": 404,
-                    "message": "Delete unsuccessful"
-                } ), 404   
+  
             
             
 
@@ -714,7 +693,7 @@ def get_all_role():
 @app.route("/role/create/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>", methods=['GET','POST'])
 def create_role(Role_ID,Role_Name,Role_Desc):
 
-    if (Role.query.filter_by(Role_ID=Role_ID).first()):
+    if (Role.query.filter_by(Role_Name=Role_Name).first()):
         return jsonify(
             {
                 "code": 400,
@@ -919,7 +898,18 @@ def role_to_skill_assignment(Role_ID,Skill_ID):
     for skill in skill_arr:
         print(skill)
         if (Role_Assign.query.filter(Role_Assign.Role_ID.like(Role_ID),Role_Assign.Skill_ID.like(skill)).first()):
-            if_duplicate_err += str(skill)
+                return jsonify(
+                {
+                    "code": 400,
+                    "data": {
+                        
+                        "Skill_ID": skill,
+                        "Role_ID": Role_ID
+                        
+                    },
+                    "message": "Skill-Role already exists."
+                }
+            ), 400
         
         new_role_assignment = Role_Assign(Role_ID,skill)
         try:
@@ -941,7 +931,7 @@ def role_to_skill_assignment(Role_ID,Skill_ID):
     return jsonify(
         {
             "code": 201,
-            "data": new_role_assignment.json()
+            "data": str(skill_arr)
         }
     ), 201 
 
@@ -1044,7 +1034,7 @@ def find_by_course(Course_Name):
 @app.route("/skill/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>", methods=['GET','POST'])
 def create_skill(Skill_ID,Skill_Name,Skill_Desc):
 
-    if (Skill.query.filter_by(Skill_ID = Skill_ID ).first()):
+    if (Skill.query.filter_by(Skill_Name = Skill_Name ).first()):
         return jsonify(
             {
                 "code": 400,
@@ -1163,7 +1153,7 @@ def skill_to_course_assignment(Skill_ID,Course_ID):
                     "data": {
                         
                         "Skill_ID": Skill_ID,
-                        "Course_ID": Course_ID
+                        "Course_ID": course
                         
                     },
                     "message": "Skill-course already exists."
@@ -1221,7 +1211,7 @@ def course_to_skill_delete(Skill_ID,Course_ID):
         }
     ), 201 
 
-@app.route('/skill/delete/<string:Skill_ID>',methods=['DELETE'])
+@app.route('/skill/delete/<string:Skill_ID>',methods=['GET','DELETE'])
 def delete_skill(Skill_ID):
     skill = Skill.query.filter_by(Skill_ID=Skill_ID).first()
     if skill:
@@ -1275,4 +1265,4 @@ def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5004, debug=True)

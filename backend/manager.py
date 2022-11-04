@@ -13,9 +13,10 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL') or 'mysql+mysqlconnector://root@localhost:3306/lms'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size': 100,
+                                           'pool_recycle': 280}
  
 db = SQLAlchemy(app)
 CORS(app)
@@ -498,7 +499,7 @@ def find_by_course(Course_Name):
 @app.route("/skill/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>", methods=['GET','POST'])
 def create_skill(Skill_ID,Skill_Name,Skill_Desc):
 
-    if (Skill.query.filter_by(Skill_ID = Skill_ID ).first()):
+    if (Skill.query.filter_by(Skill_Name = Skill_Name ).first()):
         return jsonify(
             {
                 "code": 400,

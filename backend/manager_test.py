@@ -21,14 +21,12 @@ class TestSkill(unittest.TestCase):
     def test_to_dict(self):
         s1 = Skill(Skill_ID= 'BPM020',
             Skill_Name= 'Process Modelling',
-            Skill_Desc= 'RPA and BPM',
-            Date_created='2022-01-21')
+            Skill_Desc= 'RPA and BPM')
         
         self.assertEqual(s1.json(), {
             'Skill_ID': 'BPM020',
             'Skill_Name': 'Process Modelling',
-            'Skill_Desc': 'RPA and BPM',
-             }
+            'Skill_Desc': 'RPA and BPM'}
         )
 
 
