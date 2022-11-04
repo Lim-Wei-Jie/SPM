@@ -42,7 +42,8 @@ jobs:
           pip3 install flask_cors 
           pip3 install mysql
           pip3 install mysql-connector-python
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip3 install flask_testing
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
 
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
