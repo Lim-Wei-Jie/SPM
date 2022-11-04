@@ -58,5 +58,5 @@ jobs:
 
           python -m unittest backend/unit_test.py
           
-          python -m flask_testing backend/integration_test.py
+          python -m unittest backend/integration_test.py
         
