@@ -56,6 +56,6 @@ jobs:
           #TODO: Add the command to run all the unittest here.
 
           python -m unittest ./backend/unit_tests.py
+          working-directory: backend
           python -m flask_testing ./backend/integration_test.py
-
-        #test
+        
