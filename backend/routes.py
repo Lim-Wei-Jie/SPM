@@ -371,7 +371,7 @@ def Add_LJ_by_Staff(Staff_ID,Role_ID,LJPS_ID):
                         return jsonify(
                                 {
                                     "code": 201,
-                                    "data": "learning journey already exist"
+                                    "message": "learning journey already exist"
                                 }
                             ), 201 
                     
@@ -420,7 +420,7 @@ def Add_Course_by_LJ(Course_ID,LJPS_ID):
                         return jsonify(
                                 {
                                     "code": 201,
-                                    "data": "learning journey course already exist"
+                                    "message": "learning journey course already exist"
                                 }
                             ), 201 
                     
@@ -487,7 +487,7 @@ def Del_Course_by_LJ(Course_ID,LJPS_ID):
                         return jsonify(
                                 {
                                     "code": 201,
-                                    "data": "course from learning journey has been successfully removed"
+                                    "message": "course from learning journey has been successfully removed"
                                 }
                             ), 201 
                     
@@ -496,7 +496,7 @@ def Del_Course_by_LJ(Course_ID,LJPS_ID):
                         return jsonify(
                             {
                                 "code": 500,
-                                "data": "Course does not exist"
+                                "message": "Course does not exist"
                             }
                         ), 201 
                         
@@ -538,6 +538,13 @@ def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
                                 "data": "DATA ERROR"
                             }
                         ), 201
+
+                return jsonify(
+                    {
+                        "code": 201,
+                        "data": "data being removed"
+                    }
+                ), 201 
                     
    
             else:
@@ -549,10 +556,12 @@ def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
                                 "message":"data not successfully removed"
                             
                             },
-                            "message": "An error occurred creating the registratertregrion."
+                            "message": "No such learning journey"
                         }
                     ), 500
-                
+        
+        else:
+                    
             
             
             job_check = LJPS_Assignment.query.filter_by(LJPS_ID=LJPS_ID,Staff_ID=Staff_ID,Role_ID=Role_ID).first()
@@ -573,7 +582,7 @@ def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
                                 "reg_id": "data removed successfully"
                             
                             },
-                            "message": "An error occurred creating the registration."
+                            "message": "An error occurred creating the registration 200."
                         }
                     ), 500
             
