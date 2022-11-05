@@ -11,7 +11,7 @@
                             <RouterLink to="/login">Home</RouterLink>
                         </li>
                         <li>
-                            <RouterLink to="/hr">Skill</RouterLink>
+                            <RouterLink to="/hr" v-on:click="handleBack()">Skill</RouterLink>
                         </li> 
                         <li>
                             New skill 
@@ -82,13 +82,13 @@
                         <!-- Courses component -->
                         <div class="grid grid-cols-4 gap-6 bg-gray-700 rounded-lg my-6 p-8">
                             <!-- Course -->
-                            <div class="flex justify-evenly" v-for="each of checkedCourses" >
+                            <div class="flex justify-evenly" v-for="each of addedCourses" >
                                 <div class="text-center bg-gray-800 rounded-lg w-11/12 p-3 relative">
-                                    <p class="text-white" >{{ each.Course_Name }}</p> 
+                                    <p class="text-white" >{{ each }}</p> 
                                     <!-- <br> -->
                                     <!-- <p class="text-white"> {{ courseDetail.Course_Desc }}</p>  -->
                                     <!-- Remove course button -->
-                                    <label for="remove-modal" class="btn modal-button btn-xs btn-circle btn-error btn-outline absolute right-0 top-0" @click="handleRemoveCourse(each.Course_Name)">
+                                    <label for="remove-modal" class="btn modal-button btn-xs btn-circle btn-error btn-outline absolute right-0 top-0" @click="handleRemoveCourse(each)">
                                         <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
@@ -106,7 +106,7 @@
                                             <!-- Confirm + cancel buttons -->
                                             <div class="grid grid-cols-2 gap-6">
                                                 <div class="flex justify-end">
-                                                    <label for="remove-modal" class="btn btn-sm btn-error btn-outline w-3/5" @click="confirmRemoveCourse(each.Course_Name)">
+                                                    <label for="remove-modal" class="btn btn-sm btn-error btn-outline w-3/5" @click="confirmRemoveCourse(removeModal.courseName)">
                                                         Confirm
                                                     </label>
                                                 </div>
@@ -158,6 +158,14 @@
                                                             {{ error }} 
                                                         </section>
                                                     </div>
+                                                    <!-- Reset error msg button -->
+                                                    <div class="grid grid-cols-2 gap-6">
+                                                        <div class="flex justify-end">
+                                                            <div class="btn btn-sm btn-error btn-outline w-3/5" @click="resetError()">
+                                                                Ok
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </p>   
                                             </div>
                                             
@@ -168,7 +176,7 @@
                     
                     <!-- Cancel button -->
                     <div>
-                        <RouterLink :to="`/hr`">
+                        <RouterLink :to="`/hr`" v-on:click="handleBack()">
                             <div class="btn btn-outline btn-error w-1/5">
                                 Cancel
                             </div>
@@ -197,20 +205,21 @@
     import NavBar from '@/components/Navbar.vue'
     import { reactive, ref } from 'vue'
     import { useRouter, useRoute } from 'vue-router'
-    import { getCoursesBySkill, getAllCourses, createSkill, addCoursesToSkill, removeCoursesFromSkill } from "@/endpoint/endpoint.js";
-import { getAllSkills } from '../endpoint/endpoint';
+    import { useSkillCoursesStore } from '@/store/index.js'
+    import { getCoursesBySkill, getAllCourses, createSkill, addCoursesToSkill, getAllSkills } from "@/endpoint/endpoint.js";
+    
     
     const router = useRouter()
     const route = useRoute()
+    
+
     const viewAllCourses = ref([])
     const checkedCourses = ref([]) //array of course objects
     const skillName = ref('');
     const skillDesc = ref('');
     const addCourseIDArr = ref([]) //used to call api
-    const removeCourseIDArr = ref([])
     const noCreateErr = ref(true);
     const createErrArr = ref([]);
-    const addedCourses = ref([])
    
 
     const removeModal = reactive({
@@ -219,42 +228,48 @@ import { getAllSkills } from '../endpoint/endpoint';
         removeCourseID: [] // for API call
     })
 
-    // const addModal = reactive({
-    //     skillID: store.skill.skillID, // for API call for skill and course assignment 
-    //     skillName: store.skill.skillName, // for API call for skill and course assignment 
-    //     courseName: '',
-    //     courseID: '', 
-    //     //addCourseIDArr: []  for API call for skill and course assignment 
-    // })
+    const skillCoursesStore = useSkillCoursesStore()
+
+    // this is an array
+    const addedCourses = ref(skillCoursesStore.skillCourses.addedCourses)
+
     
     const loading = ref(true);
     const error = ref('');
     const haveError = ref(false);
 
-    
+    // reset skillCoursesStore when exit create skill page (using back or cancel btn)
+    function handleBack() {
+        skillCoursesStore.skillCourses.addedCourses = []
+        addedCourses = [];
+    }
+
     function handleRemoveCourse(courseName) {
         removeModal.courseName = courseName
     }
     
     function confirmRemoveCourse(courseName) {
-        // store course ID/s in an array for API call when submit form
-        //const removeCourseID = store.skill.courses[courseName].Course_ID;
-        //removeCourseIDArr.value.push(removeCourseID.toString());
-    
+        //console.log(courseName);
+        //console.log(addedCourses);
+        //console.log(addedCourses.value);
+        for(let i = 0; i < addedCourses.value.length; i++){
+            //console.log(i);
+            if(addedCourses.value[i] === courseName){
+                delete addedCourses.value[i];
+                addCourseIDArr.value.splice(i);
+                //console.log(addCourseIDArr.value);
+            }
+        }
         // removing skill key from coursesBySkillName object in pinia store only
         //delete store.skill.courses[courseName];
         
         //console.log(removeCourseIDArr);
-        const pos = ref();
-        for(let i=0; i < addedCourses.value.length; i++){
-            if(addedCourses[i] == courseName){
-                pos = i;
-                addedCourses.value.splice(courseName);
-            }
-        }
+    
         
     }
-    
+    function resetError(){
+        createErrArr.value = [];
+    }
 
     async function handleAddCourseClick() {
         try {
@@ -286,17 +301,22 @@ import { getAllSkills } from '../endpoint/endpoint';
         if(skillName.value.length === 0){
             createErrArr.value.push('Please enter skill name')
             noCreateErr.value = false;
-            return;
+            
+        }
+        if(skillName.value.length > 60){
+            createErrArr.value.push('Skill name is too long, it cannot exceed 60 characters')
+            noCreateErr.value = false;
+            
         }
         if(skillDesc.value.length === 0){
             createErrArr.value.push('Please enter skill description')
             noCreateErr.value = false;
-            return;
+            
         }
         if(addCourseIDArr.value.length === 0){
             createErrArr.value.push('Please select at least 1 course')
             noCreateErr.value = false;
-            return;
+            
         }
         
 
