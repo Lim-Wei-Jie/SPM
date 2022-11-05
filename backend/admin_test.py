@@ -1,3 +1,10 @@
+import sys
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+
 import unittest
 from backend.routes import Course, Skill, Role, Role_Assign, Staff, Skill_Assign
 from backend.db import LJPS_Assignment, LJPS_Course_Assignment
