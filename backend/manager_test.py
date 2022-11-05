@@ -1,5 +1,5 @@
 import unittest
-from routes import Course, Skill, Role, Role_Assign, Staff, Skill_Assign
+from backend.routes import Course, Skill, Role, Role_Assign, Staff, Skill_Assign
 from db import LJPS_Assignment, LJPS_Course_Assignment
 
 
