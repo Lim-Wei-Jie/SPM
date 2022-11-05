@@ -52,33 +52,46 @@
                             </div>
                         </div>
                     </div>
-                    <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12" @click="getAllCourses(skill.skill_id)">Add Course</label>
-                    <!-- modal pop up to add course-->
-                    <input type="checkbox" id="addCourseModal" class="modal-toggle" />
-                    <div class="modal">
-                        <div class="modal-box h-fit w-11/12">
-                            <h3 class="font-bold text-lg">{{ skill.skill_name }}</h3>
-                            <ul>
-                                <li v-for="course in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
-                                    <div class="flex justify-between">
-                                        <div>
-                                            <p class="font-medium">{{ course.course_id}} - {{ course.course_name }}</p>
-                                            <p class="font-light">{{ course.course_desc }}</p>
+                    <li v-for="course in skill.courses_available" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
+                        <div class="flex justify-between">
+                            <div>
+                                <p class="font-medium">{{ course.course_id}} - {{ course.course_name }}</p>
+                                <p class="font-light">{{ course.course_desc }}</p>
+                            </div>
+                            <input type="checkbox" v-model="selectedCourses" :id="course.course_id" :value="course.course_id" class="checkbox" />
+                        </div>
+                        
+                    </li>
+                    <!--
+                        <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12" @click="getAllCourses(skill.skill_id)">Add Course</label>
+                        <input type="checkbox" id="addCourseModal" class="modal-toggle" />
+                        <div class="modal">
+                            <div class="modal-box h-fit w-11/12">
+                                <h3 class="font-bold text-lg">{{ skill.skill_name }}</h3>
+                                <ul>
+                                    <li v-for="course in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
+                                        <div class="flex justify-between">
+                                            <div>
+                                                <p class="font-medium">{{ course.course_id}} - {{ course.course_name }}</p>
+                                                <p class="font-light">{{ course.course_desc }}</p>
+                                            </div>
+                                            <input type="checkbox" v-model="selectedCourses" :id="course.course_id" :value="course.course_id" class="checkbox" />
                                         </div>
-                                        <input type="checkbox" v-model="selectedCourses" :id="course.course_id" :value="course.course_id" class="checkbox" />
-                                    </div>
-                                    
-                                </li>
-                            </ul>
-                            <div class="modal-action">
-                                <!--skill.skill_id not working!-->
-                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course {{skill.skill_id}}</label>
+                                        
+                                    </li>
+                                </ul>
+                                <div class="modal-action">
+
+                                    <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course {{skill.skill_id}}</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    -->
+                    
                 </div>
             </div>
         </div>
+        <div>{{selectedCourses}}</div>
         <!-- send edited data back-->
         <button class="btn btn-outline btn-success" @click="createRegis(skillsList, staffID, roleDetailsID, ljpsID)">Create Learning Journey</button>
     </div>
@@ -114,8 +127,33 @@ const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const staffID = ref('130003')
-const ljpsID = ref()
+const ljpsID = 10
 const skillsList = ref([])
+
+//COURSES
+
+function getAllCourses(skillID) {
+    ;(async() => {
+        await getCoursesBySkill(skillID)
+        .then((courses) => {
+            var courseList = []
+            for (var course of courses) {
+                if (course.Course_Status == "Active") {
+                    var courseDetails = {
+                        course_name: course.Course_Name,
+                        course_id: course.Course_ID,
+                        course_desc: course.Course_Desc
+                    }
+                    courseList.push(courseDetails)
+                }
+            }
+            console.log(courseList)
+            return (courseList)
+        }).catch((err) => {
+            console.log(err);
+        });
+    })();
+}
 
 ;(async() => {
 try {
@@ -128,18 +166,33 @@ try {
     //SKILLS DETAILS
     const skills = await getSkillsByRole(roleDetailsID.value)
     for(var skill of skills){
+        var courses = await getCoursesBySkill(skill.Skill_ID)
+        var courseList = []
+            for (var course of courses) {
+                if (course.Course_Status == "Active") {
+                    var courseDetails = {
+                        course_name: course.Course_Name,
+                        course_id: course.Course_ID,
+                        course_desc: course.Course_Desc
+                    }
+                    courseList.push(courseDetails)
+                }
+            }
+
         var skillDetails = {
             skill_id: skill.Skill_ID,
             skill_name: skill.Skill_Name,
             skill_desc: skill.Skill_Desc,
+            courses_available: courseList,
             courses_selected: []
         }
         skillsList.value.push(skillDetails) 
+        console.log(skillsList)
     }
 
 
     //LJPS ID
-    ljpsID.value = await getAllLJPSNo()
+    //ljpsID.value = await getAllLJPSNo()
 
 
 }
@@ -150,7 +203,7 @@ catch(err) {
 
 
 
-
+/*
 var regID = 0
 onBeforeMount(
     async() => {
@@ -163,31 +216,9 @@ onBeforeMount(
         console.log(err);
     });
 })();
+*/
 
 
-//COURSES
-const courseList = ref([])
-
-function getAllCourses(skillID) {
-    ;(async() => {
-        await getCoursesBySkill(skillID)
-        .then((courses) => {
-            courseList.value = []
-            for (var course of courses) {
-                if (course.Course_Status == "Active") {
-                    var courseDetails = {
-                        course_name: course.Course_Name,
-                        course_id: course.Course_ID,
-                        course_desc: course.Course_Desc
-                    }
-                    courseList.value.push(courseDetails)
-                }
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
-    })();
-}
 
 const selectedCourses = ref([])
 function addCourse(selectedCourses, skillID, skillsList) {
