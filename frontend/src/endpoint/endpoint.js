@@ -88,7 +88,7 @@ export function createRole(newJobRoleData) {
 export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
     const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
     const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
-    console.log(roleDetails.roleDesc);
+
     let updateEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/update/${roleDetails.roleID}/${roleDetails.roleName}/${roleDetails.roleDesc}`
     let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
     let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
@@ -100,7 +100,6 @@ export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
             axios.post(assignAddEndpoint)
         ])
         .then((res) => {
-            console.log(res);
             resolve(res[0].value.data.data)
         })
         .catch((err) => {
