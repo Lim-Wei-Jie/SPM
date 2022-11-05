@@ -60,9 +60,11 @@ import NavBar from '@/components/Navbar.vue'
 // import Breadcrumb from '@/components/Breadcrumb.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useRoleStore } from '@/store/index.js'
 import { getAllRoles } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
+const roleStore = useRoleStore()
 
 const jobRoles = ref([])
 const numOfJobRoles = ref()
@@ -97,6 +99,8 @@ function handleJobRoleClick(jobRoleName) {
 }
 
 function handleAddNewJob() {
+    // reset role store
+    
     router.push({
         name: 'newRole'
     })
