@@ -275,6 +275,7 @@ async function confirmAddSkill() {
 async function handleEditRole() {
     try {
         const updatedRole = await updateRole(roleStore.role, removeSkillsIDArr.value, addSkillsIDArr.value)
+        handleBack()
         router.push({
             name: 'jobRole',
             params: {

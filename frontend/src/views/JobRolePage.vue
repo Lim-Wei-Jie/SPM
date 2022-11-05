@@ -194,7 +194,7 @@ function handleEditClick(roleName) {
 
 function handleCourseClick(skillName, courseName) {
     courseModal.courseName = courseName
-    courseModal.courseDesc = role.coursesBySkillName[skillName].courses[courseName].Course_Desc
+    courseModal.courseDesc = roleStore.role.coursesBySkillName[skillName].courses[courseName].Course_Desc
 }
 
 </script>
