@@ -18,6 +18,18 @@
                     </li>
                 </ul>
             </div>
+
+            <!-- Back button -->
+            <div class="mt-4">
+                <RouterLink to="/manager">
+                    <button class="btn btn-circle" @click="handleBack">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                        </svg>
+                    </button>
+                </RouterLink>
+            </div>
+
             <div class="grid grid-cols-2 my-4">
                 <!-- Role Name -->
                 <p class="text-3xl font-bold underline underline-offset-8">
@@ -142,6 +154,7 @@ const error = ref(null)
 
         // get skills with role ID
         try {
+            roleStore.role.coursesBySkillName = {}
             const roleSkills = await getSkillsByRole(roleDetails.Role_ID)
             // get courses with each skill ID
             for (var skill of roleSkills) {
@@ -171,6 +184,8 @@ const error = ref(null)
             }
         }
         catch (err) {
+            // no skills assigned
+            roleStore.role.coursesBySkillName = {}
             noSkills.value = err.message
         }
 
