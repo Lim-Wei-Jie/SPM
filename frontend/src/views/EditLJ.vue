@@ -148,15 +148,18 @@ try {
     for (var course of resA[jobRoleID.value]) {
             registeredCourses.value.push(course)
     }
-    courseID.value = registeredCourses.value[0][2]
+    courseID.value = registeredCourses.value[0][2] // for deleting LJ
     for (var a in registeredCourses.value) {
         var courseName = registeredCourses.value[a][2]
         const skillIDs = await getSkillIdByCourseName(courseName)
-
-        for (var x in skillsIdList) {
-            for (var y in skillIDs) {
-                if (skillsIdList[x] == skillIDs[y]) {
-                    registeredCourses2.value.push(skillsIdList[x])
+        var temp = 0
+        for (var x in skillIDs) {
+            for (var y in skillsIdList) {
+                if (skillIDs[x] == skillsIdList[y]) {
+                    if (temp == 0) {
+                        registeredCourses2.value.push(skillIDs[x])
+                        temp += 1
+                    }
                 }
             }
         }
@@ -244,7 +247,7 @@ function createRegis(skillsList, staffID, ljpsID) {
         remainingSkillsNo += skill.courses_selected.length
     }
     if (remainingSkillsNo != 0) {
-        if (selectedCourses.value != []) {
+        if (selectedCourses.value.length != 0) {
             const allSelectedCourses = []
             for (var skill of skillsList) {
                 for(var course of skill.courses_selected) {
@@ -261,6 +264,8 @@ function createRegis(skillsList, staffID, ljpsID) {
             for (var i = 0; i < allSelectedCourses.length; i++) {
                 addToLJ(allSelectedCourses[i], ljpsID)
             }
+        } else {
+            router.push('/staff')
         }
         
         //route to staff page
@@ -268,7 +273,6 @@ function createRegis(skillsList, staffID, ljpsID) {
     } else {
         alert('You need at least one course to continue')
     }
-    
 }
 
 

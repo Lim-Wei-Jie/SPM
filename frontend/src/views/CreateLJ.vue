@@ -164,28 +164,6 @@ onBeforeMount(
     });
 })();
 
-/*
-//SKILLS
-const skillsList = ref([])
-
-;(async() => {
-    await getSkillsByRole(1)
-    .then((skills) => {
-        for(var skill of skills){
-            var skillDetails = {
-                skill_id: skill.Skill_ID,
-                skill_name: skill.Skill_Name,
-                skill_desc: skill.Skill_Desc,
-                courses_selected: []
-            }
-            skillsList.value.push(skillDetails) 
-        }
-    }).catch((err) => {
-        console.log(err);
-    });
-})();
-*/
-
 
 //COURSES
 const courseList = ref([])
@@ -251,7 +229,7 @@ function createRegis(skillsList, staffID, roleID, ljpsID) {
 
     //checks for selected courses
     if (allSelectedCourses.length == 0) {
-        alert('Please add at least one learning journey')
+        alert('Please add at least one course')
     } else {
         //add registration
         for (var courseID of allSelectedCourses) {
