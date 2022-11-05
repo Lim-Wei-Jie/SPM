@@ -57,7 +57,7 @@
             </div>
         </div>
         <!-- send edited data back-->
-        <button class="btn btn-outline btn-success" @click="createRegis(selectedCourses, staffID, roleDetailsID, ljpsID)">Create Learning Journey</button>
+        <button class="btn btn-outline btn-success" @click="createRegis(skillsList, selectedCourses, staffID, roleDetailsID, ljpsID)">Create Learning Journey</button>
     </div>
 </template>
 
@@ -188,45 +188,55 @@ function deleteCourse(courseID, skillID, skillsList) {
 
 
 
-function createRegis(selectedCourses, staffID, roleID, ljpsID) {
-    /*
-    const allSelectedCourses = []
-    for (var skill of skillsList) {
-        for(var course of skill.courses_selected) {
-            allSelectedCourses.push(course)
-        }
-    }
-    */
-
-    //checks for selected courses
+function createRegis(skillsList, selectedCourses, staffID, roleID, ljpsID) {
     if (selectedCourses.length == 0) {
-        alert('Please add at least one course')
+        alert('Please select at least one course for each skill.')
     } else {
-        //add registration
-        for (var courseID of selectedCourses) {
-            addReg(regID, courseID, staffID)
-            regID+=1
-        }
-
-        createLJ(staffID, roleID, ljpsID)
-
-        for (var courseID of selectedCourses) {
-            addToLJ(courseID, ljpsID)
-        }
-        /*
-        //add assignment
-        for (var i = 0; i < selectedCourses.length; i++) {
-            if (i == 0 ) {
-                createLJ(staffID, roleID, selectedCourses[0], ljpsID)
-                addToLJ(selectedCourses[0], ljpsID)
-            } else {
-                addToLJ(selectedCourses[i], ljpsID)
+        var temp = 0
+        for (var skill of skillsList) {
+            var temp1 = 0
+            for (var avail_course of skill.courses_available) {
+                var avail_course_ID = avail_course.course_id
+                for (var sel_course of selectedCourses) {
+                    if (sel_course == avail_course_ID) {
+                        temp1 +=1
+                    }
+                }
             }
+            if (temp1 >= 1) {
+                temp += 1
+            } 
         }
-        */
 
-        //route to staff page
-        router.push('/staff')
+        if( skillsList.length != temp) {
+            alert('Please select at least one course for each skill.')
+        } else {
+            //add registration
+            for (var courseID of selectedCourses) {
+                addReg(regID, courseID, staffID)
+                regID+=1
+            }
+
+            createLJ(staffID, roleID, ljpsID)
+            
+            for (var courseID of selectedCourses) {
+                addToLJ(courseID, ljpsID)
+            }
+            
+            //add assignment
+            for (var i = 0; i < selectedCourses.length; i++) {
+                if (i == 0 ) {
+                    createLJ(staffID, roleID, selectedCourses[0], ljpsID)
+                    addToLJ(selectedCourses[0], ljpsID)
+                } else {
+                    addToLJ(selectedCourses[i], ljpsID)
+                }
+            }
+            
+
+            //route to staff page
+            router.push('/staff')   
+        }
     }
 }
 

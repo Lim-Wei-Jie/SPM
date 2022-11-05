@@ -36,51 +36,22 @@
                     {{ skill.skill_name }}
                 </p>
                 <div class="grid grid-cols-3 gap-6">
-                    <div v-if="skill.courses_selected != []" class="flex " v-for="course in skill.courses_selected">
-                        <label class="btn btn-lg w-11/12 modal-btn" for="my-modal">
-                            {{ course }}
-                        </label>
-
-                        <!-- modal pop up to delete course-->
-                        <input type="checkbox" id="my-modal" class="modal-toggle" />
-                        <div class="modal">
-                            <div class="modal-box">
-                                <h3 class="font-bold text-lg">{{ course }}</h3>
-                                <div class="modal-action">
-                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(course, ljpsID, skillsList)">Remove Course</label>
-                                </div>
+                    <li v-for="course in skill.courses_available" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
+                        <div class="flex justify-between">
+                            <div>
+                                <p class="font-medium">{{ course.course_id}} - {{ course.course_name }}</p>
+                                <p class="font-light">{{ course.course_desc }}</p>
                             </div>
+                            <input type="checkbox" v-model="selectedCourses" :id="course.course_id" :value="course.course_id" class="checkbox" />
                         </div>
-                    </div>
-                    <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12" @click="getAllCourses(skill.skill_id)">Add Course</label>
-                    <!-- modal pop up to add course-->
-                    <input type="checkbox" id="addCourseModal" class="modal-toggle" />
-                    <div class="modal">
-                        <div class="modal-box h-fit w-11/12">
-                            <h3 class="font-bold text-lg">{{ skill.skill_name }}</h3>
-                            <ul>
-                                <li v-for="course in coursesList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
-                                    <div class="flex justify-between">
-                                        <div>
-                                            <p class="font-medium">{{ course.course_id}} - {{ course.course_name }}</p>
-                                            <p class="font-light">{{ course.course_desc }}</p>
-                                        </div>
-                                        <input type="checkbox" v-model="selectedCourses" :id="course.course_id" :value="course.course_id" class="checkbox" />
-                                    </div>
-                                    
-                                </li>
-                            </ul>
-                            <div class="modal-action">
-                                <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course</label>
-                            </div>
-                        </div>
-                    </div>
+                        
+                    </li>
                 </div>
             </div>
         </div>
         <!-- send edited data back-->
         <div class="flex justify-evenly gap-6 w-full">
-            <button class="btn btn-outline btn-success w-2/6" @click="createRegis(skillsList, staffID, ljpsID)">Done</button>
+            <button class="btn btn-outline btn-success w-2/6" @click="createRegis(skillsList, selectedCourses, registeredCourses, staffID, ljpsID)">Done</button>
             <button class="btn btn-outline btn-error w-2/6" @click="deleteLJ(staffID, jobRoleID, courseID, ljpsID)">Delete</button>
         </div>
     </div>
@@ -88,7 +59,7 @@
 
 <script setup>
 import NavBar from '@/components/Navbar.vue'
-import { ref, toRefs, onBeforeMount, reactive } from 'vue'
+import { ref, toRefs, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { getLJs, getRoleByID, getSkillsByRole, getCoursesBySkill, getSkillIdByCourseName, getAllRegistrationNo } from "@/endpoint/endpoint.js";
 
@@ -135,6 +106,9 @@ const registeredCourses = ref([])
 const registeredCourses2 = ref([])
 const skillsList = ref([])
 const courseID = ref()
+const selectedCourses = ref([])
+const toAddCourses = ref([])
+const toDeleteCourses = ref([])
 
 ;(async() => {
 try {
@@ -147,7 +121,9 @@ try {
     const resA = await getLJs(staffID)
     for (var course of resA[jobRoleID.value]) {
             registeredCourses.value.push(course)
+            selectedCourses.value.push(course[2])
     }
+
     courseID.value = registeredCourses.value[0][2] // for deleting LJ
     for (var a in registeredCourses.value) {
         var courseName = registeredCourses.value[a][2]
@@ -167,6 +143,18 @@ try {
 
     const skills = await getSkillsByRole(jobRoleID.value)
     for (var skill of skills) {
+        var courses = await getCoursesBySkill(skill.Skill_ID)
+        var courseList = []
+        for (var course of courses) {
+            if (course.Course_Status == "Active") {
+                var courseDetails = {
+                    course_name: course.Course_Name,
+                    course_id: course.Course_ID,
+                    course_desc: course.Course_Desc
+                }
+                courseList.push(courseDetails)
+            }
+        }
         var regCourses = []
         for (let i = 0; i < registeredCourses2.value.length; i++) {
             if (registeredCourses2.value[i] == skill.Skill_ID) {
@@ -177,6 +165,7 @@ try {
                 skill_id: skill.Skill_ID,
                 skill_name: skill.Skill_Name,
                 skill_desc: skill.Skill_Desc,
+                courses_available: courseList,
                 courses_selected: regCourses
             }
         skillsList.value.push(skillDetails) 
@@ -225,53 +214,109 @@ function getAllCourses(skillID) {
     })();
 }
 
-const selectedCourses = ref([])
-function addCourse(selectedCourses, skillID, skillsList) {
-    for(var skill of skillsList){
-        
-        if (skill.skill_id == skillID) {
-            console.log(skill.skill_id, skillID)
-            for(var i=0; i<selectedCourses.length; i++){
-                skill.courses_selected.push(selectedCourses[i])
+function temp(selectedCourses, registeredCourses) {
+    //add new courses
+    for (var sel_course_ID of selectedCourses) {
+        var temp = 0
+        for (var reg_course of registeredCourses) {
+            var reg_course_ID = reg_course[2]
+            if (sel_course_ID == reg_course_ID) {
+                temp+=1
             }
         }
+        if (temp == 0) {
+            toAddCourses.value.push(sel_course_ID)
+        }
     }
-    while(selectedCourses.length > 0) {
-        selectedCourses.pop();
+    //delete registered courses
+    for (var reg_course of registeredCourses) {
+        var reg_course_ID = reg_course[2]
+        var temp = 0
+        for (var sel_course_ID of selectedCourses) {
+            if (sel_course_ID == reg_course_ID) {
+                temp+=1
+            }
+        }
+        if (temp == 0) {
+            toDeleteCourses.value.push(reg_course_ID)
+        }
     }
 }
 
-function createRegis(skillsList, staffID, ljpsID) {
-    var remainingSkillsNo = 0
-    for (var skill of skillsList) {
-        remainingSkillsNo += skill.courses_selected.length
-    }
-    if (remainingSkillsNo != 0) {
-        if (selectedCourses.value.length != 0) {
-            const allSelectedCourses = []
-            for (var skill of skillsList) {
-                for(var course of skill.courses_selected) {
-                    allSelectedCourses.push(course)
+function createRegis(skillsList, selectedCourses, registeredCourses, staffID, ljpsID) {
+    if (selectedCourses.length == 0) {
+        alert('Please select at least one course for each skill.')
+    } else {
+        var temp = 0
+        for (var skill of skillsList) {
+            var temp1 = 0
+            for (var avail_course of skill.courses_available) {
+                var avail_course_ID = avail_course.course_id
+                for (var sel_course of selectedCourses) {
+                    if (sel_course == avail_course_ID) {
+                        temp1 +=1
+                    }
+                }
+            }
+            if (temp1 >= 1) {
+                temp += 1
+            } 
+        }
+
+        if( skillsList.length != temp) {
+            alert('Please select at least one course for each skill.')
+        } else {
+            //add new courses
+            for (var sel_course_ID of selectedCourses) {
+                var temp = 0
+                for (var reg_course of registeredCourses) {
+                    var reg_course_ID = reg_course[2]
+                    if (sel_course_ID == reg_course_ID) {
+                        temp+=1
+                    }
+                }
+                if (temp == 0) {
+                    toAddCourses.value.push(sel_course_ID)
+                }
+            }
+            //delete registered courses
+            for (var reg_course of registeredCourses) {
+                var reg_course_ID = reg_course[2]
+                var temp = 0
+                for (var sel_course_ID of selectedCourses) {
+                    if (sel_course_ID == reg_course_ID) {
+                        temp+=1
+                    }
+                }
+                if (temp == 0) {
+                    toDeleteCourses.value.push(reg_course_ID)
+                }
+            }           
+            
+            // add courses
+            if (toAddCourses.value.length != 0) {
+                //add registration
+                for (var courseID of toAddCourses.value) {
+                    addReg(regID, courseID, staffID)
+                    regID+=1
+                }
+                //add course assignment
+                for (var courseID of toAddCourses.value) {
+                    addToLJ(courseID, ljpsID)
+                }
+            }
+            
+            // delete courses
+            if (toDeleteCourses.value.length != 0) {
+                for (var courseID of toDeleteCourses.value) {
+                    deleteCourse(courseID, ljpsID, skillsList)
                 }
             }
 
-            //add registration
-            for (var courseID of allSelectedCourses) {
-                addReg(regID, courseID, staffID)
-                regID+=1
-            }
-            //add assignment
-            for (var i = 0; i < allSelectedCourses.length; i++) {
-                addToLJ(allSelectedCourses[i], ljpsID)
-            }
-        } else {
-            router.push('/staff')
-        }
         
-        //route to staff page
-        router.push('/staff')
-    } else {
-        alert('You need at least one course to continue')
+            //route to staff page
+            router.push('/staff') 
+        }
     }
 }
 
