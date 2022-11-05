@@ -86,28 +86,28 @@ export function createRole(newJobRoleData) {
 
 // Update job role
 export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
-    console.log(roleDetails.roleName);
     const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
     const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
+    console.log(roleDetails.roleDesc);
+    let updateEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/update/${roleDetails.roleID}/${roleDetails.roleName}/${roleDetails.roleDesc}`
+    let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
+    let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
+
     return new Promise((resolve, reject) => {
-        let updateEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/update/${roleDetails.roleID}/${roleDetails.roleName}/${roleDetails.roleDesc}`
-        let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
-        let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
-        axios.all([
+        Promise.allSettled([
             axios.put(updateEndpoint),
             axios.post(assignRemoveEndpoint),
             axios.post(assignAddEndpoint)
         ])
-        .then(axios.spread((obj1, obj2, obj3) => {
-            console.log(obj1.data);
-            console.log(obj2.data);
-            console.log(obj3.data);
-        }))
+        .then((res) => {
+            console.log(res);
+            resolve(res[0].value.data.data)
+        })
         .catch((err) => {
-            console.log(err.message);
-            reject('Fail to delete role, check WAMP/MAMP server');
+            reject(err)
         })
     })
+
 }
 
 // Delete job role

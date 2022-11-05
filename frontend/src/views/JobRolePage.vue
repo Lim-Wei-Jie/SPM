@@ -14,17 +14,17 @@
                         <RouterLink to="/manager">Job Role</RouterLink>
                     </li> 
                     <li>
-                        {{role.roleName}}
+                        {{roleStore.role.roleName}}
                     </li>
                 </ul>
             </div>
             <div class="grid grid-cols-2 my-4">
                 <!-- Role Name -->
                 <p class="text-3xl font-bold underline underline-offset-8">
-                    {{role.roleName}}
+                    {{roleStore.role.roleName}}
                 </p>
                 <!-- Edit button -->
-                <button @click="handleEditClick(role.roleName)" class="btn btn-circle place-self-end">
+                <button @click="handleEditClick(roleStore.role.roleName)" class="btn btn-circle place-self-end">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
                 </button>
             </div>
@@ -34,7 +34,7 @@
                     Job Role Description
                 </p>
                 <p>
-                    {{role.roleDesc}}
+                    {{roleStore.role.roleDesc}}
                 </p>
             </div>
             <!-- Skills -->
@@ -46,13 +46,13 @@
                 <div v-if="noSkills">
                     {{noSkills}}
                 </div>
-                <div v-else class="bg-gray-700 rounded-lg my-6 p-8" v-for="(skillDetails, skillName) in role.coursesBySkillName" :key="skillName">
+                <div v-else class="bg-gray-700 rounded-lg my-6 p-8" v-for="(skillDetails, skillName) in roleStore.role.coursesBySkillName" :key="skillName">
                     <!-- Skill -->
                     <div class="font-medium text-lg mb-5">
                         {{skillName}}
                     </div>
                     <!-- Courses -->
-                    <div v-if="noCourses">
+                    <div v-if="Object.keys(roleStore.role.coursesBySkillName[skillName].courses).length === 0">
                         {{noCourses}}
                     </div>
                     <div v-else class="grid grid-cols-3 gap-6">
@@ -115,12 +115,12 @@ const roleStore = useRoleStore()
 // from params
 const roleName = route.params.jobRoleName
 
-const role = reactive({
-    roleName: '',
-    roleID: '',
-    roleDesc: '',
-    coursesBySkillName: {}
-})
+// const role = reactive({
+//     roleName: '',
+//     roleID: '',
+//     roleDesc: '',
+//     coursesBySkillName: {}
+// })
 
 const courseModal = reactive({
     courseName: '',
@@ -136,9 +136,9 @@ const error = ref(null)
     try {
         // get role name, ID, and description
         const roleDetails = await getRoleDetails(roleName)
-        role.roleName = roleDetails.Role_Name
-        role.roleID = roleDetails.Role_ID
-        role.roleDesc = roleDetails.Role_Desc
+        roleStore.role.roleName = roleDetails.Role_Name
+        roleStore.role.roleID = roleDetails.Role_ID
+        roleStore.role.roleDesc = roleDetails.Role_Desc
 
         // get skills with role ID
         try {
@@ -153,37 +153,26 @@ const error = ref(null)
                     noCourses.value = err.message
                 }
 
-                if (noCourses.value) {
-                    // if there are no courses assigned to skill
-                    role.coursesBySkillName[skill.Skill_Name] = {
-                        'skillID': skill.Skill_ID,
-                        'courses': {}
-                    }
-                } else {
+                // add skill to role store
+                roleStore.role.coursesBySkillName[skill.Skill_Name] = {
+                    'skillID': skill.Skill_ID,
+                    'courses': {}
+                }
+
+                if (skillCourses) {
                     // if there are courses assigned to skill
                     for (var course of skillCourses) {
-                        // skillName exist in object
-                        if (role.coursesBySkillName[skill.Skill_Name]) {
-                            role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
-                        // skillName does not exist in object
-                        } else {
-                            role.coursesBySkillName[skill.Skill_Name] = {
-                                'skillID': skill.Skill_ID,
-                                'courses': {}
-                            }
-                            role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
-                        }
+                        roleStore.role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
                     }
+                } else {
+                    // if there are no courses assigned to skill
+                    // pass
                 }
             }
-
         }
         catch (err) {
             noSkills.value = err.message
         }
-
-        // store role in global store to be use by edit job role page
-        roleStore.storeRole(role.roleName, role.roleID, role.roleDesc, role.coursesBySkillName)
 
         // after all API calls made
         loading.value = true

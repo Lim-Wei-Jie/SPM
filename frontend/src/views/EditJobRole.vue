@@ -228,45 +228,64 @@ async function handleAddSkill() {
 
     }
     catch (err) {
-        error.value = err
+        // error.value = err
         console.log(err);
     }
 }
 
 async function confirmAddSkill() {
-    try {
-        for (var skill of addModal.selectedSkills) {
-            const skillCourses = await getCoursesBySkill(skill.Skill_ID)
+    for (var skill of addModal.selectedSkills) {
+        let skillCourses = null
+        try {
+            skillCourses = await getCoursesBySkill(skill.Skill_ID)
+        }
+        catch (err) {
+            error.value = err
+        }
+
+        // add skill to role store
+        roleStore.role.coursesBySkillName[skill.Skill_Name] = {
+            'skillID': skill.Skill_ID,
+            'courses': {}
+        }
+
+        if (skillCourses) {
+            // if have courses assigned to skill
             for (var course of skillCourses) {
-                roleStore.role.coursesBySkillName[skill.Skill_Name] = {
-                    'skillID': skill.Skill_ID,
-                    'courses': {}
-                }
                 roleStore.role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
             }
-            // check if skill id in removeSkillsIDArr
-            if (removeSkillsIDArr.value.includes((skill.Skill_ID).toString())) {
-                removeSkillsIDArr.value.pop(skill.Skill_ID)
-            } else {
-                addSkillsIDArr.value.push((skill.Skill_ID).toString())
-            }
+        } else {
+            // if no courses assigned to skill
+            // pass
         }
+
+        // check if skill id in removeSkillsIDArr
+        if (removeSkillsIDArr.value.includes((skill.Skill_ID).toString())) {
+            removeSkillsIDArr.value.pop(skill.Skill_ID)
+        } else {
+            addSkillsIDArr.value.push((skill.Skill_ID).toString())
+        }
+
     }
-    catch (err) {
-        error.value = err
-        console.log(err);
-    }
+
+    // reset modal selected skills
+    addModal.selectedSkills = []
 }
 
 async function handleEditRole() {
     try {
         const updatedRole = await updateRole(roleStore.role, removeSkillsIDArr.value, addSkillsIDArr.value)
+        router.push({
+            name: 'jobRole',
+            params: {
+                jobRoleName: updatedRole.Role_Name
+            }
+        })
     }
     catch (err) {
-        error.value = err
+        // error.value = err
         console.log(err);
     }
-
 }
 
 function handleDeleteRole(roleID) {
