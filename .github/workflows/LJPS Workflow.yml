@@ -57,7 +57,7 @@ jobs:
           #TODO: Add the command to run all the unittest here.
 
           python -m unittest backend/ljps_test.py
-          python -m unittest backend/manager_test.py
+          python -m unittest backend/admin_test.py
           python -m unittest backend/role_test.py
           python -m unittest backend/skill_test.py
           
