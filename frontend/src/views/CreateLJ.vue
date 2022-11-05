@@ -41,16 +41,7 @@
                             {{ course }}
                         </label>
 
-                        <!-- modal pop up to delete course-->
-                        <input type="checkbox" id="my-modal" class="modal-toggle" />
-                        <div class="modal">
-                            <div class="modal-box">
-                                <h3 class="font-bold text-lg">{{ course }}</h3>
-                                <div class="modal-action">
-                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteCourse(course, skill.skill_id, skillsList)">Remove Course</label>
-                                </div>
-                            </div>
-                        </div>
+                    
                     </div>
                     <li v-for="course in skill.courses_available" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
                         <div class="flex justify-between">
@@ -62,38 +53,11 @@
                         </div>
                         
                     </li>
-                    <!--
-                        <label for="addCourseModal" class="modal-btn btn btn-lg btn-outline w-11/12" @click="getAllCourses(skill.skill_id)">Add Course</label>
-                        <input type="checkbox" id="addCourseModal" class="modal-toggle" />
-                        <div class="modal">
-                            <div class="modal-box h-fit w-11/12">
-                                <h3 class="font-bold text-lg">{{ skill.skill_name }}</h3>
-                                <ul>
-                                    <li v-for="course in courseList" class="bg-slate-50 hover:shadow-lg hover:bg-slate-100 px-5 py-3">
-                                        <div class="flex justify-between">
-                                            <div>
-                                                <p class="font-medium">{{ course.course_id}} - {{ course.course_name }}</p>
-                                                <p class="font-light">{{ course.course_desc }}</p>
-                                            </div>
-                                            <input type="checkbox" v-model="selectedCourses" :id="course.course_id" :value="course.course_id" class="checkbox" />
-                                        </div>
-                                        
-                                    </li>
-                                </ul>
-                                <div class="modal-action">
-
-                                    <label for="addCourseModal" class="btn btn-outline btn-success" @click="addCourse(selectedCourses, skill.skill_id, skillsList)">Add Course {{skill.skill_id}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    -->
-                    
                 </div>
             </div>
         </div>
-        <div>{{selectedCourses}}</div>
         <!-- send edited data back-->
-        <button class="btn btn-outline btn-success" @click="createRegis(skillsList, staffID, roleDetailsID, ljpsID)">Create Learning Journey</button>
+        <button class="btn btn-outline btn-success" @click="createRegis(selectedCourses, staffID, roleDetailsID, ljpsID)">Create Learning Journey</button>
     </div>
 </template>
 
@@ -127,33 +91,8 @@ const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const staffID = ref('130003')
-const ljpsID = 10
+const ljpsID = ref()
 const skillsList = ref([])
-
-//COURSES
-
-function getAllCourses(skillID) {
-    ;(async() => {
-        await getCoursesBySkill(skillID)
-        .then((courses) => {
-            var courseList = []
-            for (var course of courses) {
-                if (course.Course_Status == "Active") {
-                    var courseDetails = {
-                        course_name: course.Course_Name,
-                        course_id: course.Course_ID,
-                        course_desc: course.Course_Desc
-                    }
-                    courseList.push(courseDetails)
-                }
-            }
-            console.log(courseList)
-            return (courseList)
-        }).catch((err) => {
-            console.log(err);
-        });
-    })();
-}
 
 ;(async() => {
 try {
@@ -187,12 +126,11 @@ try {
             courses_selected: []
         }
         skillsList.value.push(skillDetails) 
-        console.log(skillsList)
     }
 
 
     //LJPS ID
-    //ljpsID.value = await getAllLJPSNo()
+    ljpsID.value = await getAllLJPSNo()
 
 
 }
@@ -203,7 +141,7 @@ catch(err) {
 
 
 
-/*
+
 var regID = 0
 onBeforeMount(
     async() => {
@@ -216,7 +154,7 @@ onBeforeMount(
         console.log(err);
     });
 })();
-*/
+
 
 
 
@@ -250,32 +188,42 @@ function deleteCourse(courseID, skillID, skillsList) {
 
 
 
-function createRegis(skillsList, staffID, roleID, ljpsID) {
+function createRegis(selectedCourses, staffID, roleID, ljpsID) {
+    /*
     const allSelectedCourses = []
     for (var skill of skillsList) {
         for(var course of skill.courses_selected) {
             allSelectedCourses.push(course)
         }
     }
+    */
 
     //checks for selected courses
-    if (allSelectedCourses.length == 0) {
+    if (selectedCourses.length == 0) {
         alert('Please add at least one course')
     } else {
         //add registration
-        for (var courseID of allSelectedCourses) {
+        for (var courseID of selectedCourses) {
             addReg(regID, courseID, staffID)
             regID+=1
         }
+
+        createLJ(staffID, roleID, ljpsID)
+
+        for (var courseID of selectedCourses) {
+            addToLJ(courseID, ljpsID)
+        }
+        /*
         //add assignment
-        for (var i = 0; i < allSelectedCourses.length; i++) {
+        for (var i = 0; i < selectedCourses.length; i++) {
             if (i == 0 ) {
-                createLJ(staffID, roleID, allSelectedCourses[0], ljpsID)
-                addToLJ(allSelectedCourses[0], ljpsID)
+                createLJ(staffID, roleID, selectedCourses[0], ljpsID)
+                addToLJ(selectedCourses[0], ljpsID)
             } else {
-                addToLJ(allSelectedCourses[i], ljpsID)
+                addToLJ(selectedCourses[i], ljpsID)
             }
         }
+        */
 
         //route to staff page
         router.push('/staff')
@@ -298,9 +246,9 @@ function addReg(regID, courseID, staffID) {
 }
 
 //add to learning journey assignment
-function createLJ(staffID, roleID, courseID, ljpsID) {
+function createLJ(staffID, roleID, ljpsID) {
     ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssign/${staffID}/${roleID}/${courseID}/${ljpsID}`)
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssign/${staffID}/${roleID}/${ljpsID}`)
         .then((res) => {
             
         }).catch((err) => {

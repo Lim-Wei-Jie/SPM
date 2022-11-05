@@ -1,5 +1,5 @@
-from .app import app
-from .db import *
+from app import app
+from db import *
 from flask import request, jsonify
 import json
 
@@ -1274,4 +1274,4 @@ def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5004, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
