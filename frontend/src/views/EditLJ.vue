@@ -85,7 +85,6 @@ const { ljpsID } = toRefs(props)
 
 
 const staffID = '130003'
-const courseList = ref()
 const roleDetailsName = ref()
 const roleDetailsDesc = ref()
 

@@ -11,6 +11,7 @@ import EditJobRole from "../views/EditJobRole.vue"
 import SearchJobRole from "../views/SearchRole.vue"
 import CreateLJ from "../views/CreateLJ.vue"
 import EditLJ from "../views/EditLJ.vue"
+import ViewLJ from "../views/ViewLJ.vue"
 
 const routes = [
     {
@@ -79,6 +80,13 @@ const routes = [
         path: '/staff/edit/:ljpsID/:jobRoleID',
         name: 'editLJ',
         component: EditLJ,
+        props: true
+    },
+
+    {
+        path: '/staff/view/:ljpsID/:jobRoleID',
+        name: 'viewLJ',
+        component: ViewLJ,
         props: true
     },
 ]

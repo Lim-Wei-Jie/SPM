@@ -1,7 +1,7 @@
 <template>
     <div class="bg-slate-100 rounded-md px-10 py-7 my-4">
         <div class="grid grid-cols-2">
-            <p class="text-xl font-bold underline underline-offset-8">
+            <p class="text-xl font-bold underline underline-offset-8" @click="handleViewClick(ljpsID, jobRoleID)">
                 {{jobRoleName}}
             </p>
             <button @click="handleEditClick(ljpsID, jobRoleID)" class="btn btn-circle place-self-end">
@@ -76,6 +76,11 @@ const router = useRouter()
 function handleEditClick(ljpsID, jobRoleID) {
     router.push({
         path: `staff/edit/${ljpsID}/${jobRoleID}`
+    })
+}
+function handleViewClick(ljpsID, jobRoleID) {
+    router.push({
+        path: `staff/view/${ljpsID}/${jobRoleID}`
     })
 }
 
