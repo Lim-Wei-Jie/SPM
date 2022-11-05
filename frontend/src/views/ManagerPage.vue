@@ -99,8 +99,12 @@ function handleJobRoleClick(jobRoleName) {
 }
 
 function handleAddNewJob() {
-    // reset role store
-    
+    // reset role store ($reset don't work)
+    roleStore.role.roleName = ''
+    roleStore.role.roleID = ''
+    roleStore.role.roleDesc = ''
+    roleStore.role.coursesBySkillName = {}
+
     router.push({
         name: 'newRole'
     })
