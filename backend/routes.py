@@ -1,5 +1,5 @@
-from app import app
-from db import *
+from backend.app import app
+from backend.db import *
 from flask import request, jsonify
 import json
 
@@ -11,7 +11,7 @@ def hello():
         "message": [skill_assignment.c.keys()]
     }
     ), 404
-"""
+ """
 
 
 
@@ -560,15 +560,15 @@ def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
                         }
                     ), 500
         
-        else:
+        
                     
             
             
-            job_check = LJPS_Assignment.query.filter_by(LJPS_ID=LJPS_ID,Staff_ID=Staff_ID,Role_ID=Role_ID).first()
+        job_check = LJPS_Assignment.query.filter_by(LJPS_ID=LJPS_ID,Staff_ID=Staff_ID,Role_ID=Role_ID).first()
             
         
             
-            if job_check:
+        if job_check:
                 
                 
                 try:
@@ -1274,4 +1274,4 @@ def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5004, debug=True)
