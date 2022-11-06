@@ -66,22 +66,22 @@ export function getCoursesBySkill(skillID) {
 export function createRole(roleDetails, addSkillsIDArr) {
     const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
 
-    // let createEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/create/${roleDetails.roleName}/${roleDetails.roleDesc}`
+    let createEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/create/${roleDetails.roleName}/${roleDetails.roleDesc}`
     let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
 
-    return new Promise((resolve, reject) => {
-        Promise.allSettled([
-            axios.put(createEndpoint),
-            axios.post(assignAddEndpoint)
-        ])
-        .then((res) => {
-            resolve(res[0].value.data.data)
-        })
-        // need to catch if role already exist error
-        .catch((err) => {
-            reject(err)
-        })
-    })
+    // return new Promise((resolve, reject) => {
+    //     Promise.allSettled([
+    //         axios.put(createEndpoint),
+    //         axios.post(assignAddEndpoint)
+    //     ])
+    //     .then((res) => {
+    //         resolve(res[0].value.data.data)
+    //     })
+    //     // need to catch duplicate role name error
+    //     .catch((err) => {
+    //         reject(err)
+    //     })
+    // })
 }
 
 // Update job role
@@ -93,6 +93,7 @@ export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
     let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
     let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
 
+    // check if removeSkills and addSkills not empty, then call respectively route
     return new Promise((resolve, reject) => {
         Promise.allSettled([
             axios.put(updateEndpoint),
@@ -103,6 +104,7 @@ export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
             resolve(res[0].value.data.data)
         })
         .catch((err) => {
+            // need to catch duplicate role name error
             reject(err)
         })
     })
