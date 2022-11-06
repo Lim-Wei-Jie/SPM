@@ -754,7 +754,7 @@ def update_role(Role_ID,Role_Name,Role_Desc):
 
     if role:
 
-        if role.Role_Name == Role_Name:
+        if Role.query.filter_by(Role_Name=Role_Name).first():
             return jsonify(
             {
                 "code": 400,
