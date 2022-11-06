@@ -25,12 +25,9 @@ def hello():
 
 
 
-#COURSE ROUTES
 
-#https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
 @app.route("/course")
 def get_all_course():
-    #list
     courselist = Course.query.all()
     if len(courselist):
         
@@ -39,7 +36,6 @@ def get_all_course():
                 "code": 200,
                 "data": {
                     
-                    #turn python data into javascript object
                     "courses": [course.json() for course in courselist]
                 }
             }
@@ -118,15 +114,7 @@ def update_course(Course_Name):
         course.Course_Status = 'F2F'
         course.Course_Type = 'Sales'
         course.Course__Category = "technology"
-        #data = request.get_json()
-        #if data['course_name'] != "":
-        #    course.course_name = data['course_name']
-        #if data['course_desc'] != "":
-        #    course.course_desc = data['course_desc']
-        #if data['course_status'] != "":
-        #    course.course_status = data['course_status']
-        #if data['course_type'] != "":
-        #   course.course_type = data['course_type']
+
            
         db.session.commit()
         
@@ -147,7 +135,22 @@ def update_course(Course_Name):
     ), 404
     
     
-
+@app.route("/searchcourse/<string:Course_Name>",methods=['GET'])
+def find_by_course(Course_Name):
+    course = Course.query.filter_by(Course_Name = Course_Name).first()
+    if course:
+        return jsonify(
+            {
+                "code": 200,
+                "data": course.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Course not found."
+        }
+    ), 404
 
 
     
@@ -160,7 +163,6 @@ def update_course(Course_Name):
 
 @app.route("/Registration")
 def get_all_registration():
-    #list
     Reglist = Registration.query.all()
     if len(Reglist):
         
@@ -169,7 +171,6 @@ def get_all_registration():
                 "code": 200,
                 "data": {
                     
-                    #turn python data into javascript object
                     "registration": [Reg.json() for Reg in Reglist]
                 }
             }
@@ -185,7 +186,7 @@ def get_all_registration():
 
 @app.route("/Registration/<string:Staff_ID>")
 def get_registration_staff(Staff_ID):
-    #list
+    
     Regis = Registration.query.filter_by(Staff_ID = Staff_ID).all()
     if len(Regis):
         return jsonify(
@@ -206,7 +207,7 @@ def get_registration_staff(Staff_ID):
   
 
 @app.route("/Registration/addRegis/<string:Reg_ID>/<string:Course_ID>/<string:Staff_ID>/<string:Reg_Status>/<string:Completion_Status>",methods=['GET','POST'])
-def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
+def create_registration(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
     
 
     
@@ -227,8 +228,7 @@ def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
         ), 400
  
 
-    #data = request.get_json()
-    #print("poopo" + data)
+
     
    
     
@@ -264,7 +264,6 @@ def create_regis(Reg_ID,Course_ID,Staff_ID,Reg_Status,Completion_Status):
     
     
 
-#get skills from role_ID
 @app.route("/LJAssign/<string:Staff_ID>",methods=['GET'])
 def get_LJ_by_Staff(Staff_ID):
     list_ofID = get_ljps_id_by_role(Staff_ID)
@@ -273,14 +272,12 @@ def get_LJ_by_Staff(Staff_ID):
     role_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
     
     
-    #print(course_list)
     xz = []
     yz = []
     
     for i in course_list:
         for y in role_list:
             if (y.LJPS_ID == i.LJPS_ID):
-                #print('yes')
                 
                 yz.append(y.LJPS_ID)
                 yz.append(y.Role_ID)
@@ -300,7 +297,7 @@ def get_LJ_by_Staff(Staff_ID):
         xz.append(yz)
         yz=[]
                 
-    #print(xz)
+    
     
     
   
@@ -317,7 +314,6 @@ def get_LJ_by_Staff(Staff_ID):
                 spare_list.append(j)
         dicts[i] = spare_list
     print(dicts)
-    #print(xz)
     
     
    
@@ -338,16 +334,13 @@ def get_LJ_by_Staff(Staff_ID):
         }
     ), 404
 
-#filter only skillID
 def filter_LJPSID(list_of_id):
     list_onlyID = []
     for data in list_of_id:
-        #print(data.Skill_ID)
         list_onlyID.append(str(getattr(data,"LJPS_ID")))
-        #print(list_onlyID)
     return list_onlyID
 
-#get skill from associative table using role_id
+
 def get_ljps_id_by_role(Staff_ID):
     role_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
     if role_list:
@@ -360,9 +353,9 @@ def get_ljps_id_by_role(Staff_ID):
     ), 404
     
 
-#get skills from role_ID
+
 @app.route("/AddLJAssign/<string:Staff_ID>/<string:Role_ID>",methods=['GET','POST'])
-def Add_LJ_by_Staff(Staff_ID,Role_ID):
+def add_LJ_by_Staff(Staff_ID,Role_ID):
     
 
        
@@ -409,9 +402,9 @@ def Add_LJ_by_Staff(Staff_ID,Role_ID):
                         ), 201 
                         
                         
-#get skills from role_ID
+
 @app.route("/AddLJAssignCourse/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','POST'])
-def Add_Course_by_LJ(Course_ID,LJPS_ID):
+def add_Course_by_LJ(Course_ID,LJPS_ID):
     
 
        
@@ -458,9 +451,9 @@ def Add_Course_by_LJ(Course_ID,LJPS_ID):
                         
             
 
-#get skills from role_ID
+
 @app.route("/DeLJAssignCourse/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','DELETE'])
-def Del_Course_by_LJ(Course_ID,LJPS_ID):
+def delete_Course_by_LJ(Course_ID,LJPS_ID):
     
 
        
@@ -510,9 +503,8 @@ def Del_Course_by_LJ(Course_ID,LJPS_ID):
 
    
 
-#get skills from role_ID
 @app.route("/DeleteLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:Course_ID>/<string:LJPS_ID>",methods=['GET','DELETE'])
-def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
+def delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
     
 
 
@@ -598,7 +590,7 @@ def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
 
 @app.route("/LJPS_Assignment")
 def get_LJPS_Assignment():
-    #list
+    
     LJPS_Assignment_Map = LJPS_Assignment.query.all()
     if len(LJPS_Assignment_Map):
         
@@ -607,7 +599,6 @@ def get_LJPS_Assignment():
                 "code": 200,
                 "data": {
                     
-                    #turn python data into javascript object
                     "maps": [LJPS_Assign.json() for LJPS_Assign in LJPS_Assignment_Map]
                 }
             }
@@ -626,7 +617,6 @@ def get_LJPS_Assignment():
 
 @app.route("/LJPS_Course/<string:LJPS_ID>")
 def get_LJPS_Assignment_By_Course(LJPS_ID):
-    #list
     LJPS_Assignment_Map_By_Course = LJPS_Course_Assignment.query.filter_by(LJPS_ID=LJPS_ID).all()
     
     
@@ -639,7 +629,6 @@ def get_LJPS_Assignment_By_Course(LJPS_ID):
                     "code": 200,
                     "data": {
                         
-                        #turn python data into javascript object
                         "maps": [LJPS_Assign_Course.json() for LJPS_Assign_Course in LJPS_Assignment_Map_By_Course]
                         
                         
@@ -657,7 +646,6 @@ def get_LJPS_Assignment_By_Course(LJPS_ID):
     
     
     
-# show all inventory
 @app.route("/staff")
 def get_all_staff():
     staff_list = Staff.query.all()
@@ -757,9 +745,10 @@ def delete_role(Role_ID):
                 "message": "Delete unsuccessful as role does not exist."
             } ), 404
 
-#update role by ID
+
+
 @app.route('/role/update/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>',methods=['PUT'])
-def updateRole(Role_ID,Role_Name,Role_Desc):
+def update_role(Role_ID,Role_Name,Role_Desc):
     role = Role.query.filter_by(Role_ID=Role_ID).first()
 
     if role:
@@ -785,7 +774,7 @@ def updateRole(Role_ID,Role_Name,Role_Desc):
             }
         ), 500
 
-#get role from id
+
 @app.route("/role/<string:Role_ID>",methods=['GET'])
 def get_role_id(Role_ID):
     role = Role.query.filter_by(Role_ID=Role_ID).first()
@@ -806,10 +795,9 @@ def get_role_id(Role_ID):
         }
     ), 404
 
-#get role from name
+
 @app.route("/role/name/<string:role_Name>",methods=['GET'])
 def get_role_name(role_Name):
-    #role_List = Role.query.filter(Role.Role_Name.like(Role_Name)).all()
     role_List = Role.query.filter(Role.Role_Name.like(f'%{role_Name}%')).all()
     print(role_List)
     if role_List:
@@ -828,10 +816,10 @@ def get_role_name(role_Name):
         }
     ), 404
 
-#viewing the role_assignment table
+
 @app.route("/role/getskill")
 def get_mapped_skill_to_role():
-    #list
+    
     Skill_Role_Map = Role_Assign.query.all()
     if len(Skill_Role_Map):
         
@@ -840,7 +828,6 @@ def get_mapped_skill_to_role():
                 "code": 200,
                 "data": {
                     
-                    #turn python data into javascript object
                     "maps": [Skill_Assign.json() for Skill_Assign in Skill_Role_Map]
                 }
             }
@@ -852,11 +839,9 @@ def get_mapped_skill_to_role():
         } 
     ), 404
 
-#get skills from role_ID
 @app.route("/role/getskill/<string:Role_ID>",methods=['GET'])
 def get_skill_list_by_Role(Role_ID):
     list_ofID = get_skill_id_by_role(Role_ID) 
-    #check list of ID ##Need to add a validator here to check if it returns a list or error
     print(list_ofID)
     if list_ofID:
         filtered_list = filter_skillID(list_ofID)
@@ -881,20 +866,20 @@ def get_skill_list_by_Role(Role_ID):
         "code": 404,
         "message": "There is no such skill"
     }), 404     
-#filter only skillID
+
 def filter_skillID(list_of_id):
     list_onlyID = []
     for data in list_of_id:
-        #print(data.Skill_ID)
         list_onlyID.append(str(getattr(data,"Skill_ID")))
     return list_onlyID
-#get skill from associative table using role_id
+
 def get_skill_id_by_role(Role_ID):
     role_list = Role_Assign.query.filter_by(Role_ID=Role_ID).all()
     if role_list:
         return role_list
 
-#mapping skills to role
+
+
 @app.route("/role/roleassignskills/<string:Role_ID>/<string:Skill_ID>", methods=['GET','POST'])
 def role_to_skill_assignment(Role_ID,Skill_ID):
     Skill_ID = Skill_ID.replace("[","")
@@ -942,7 +927,6 @@ def role_to_skill_assignment(Role_ID,Skill_ID):
         }
     ), 201 
 
-#delete skills from role
 @app.route("/role/roledeleteskills/<string:Role_ID>/<string:Skill_ID>", methods=['GET','POST'])
 def role_to_skill_delete(Role_ID,Skill_ID):
     
@@ -973,22 +957,6 @@ def role_to_skill_delete(Role_ID,Skill_ID):
 
 
 
-@app.route("/searchcourse/<string:Course_Name>",methods=['GET'])
-def find_by_course(Course_Name):
-    course = Course.query.filter_by(Course_Name = Course_Name).first()
-    if course:
-        return jsonify(
-            {
-                "code": 200,
-                "data": course.json()
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "Course not found."
-        }
-    ), 404
 
 @app.route("/skill/<string:Skill_Name>/<string:Skill_Desc>", methods=['GET','POST'])
 def create_skill(Skill_Name,Skill_Desc):
@@ -1005,8 +973,7 @@ def create_skill(Skill_Name,Skill_Desc):
             }
         ), 400
  
-    #data = request.get_json()
-    #print("poopo" + data)
+
     new_skill = Skill(str(uuid.uuid1()),Skill_Name,Skill_Desc)
  
     try:
@@ -1032,7 +999,6 @@ def create_skill(Skill_Name,Skill_Desc):
         }
     ), 201 
     
-#get courses from skill_ID
 @app.route("/skill/getcourse/<string:Skill_ID>",methods=['GET'])
 def get_course_list_by_Skill(Skill_ID):
     list_ofID = get_course_id_by_skill(Skill_ID)
@@ -1073,7 +1039,6 @@ def get_course_id_by_skill(Skill_ID):
 #viewing the skill_assignment table
 @app.route("/skill_course_assignment")
 def get_mapped_skill_to_course():
-    #list
     Skill_Course_Map = Skill_Assign.query.all()
     if len(Skill_Course_Map):
         
@@ -1171,7 +1136,6 @@ def course_to_skill_delete(Skill_ID,Course_ID):
 
 @app.route("/skill")
 def get_all_skill():
-    #list
     Skilllist = Skill.query.all()
     if len(Skilllist):
         
@@ -1180,7 +1144,6 @@ def get_all_skill():
                 "code": 200,
                 "data": {
                     
-                    #turn python data into javascript object
                     "books": [Skill.json() for Skill in Skilllist]
                 }
             }
