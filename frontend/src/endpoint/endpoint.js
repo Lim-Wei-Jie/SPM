@@ -377,3 +377,20 @@ export function getStaffCreate() {
             })
     })
 }
+
+
+// Mapping skills to role
+export function createLJ2(staffID, roleID) {
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/AddLJAssign/${staffID}/${roleID}`
+        axios
+            .post(apiEndpoint)
+            .then((res) => {
+                resolve(res)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to fetch all skills, check WAMP/MAMP server')
+            })
+    })
+}

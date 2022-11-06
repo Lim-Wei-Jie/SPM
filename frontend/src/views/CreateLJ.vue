@@ -57,7 +57,7 @@
             </div>
         </div>
         <!-- send edited data back-->
-        <button class="btn btn-outline btn-success" @click="createRegis(skillsList, selectedCourses, staffID, roleDetailsID, ljpsID)">Create Learning Journey</button>
+        <button class="btn btn-outline btn-success" @click="createRegis(skillsList, selectedCourses, staffID, roleDetailsID)">Create Learning Journey</button>
     </div>
 </template>
 
@@ -65,7 +65,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { onBeforeMount, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getCoursesBySkill, getSkillsByRole, getAllLJPSNo, getAllRegistration, getAllRegistrationNo } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getCoursesBySkill, getSkillsByRole, createLJ2, getAllRegistrationNo } from "@/endpoint/endpoint.js";
 
 //route back for breadcrumb
 const router = useRouter()
@@ -91,8 +91,8 @@ const roleDetailsName = ref()
 const roleDetailsID = ref()
 const roleDetailsDesc = ref()
 const staffID = ref('130003')
-const ljpsID = ref()
 const skillsList = ref([])
+const selectedCourses = ref([])
 
 ;(async() => {
 try {
@@ -127,20 +127,11 @@ try {
         }
         skillsList.value.push(skillDetails) 
     }
-
-
-    //LJPS ID
-    ljpsID.value = await getAllLJPSNo()
-
-
 }
 catch(err) {
     console.log(err);
 }
 })();
-
-
-
 
 var regID = 0
 onBeforeMount(
@@ -155,40 +146,7 @@ onBeforeMount(
     });
 })();
 
-
-
-
-const selectedCourses = ref([])
-function addCourse(selectedCourses, skillID, skillsList) {
-    for(var skill of skillsList){
-        
-        if (skill.skill_id == skillID) {
-            for(var i=0; i<selectedCourses.length; i++){
-                skill.courses_selected.push(selectedCourses[i])
-            }
-        }
-    }
-    while(selectedCourses.length > 0) {
-        selectedCourses.pop();
-    }
-}
-
-function deleteCourse(courseID, skillID, skillsList) {
-    for(var skill of skillsList){
-        if (skill.skill_id === skillID) {
-            for( var i = 0; i < skill.courses_selected.length; i++){ 
-                if ( skill.courses_selected[i] === courseID) { 
-                    skill.courses_selected.splice(i, 1); 
-                }
-            }
-        }
-    }
-}
-
-
-
-
-function createRegis(skillsList, selectedCourses, staffID, roleID, ljpsID) {
+function createRegis(skillsList, selectedCourses, staffID, roleID) {
     if (selectedCourses.length == 0) {
         alert('Please select at least one course for each skill.')
     } else {
@@ -212,30 +170,29 @@ function createRegis(skillsList, selectedCourses, staffID, roleID, ljpsID) {
             alert('Please select at least one course for each skill.')
         } else {
             //add registration
-            for (var courseID of selectedCourses) {
-                addReg(regID, courseID, staffID)
-                regID+=1
-            }
+            ;(async() => {
+            try {
+                //get LJPS_ID
+                var res = await createLJ2(staffID, roleID)
+                var newLjpsID = res.data.LJPS_ID
+                
 
-            createLJ(staffID, roleID, ljpsID)
-            
-            for (var courseID of selectedCourses) {
-                addToLJ(courseID, ljpsID)
-            }
-            
-            //add assignment
-            for (var i = 0; i < selectedCourses.length; i++) {
-                if (i == 0 ) {
-                    createLJ(staffID, roleID, selectedCourses[0], ljpsID)
-                    addToLJ(selectedCourses[0], ljpsID)
-                } else {
-                    addToLJ(selectedCourses[i], ljpsID)
+                for (var courseID of selectedCourses) {
+                    addReg(regID, courseID, staffID)
+                    regID+=1
                 }
-            }
-            
 
-            //route to staff page
-            router.push('/staff')   
+                for (var courseID of selectedCourses) {
+                    addToLJ(courseID, newLjpsID)
+                }
+                
+                //route to staff page
+                router.push('/staff') 
+            }
+            catch(err) {
+                console.log(err);
+            }
+            })();
         }
     }
 }
@@ -249,18 +206,6 @@ function addReg(regID, courseID, staffID) {
         .then((res) => {
             console.log(res)
 
-        }).catch((err) => {
-            console.log(err);
-        });
-    })();
-}
-
-//add to learning journey assignment
-function createLJ(staffID, roleID, ljpsID) {
-    ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssign/${staffID}/${roleID}/${ljpsID}`)
-        .then((res) => {
-            
         }).catch((err) => {
             console.log(err);
         });
