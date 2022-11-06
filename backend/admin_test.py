@@ -1,5 +1,13 @@
+import sys
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+
 import unittest
-from manager import Course, Skill, Role, Role_Assign, Staff, Skill_Assign
+from backend.routes import Course, Skill, Role, Role_Assign, Staff, Skill_Assign
+from backend.db import LJPS_Assignment, LJPS_Course_Assignment
 
 
 class TestCourse(unittest.TestCase):
@@ -20,14 +28,12 @@ class TestSkill(unittest.TestCase):
     def test_to_dict(self):
         s1 = Skill(Skill_ID= 'BPM020',
             Skill_Name= 'Process Modelling',
-            Skill_Desc= 'RPA and BPM',
-            Date_created='2022-01-21')
+            Skill_Desc= 'RPA and BPM')
         
         self.assertEqual(s1.json(), {
             'Skill_ID': 'BPM020',
             'Skill_Name': 'Process Modelling',
-            'Skill_Desc': 'RPA and BPM',
-            'Date_created' : '2022-01-21' }
+            'Skill_Desc': 'RPA and BPM'}
         )
 
 
@@ -88,6 +94,40 @@ class TestSkillAssign(unittest.TestCase):
             'Course_ID': 'COR3301',
             'Skill_ID': '1'}
         )
+
+
+
+class LJPS_Test_Assignment(unittest.TestCase):
+    def test_to_dict(self):
+        s1 = LJPS_Assignment(
+            LJPS_ID= '30',
+            Role_ID= '1',
+            Staff_ID = '130020'
+            )
+
+        
+        self.assertEqual(s1.json(), {
+            'LJPS_ID': '30',
+            'Role_ID': '1',
+            'Staff_ID' : '130020'}
+        )
+
+
+
+class LJPS_Course_Test_Assignment(unittest.TestCase):
+    def test_to_dict(self):
+        s1 = LJPS_Course_Assignment(
+            LJPS_ID= '30',
+            Course_ID= 'COR0030'
+            )
+
+        
+        self.assertEqual(s1.json(), {
+            'LJPS_ID': '30',
+            'Course_ID': 'COR0030'
+            }
+        )
+
 
 
 

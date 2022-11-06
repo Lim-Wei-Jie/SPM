@@ -5,3 +5,4 @@
 *.pyc
 backend/__pycache__/manager.cpython-310.pyc
 *.pyc
+frontend/.env

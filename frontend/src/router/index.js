@@ -15,6 +15,7 @@ import SkillPage from "../views/SkillPage.vue"
 import EditSkill from "../views/EditSkill.vue"
 import CreateLJ from "../views/CreateLJ.vue"
 import EditLJ from "../views/EditLJ.vue"
+import ViewLJ from "../views/ViewLJ.vue"
 
 const routes = [
     {
@@ -81,12 +82,11 @@ const routes = [
     },
 
     {
-        path: '/staff/edit/:jobRoleID',
+        path: '/staff/edit/:ljpsID/:jobRoleID',
         name: 'editLJ',
         component: EditLJ,
         props: true
     },
-
 
     {
         path: '/newSkill',
@@ -108,6 +108,12 @@ const routes = [
         props: true
     },
 
+    {
+        path: '/staff/view/:ljpsID/:jobRoleID',
+        name: 'viewLJ',
+        component: ViewLJ,
+        props: true
+    },
 ]
 
 const router = createRouter({

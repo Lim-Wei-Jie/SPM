@@ -62,7 +62,6 @@ const searchQuery = ref()
 
 const filteredJobs = ref()
 function filterResults() {
-    console.log(searchQuery.value)
     filteredJobs.value = jobRoles.value.filter(jobRole => jobRole.toLowerCase().indexOf(searchQuery.value.toLowerCase()) > -1);
 }
 
