@@ -267,16 +267,31 @@ async function confirmAddSkill() {
     addModal.selectedSkills = []
 }
 
+const roleDetails = ref(null)
 async function handleEditRole() {
     try {
-        const updatedRole = await updateRole(roleStore.role, removeSkillsIDArr.value, addSkillsIDArr.value)
-        handleBack()
-        router.push({
-            name: 'jobRole',
-            params: {
-                jobRoleName: updatedRole.Role_Name
-            }
-        })
+        if (roleName != roleStore.role.roleName) {
+            // if edited role name
+            roleDetails.value = roleStore.role
+            const updatedRole = await updateRole(roleDetails.value, removeSkillsIDArr.value, addSkillsIDArr.value)
+
+            handleBack()
+
+            router.push({
+                name: 'jobRole',
+                params: {
+                    jobRoleName: updatedRole.Role_Name
+                }
+            })
+
+        } else {
+            router.push({
+                name: 'jobRole',
+                params: {
+                    jobRoleName: roleName
+                }
+            })
+        }
     }
     catch (err) {
         // error.value = err
