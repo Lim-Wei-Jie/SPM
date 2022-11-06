@@ -134,8 +134,36 @@ class TestupdateeRole(TestApp):
                     'Role_Name': 'testpass'},
                 "message": "Role Updated sucessfully"
             })
-    def test_update_role_duplicate(self): 
-        request_body = "/role/update/60/Process Analyst/testpass87656"
+    def test_update_role_desc_only(self): 
+        request_body = "/role/update/60/Process Analyst/testpass87656 d75hhfb"
+ 
+        response = self.client.put(request_body) 
+ 
+        self.assertEqual(response.json,
+            {
+                "code": 201,
+                'data':{'Role_Desc': 'testpass87656 d75hhfb', 
+                    'Role_ID': "60", 
+                    'Role_Name': 'Process Analyst'},
+                "message": "Role Updated sucessfully"
+            })
+    
+    def test_update_role_name_only(self): 
+        request_body = "/role/update/60/test11/RPA and BPM"
+ 
+        response = self.client.put(request_body) 
+ 
+        self.assertEqual(response.json,
+            {
+                "code": 201,
+                'data':{'Role_Desc': 'RPA and BPM', 
+                    'Role_ID': "60", 
+                    'Role_Name': 'test11'},
+                "message": "Role Updated sucessfully"
+            })
+
+    def test_update_role_name_duplicate(self): 
+        request_body = "/role/update/60/Process Analyst/RPA and BPM"
  
         response = self.client.put(request_body) 
  
@@ -143,9 +171,10 @@ class TestupdateeRole(TestApp):
             {
                 "code": 400,
                 "data": {
-                    "Role": "Process Analyst"
+                    "Role": "Process Analyst",
+                    "Role_Desc": "RPA and BPM"
                 },
-                "message": "Role Name Duplicate"
+                "message": "Role Duplicate"
             })
 
 

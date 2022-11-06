@@ -754,14 +754,15 @@ def update_role(Role_ID,Role_Name,Role_Desc):
 
     if role:
 
-        if Role.query.filter_by(Role_Name=Role_Name).first():
+        if Role.query.filter_by(Role_Name=Role_Name,Role_Desc=Role_Desc).first():
             return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "Role": Role_Name
+                    "Role": Role_Name,
+                    "Role_Desc": Role_Desc
                 },
-                "message": "Role Name Duplicate"
+                "message": "Role Duplicate"
             } ), 400
 
         Role.query.filter_by(Role_ID=Role_ID).update(dict(Role_Name=Role_Name,Role_Desc=Role_Desc))
