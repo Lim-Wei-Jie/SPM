@@ -85,67 +85,51 @@ export function createRole(roleDetails, addSkillsIDArr) {
 }
 
 // Update job role
-export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
-    const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
-    const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
-
+export function updateRole(roleDetails) {
     return new Promise((resolve, reject) => {
-        // update role name and desc
-        // if (roleDetails) {
-        //     let updateEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/update/${roleDetails.roleID}/${roleDetails.roleName}/${roleDetails.roleDesc}`
-        //     axios
-        //         .put(updateEndpoint)
-        //         .then((res) => {
-        //             resolve(res.data.data)
-        //         })
-        //         .catch((err) => {
-        //             reject(err)
-        //         })
-        // }
-
-        // // remove skill assignment
-        // if (removeSkills.length > 0) {
-        //     let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
-        //     axios
-        //         .post(assignRemoveEndpoint)
-        //         .then((res) => {
-        //             resolve(res.data)
-        //         })
-        //         .catch((err) => {
-        //             reject(err)
-        //         })
-        // }
-
-        // // add skill assignment
-        // if (addSkills.length > 0) {
-        //     let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
-        //     axios
-        //         .post(assignAddEndpoint)
-        //         .then((res) => {
-        //             resolve(res.data)
-        //         })
-        //         .catch((err) => {
-        //             reject(err)
-        //         })
-        // }
-        
+        let updateEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/update/${roleDetails.roleID}/${roleDetails.roleName}/${roleDetails.roleDesc}`
+        axios
+            .put(updateEndpoint)
+            .then((res) => {
+                resolve(res.data.data)
+            })
+            .catch((err) => {
+                reject(err.response.data.message)
+            })
     })
-    
+}
 
-    // // check if removeSkills and addSkills not empty, then call respectively route
+// Remove skill assignment
+export function removeSkillAssign(roleID, removeSkillsIDArr) {
+    const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
+    console.log(removeSkills);
     // return new Promise((resolve, reject) => {
-    //     Promise.allSettled([
-    //         axios.put(updateEndpoint),
-    //         axios.post(assignRemoveEndpoint),
-    //         axios.post(assignAddEndpoint)
-    //     ])
-    //     .then((res) => {
-    //         resolve(res[0].value.data.data)
-    //     })
-    //     .catch((err) => {
-    //         // need to catch duplicate role name error
-    //         reject(err)
-    //     })
+    //     let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roledeleteskills/${roleID}/${removeSkills}`
+    //     axios
+    //         .post(assignRemoveEndpoint)
+    //         .then((res) => {
+    //             resolve(res.data)
+    //         })
+    //         .catch((err) => {
+    //             reject(err)
+    //         })
+    // })
+}
+
+// Add skill assignment
+export function addSkillAssign(roleID, addSkillsIDArr) {
+    const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
+    console.log(addSkills);
+    // return new Promise((resolve, reject) => {
+    //     let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${roleID}/${addSkills}`
+    //     axios
+    //         .post(assignAddEndpoint)
+    //         .then((res) => {
+    //             resolve(res.data)
+    //         })
+    //         .catch((err) => {
+    //             reject(err)
+    //         })
     // })
 }
 

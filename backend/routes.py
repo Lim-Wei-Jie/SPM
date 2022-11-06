@@ -761,7 +761,7 @@ def update_role(Role_ID,Role_Name,Role_Desc):
                 "data": {
                     "Role": Role_Name
                 },
-                "message": "Role Name Duplicate"
+                "message": "Role Name already exists"
             } ), 400
 
         Role.query.filter_by(Role_ID=Role_ID).update(dict(Role_Name=Role_Name,Role_Desc=Role_Desc))

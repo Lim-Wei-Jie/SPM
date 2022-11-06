@@ -157,7 +157,7 @@ import NavBar from '../components/NavBar.vue';
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useRoleStore, useAssignSkillsStore } from '@/store/index.js'
-import { getAllSkills, getCoursesBySkill, updateRole, deleteRole } from "@/endpoint/endpoint.js";
+import { getAllSkills, getCoursesBySkill, updateRole, removeSkillAssign, addSkillAssign, deleteRole } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
@@ -267,21 +267,37 @@ async function confirmAddSkill() {
     addModal.selectedSkills = []
 }
 
-const fixDesc = roleStore.role.roleDesc
 async function handleEditRole() {
     try {
-        if (roleName != roleStore.role.roleName || fixDesc != roleStore.role.roleDesc || removeSkillsIDArr.value || addSkillsIDArr.value) {
-            // if edited role name or edited role desc or remove / assign skills
-            const updatedRole = await updateRole(roleStore.role, removeSkillsIDArr.value, addSkillsIDArr.value)
+        // if got time, do modal for confirmation of save changes
+        let updatedRole = null
+
+        if (roleName != roleStore.role.roleName) {
+            // if edited role name
+            // not updating for some reason (use try catch for each call)
+            updatedRole = await updateRole(roleStore.role)
+
+        } else if (removeSkillsIDArr.value > 0) {
+            // if remove skills
+            const removedSkill = await removeSkillAssign(roleStore.role.roleID, removeSkillsIDArr.value)
+
+        } else if (addSkillsIDArr.value > 0) {
+            // if add skills
+            const addedSkill = await addSkillAssign(roleStore.role.roleID, addSkillsIDArr.value)
+
+        } else if (updatedRole) {
+            // got edits
+            console.log('got edits');
             handleBack()
             router.push({
                 name: 'jobRole',
                 params: {
-                    jobRoleName: updatedRole.Role_Name
+                    jobRoleName: updatedRole.value.Role_Name
                 }
             })
-
+            
         } else {
+            // if nothing edited
             handleBack()
             router.push({
                 name: 'jobRole',
@@ -290,10 +306,11 @@ async function handleEditRole() {
                 }
             })
         }
+
     }
     catch (err) {
-        // error.value = err
-        console.log(err);
+        // alert for now, if got time do modal pop up
+        alert(err)
     }
 }
 
