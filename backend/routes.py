@@ -754,6 +754,16 @@ def update_role(Role_ID,Role_Name,Role_Desc):
 
     if role:
 
+        if role.Role_Name == Role_Name:
+            return jsonify(
+            {
+                "code": 400,
+                "data": {
+                    "Role": Role_Name
+                },
+                "message": "Role Name Duplicate"
+            } ), 400
+
         Role.query.filter_by(Role_ID=Role_ID).update(dict(Role_Name=Role_Name,Role_Desc=Role_Desc))
 
         db.session.commit()

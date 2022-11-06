@@ -135,6 +135,20 @@ class TestupdateeRole(TestApp):
                     'Role_Name': 'testpass'},
                 "message": "Role Updated sucessfully"
             })
+    def test_update_role_duplicate(self): 
+        request_body = "/role/update/60/Process Analyst/testpass87656"
+ 
+        response = self.client.put(request_body) 
+ 
+        self.assertEqual(response.json,
+            {
+                "code": 400,
+                "data": {
+                    "Role": "Process Analyst"
+                },
+                "message": "Role Name Duplicate"
+            })
+
 
     def test_update_role_fail(self): 
         request_body = "/role/update/660/testpass/testpass"
