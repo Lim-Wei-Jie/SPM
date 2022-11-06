@@ -545,12 +545,7 @@ def Delete_LJ_by_Staff(Staff_ID,Role_ID,Course_ID,LJPS_ID):
                             }
                         ), 201
 
-                return jsonify(
-                    {
-                        "code": 201,
-                        "data": "data being removed"
-                    }
-                ), 201 
+               
                     
    
             else:
