@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `course` (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `skill` (
-	`Skill_ID` int NOT NULL,
+	`Skill_ID` varchar(255) NOT NULL,
     `Skill_Name` varchar(20)  NOT NULL,
     `Skill_Desc` text(8000)  NULL,
     
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `skill` (
 
 
 CREATE TABLE IF NOT EXISTS `role` (
-	`Role_ID` int NOT NULL,
+	`Role_ID` varchar(255) NOT NULL,
     `Role_Name` varchar(20)  NOT NULL,
     
 	-- extra

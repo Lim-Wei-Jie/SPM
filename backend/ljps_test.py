@@ -35,39 +35,6 @@ class TestApp(flask_testing.TestCase):
     def tearDown(self): 
         db.session.remove() 
         db.drop_all() 
- 
-class TestCreateLJ(TestApp): 
-    def test_create_LJ(self): 
-        d1 = Role(Role_ID= '60', 
-            Role_Name= 'Process Analyst', 
-            Role_Desc= 'RPA and BPM') 
- 
-        request_body = "/role/create/"+str(d1.Role_ID)+"/"+d1.Role_Name+"/"+d1.Role_Desc  
- 
-        response = self.client.get(request_body) 
- 
-        self.assertEqual(response.json, { 
-            'code':201, 
-            'data':{'Role_Desc': 'RPA and BPM', 
-                'Role_ID': 60, 
-                'Role_Name': 'Process Analyst'}}) 
- 
-class TestCreateSkill(TestApp): 
-    def test_create_Skill(self): 
-        d1 = Skill(Skill_ID= 6, 
-            Skill_Name= 'Business Process Analysis and Modelling', 
-            Skill_Desc= 'Signavio',
-            Date_created="10/11/2022") 
-        request_body = "/skill/"+str(d1.Skill_ID)+"/"+d1.Skill_Name+"/"+d1.Skill_Desc
- 
-        response = self.client.get(request_body) 
-        self.assertEqual(response.json, { 
-            'code':201, 
-            'data':{ 
-                'Skill_Desc': 'Signavio', 
-                'Skill_ID': 6, 
-                'Skill_Name': 'Business Process Analysis and Modelling'
-                }}) 
 
 
 class TestCreateRegistration(TestApp): 

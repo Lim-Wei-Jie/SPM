@@ -80,32 +80,22 @@ class TestApp(flask_testing.TestCase):
 
 class TestCreateSkill(TestApp): 
     def test_create_Skill(self): 
-        d1 = Skill(Skill_ID= 6, 
-            Skill_Name= 'Business Process Analysis and Modelling', 
-            Skill_Desc= 'Signavio',
-            Date_created="10/11/2022") 
 
-        request_body = "/skill/"+str(d1.Skill_ID)+"/"+d1.Skill_Name+"/"+d1.Skill_Desc
+        request_body = "/skill/SkillTest New/Skill TEst DDesc"
  
         response = self.client.get(request_body) 
-        self.assertEqual(response.json, { 
-            'code':201, 
-            'data':{ 
-                'Skill_Desc': 'Signavio', 
-                'Skill_ID': 6, 
-                'Skill_Name': 'Business Process Analysis and Modelling'
-                }}) 
+        self.assertEqual(response.json['code'], 
+            201)
 
     def test_create_Skill_duplicate(self): 
 
-        request_body = "/skill/7/Skill TEst 1/Skill TEst 1"
+        request_body = "/skill/Skill TEst 1/Skill TEst 1"
 
  
         response = self.client.get(request_body) 
         self.assertEqual(response.json, { 
                 "code": 400,
                 "data": {
-                    "Skill_ID": "7",
                     "Skill_Name": "Skill TEst 1",
                     "Skill_Name": "Skill TEst 1"
                 },
@@ -174,7 +164,7 @@ class testfindCourseByName(TestApp):
 
 class TestAssignCoursetoSkill(TestApp): 
     def test_assign_course_list_to_skill(self): 
-        request_body = "/skill/7/[3,4]"
+        request_body = "/skill/skillassigncourse/7/[3,4]"
  
         response = self.client.get(request_body) 
  
@@ -184,7 +174,7 @@ class TestAssignCoursetoSkill(TestApp):
                 "data": "['3', '4']"
             })
     def test_assign_course_list_to_duplicate(self): 
-        request_body = "/skill/7/[1,4]"
+        request_body = "/skill/skillassigncourse/7/[1,4]"
  
         response = self.client.get(request_body) 
  
@@ -273,7 +263,7 @@ class TestUpdateSkill(TestApp):
         self.assertEqual(response.json,            {
                 "code": 201,
                 "data": {'Skill_Desc': 'TEstupdateduiy', 
-                    'Skill_ID': 7, 
+                    'Skill_ID': "7", 
                     'Skill_Name': 'TEstupdate'},
                 "message": "Role Updated sucessfully"
             } )

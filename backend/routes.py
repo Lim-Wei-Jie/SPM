@@ -8,6 +8,8 @@ from backend.app import app
 from backend.db import *
 from flask import request, jsonify
 import json
+import uuid
+from sqlalchemy import exc
 
 """ @app.route('/index/')
 def hello():
@@ -380,7 +382,7 @@ def Add_LJ_by_Staff(Staff_ID,Role_ID,LJPS_ID):
                     
 
                         
-                        new_ljps_assignment = LJPS_Assignment(LJPS_ID,Staff_ID,Role_ID)
+                        new_ljps_assignment = LJPS_Assignment(str(uuid.uuid1()),Staff_ID,Role_ID)
                         
                         
                         
@@ -695,31 +697,31 @@ def get_all_role():
         }
     ), 404
 
-@app.route("/role/create/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>", methods=['GET','POST'])
-def create_role(Role_ID,Role_Name,Role_Desc):
+@app.route("/role/create/<string:Role_Name>/<string:Role_Desc>", methods=['GET','POST'])
+def create_role(Role_Name,Role_Desc):
 
     if (Role.query.filter_by(Role_Name=Role_Name).first()):
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "Role_ID": Role_ID,
                     "Role_Name": Role_Name,
                     "Role_Desc": Role_Desc
                 },
                 "message": "Role already exists."
             }
         ), 400
-    new_role = Role(Role_ID, Role_Name,Role_Desc,datetime.utcnow())
+    new_role = Role(str(uuid.uuid1()),Role_Name,Role_Desc)
     try:
         db.session.add(new_role)
         db.session.commit()
-    except:
+    except exc.SQLAlchemyError as e:
+        print(e)
         return jsonify(
             {
                 "code": 500,
                 "data": {
-                    "Role_ID": Role_ID,
+                    "Role_ID": new_role.Role_ID,
                     "Role_Name": Role_Name,
                     "Role_Desc": Role_Desc,
                 },
@@ -988,15 +990,14 @@ def find_by_course(Course_Name):
         }
     ), 404
 
-@app.route("/skill/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>", methods=['GET','POST'])
-def create_skill(Skill_ID,Skill_Name,Skill_Desc):
+@app.route("/skill/<string:Skill_Name>/<string:Skill_Desc>", methods=['GET','POST'])
+def create_skill(Skill_Name,Skill_Desc):
 
     if (Skill.query.filter_by(Skill_Name = Skill_Name ).first()):
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "Skill_ID": Skill_ID,
                     "Skill_Name": Skill_Name,
                     "Skill_Name": Skill_Desc
                 },
@@ -1006,7 +1007,7 @@ def create_skill(Skill_ID,Skill_Name,Skill_Desc):
  
     #data = request.get_json()
     #print("poopo" + data)
-    new_skill = Skill(Skill_ID,Skill_Name,Skill_Desc)
+    new_skill = Skill(str(uuid.uuid1()),Skill_Name,Skill_Desc)
  
     try:
         db.session.add(new_skill)
@@ -1016,7 +1017,7 @@ def create_skill(Skill_ID,Skill_Name,Skill_Desc):
             {
                 "code": 500,
                 "data": {
-                    "Skill_ID": Skill_ID,
+                    "Skill_ID": new_skill.Skill_ID,
                     "Skill_Name": Skill_Name,
                     "Skill_Name": Skill_Desc
                 },
@@ -1094,7 +1095,7 @@ def get_mapped_skill_to_course():
     ), 404
 
 
-@app.route("/skill/<string:Skill_ID>/<string:Course_ID>", methods=['GET','POST'])
+@app.route("/skill/skillassigncourse/<string:Skill_ID>/<string:Course_ID>", methods=['GET','POST'])
 def skill_to_course_assignment(Skill_ID,Course_ID):
 
     Course_ID = Course_ID.replace("[","")
@@ -1238,8 +1239,6 @@ def update_skill(Skill_ID,Skill_Name,Skill_Desc):
         ), 500
 
 
-    
-    
     
 
 

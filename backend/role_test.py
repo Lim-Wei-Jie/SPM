@@ -24,6 +24,7 @@ class TestApp(flask_testing.TestCase):
         return app
 
     def setUp(self):
+        db.drop_all()
         db.create_all()
         self.d1 = Role(Role_ID= '60', 
             Role_Name= 'Process Analyst', 
@@ -73,42 +74,23 @@ class TestApp(flask_testing.TestCase):
  
 class TestCreateRole(TestApp): 
     def test_create_role(self): 
- 
-        request_body = "/role/create/601/ProcesTest/TestDecs"
+        request_body = "/role/create/RoleTest/TestDecs"
  
         response = self.client.get(request_body) 
  
-        self.assertEqual(response.json, { 
-            'code':201, 
-            'data':{'Role_Desc': 'TestDecs', 
-                'Role_ID': 601, 
-                'Role_Name': 'ProcesTest'}})
+        self.assertEqual(response.json['code'], 
+            201)
+
     #test creation fail
     def test_create_role_duplicate(self): 
  
-        request_body = "/role/create/60/Process Analyst/RPA and BPM"
+        request_body = "/role/create/Process Analyst/RPA and BPM"
  
         response = self.client.get(request_body) 
  
         self.assertEqual(response.json, { 
                 "code": 400,
                 "data": {
-                    "Role_ID": "60",
-                    "Role_Name": "Process Analyst",
-                    "Role_Desc": "RPA and BPM"
-                },
-                "message": "Role already exists."
-                })
-    def test_create_role_duplicate(self): 
- 
-        request_body = "/role/create/60/Process Analyst/RPA and BPM"
- 
-        response = self.client.get(request_body) 
- 
-        self.assertEqual(response.json, { 
-                "code": 400,
-                "data": {
-                    "Role_ID": "60",
                     "Role_Name": "Process Analyst",
                     "Role_Desc": "RPA and BPM"
                 },
@@ -141,15 +123,15 @@ class TestDeleteRole(TestApp):
         
 class TestupdateeRole(TestApp): 
     def test_update_role(self): 
-        request_body = "/role/update/60/testpass/testpass"
+        request_body = "/role/update/60/testpass/testpass87656 d75hhfb"
  
         response = self.client.put(request_body) 
  
         self.assertEqual(response.json,
             {
                 "code": 201,
-                'data':{'Role_Desc': 'testpass', 
-                    'Role_ID': 60, 
+                'data':{'Role_Desc': 'testpass87656 d75hhfb', 
+                    'Role_ID': "60", 
                     'Role_Name': 'testpass'},
                 "message": "Role Updated sucessfully"
             })
@@ -180,7 +162,7 @@ class TestgetRolebyid(TestApp):
                 "code": 200,
                 "data": {
                     "Role": [{'Role_Desc': 'RPA and BPM', 
-                            'Role_ID': 60, 
+                            'Role_ID': "60", 
                             'Role_Name': 'Process Analyst'}]
                 }  
             })
@@ -207,7 +189,7 @@ class TestgetRolebyname(TestApp):
                 "code": 200,
                 "data": {
                     "Role": [{'Role_Desc': 'RPA and BPM', 
-                            'Role_ID': 60, 
+                            'Role_ID': "60", 
                             'Role_Name': 'Process Analyst'}]
                 }  
             })
@@ -233,10 +215,10 @@ class TestGetSkillListbyRole(TestApp):
                 "data": {
                     "Skill": [
                     {'Skill_Desc': 'Skill TEst 1', 
-                    'Skill_ID': 7, 
+                    'Skill_ID': "7", 
                     'Skill_Name': 'Skill TEst 1'},
                     {'Skill_Desc': 'Skill TEst 2', 
-                    'Skill_ID': 8, 
+                    'Skill_ID': "8", 
                     'Skill_Name': 'Skill TEst 2'}]
                 }  
             })
