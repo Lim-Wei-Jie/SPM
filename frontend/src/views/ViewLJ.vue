@@ -132,8 +132,6 @@ try {
         }
     }
 
-    
-
     const skills = await getSkillsByRole(jobRoleID.value)
     for (var skill of skills) {
         var courses = await getCoursesBySkill(skill.Skill_ID)
@@ -150,13 +148,17 @@ try {
                 }
             }
         }
-
+        console.log(registeredCourses3.value[2])
         var regCourses = []
         for (let i = 0; i < registeredCourses2.value.length; i++) {
             if (registeredCourses2.value[i] == skill.Skill_ID) {
+                console.log(i)
+                console.log(registeredCourses.value[i], skill.Skill_ID)
+                console.log(registeredCourses3.value[i])
                 regCourses.push(registeredCourses3.value[i])
             }
         }
+
         var skillDetails = {
                 skill_id: skill.Skill_ID,
                 skill_name: skill.Skill_Name,
@@ -166,7 +168,6 @@ try {
             }
         skillsList.value.push(skillDetails) 
     }
-
 }
 catch(err) {
     console.log(err);
