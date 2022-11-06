@@ -32,7 +32,7 @@
                     <p class="font-medium text-lg">
                         Job Role Description
                     </p>
-                    <input type="text" v-model="roleStore.role.roleDesc" class="input input-bordered w-full">
+                    <textarea v-model="roleStore.role.roleDesc" class="textarea text-base input input-bordered w-full h-44"></textarea>
                 </div>
 
                 <!-- Role skills -->
