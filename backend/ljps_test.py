@@ -68,11 +68,8 @@ class TestAddLJ(TestApp):
         request_body = "/AddLJAssign/" + d1.Staff_ID + "/" + str(d1.Role_ID)
 
         response = self.client.get(request_body) 
-        self.assertEqual(response.json, { 
-            'code':201, 
-            'data':  'New learning journey created'
-                
-                })
+        self.assertEqual(response.json['code'], 
+            201)
         
     def test_add_LJ_Fail(self): 
         
@@ -82,7 +79,7 @@ class TestAddLJ(TestApp):
  
         self.assertEqual(response.json,
                 {
-                    "code": 201,
+                    "code": 400,
                     "message": "learning journey already exist"
                 })
 
