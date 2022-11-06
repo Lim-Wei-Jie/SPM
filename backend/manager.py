@@ -168,7 +168,7 @@ def get_all_role():
 @app.route("/role/create/<string:Role_ID>/<string:Role_Name>/<string:Role_Desc>", methods=['GET','POST'])
 def create_role(Role_ID,Role_Name,Role_Desc):
 
-    if (Role.query.filter_by(Role_ID=Role_ID).first()):
+    if (Role.query.filter_by(Role_Name=Role_Name).first()):
         return jsonify(
             {
                 "code": 400,

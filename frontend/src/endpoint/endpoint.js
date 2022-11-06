@@ -63,25 +63,14 @@ export function getCoursesBySkill(skillID) {
 }
 
 // Create job role
-export function createRole(newJobRoleData) {
-    var role_id = newJobRoleData[0];
-    var role_name = newJobRoleData[1];
-    var role_des = newJobRoleData[2];
-    // var BE_error = false;
-    // var job_err_msg = '';
+export function createRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
+    const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
+    const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
 
-    return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/${role_id}/${role_name}/${role_des}`
-        axios
-            .post(apiEndpoint)
-            .then((res) => {
-                resolve(res.data)
-            })
-            .catch((err) => {
-                console.log(err.message);
-                reject('Fail to create role, check WAMP/MAMP server')
-            })
-    })
+    console.log(roleDetails);
+
+    let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
+    let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
 }
 
 // Update job role
