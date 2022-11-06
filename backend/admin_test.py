@@ -1,6 +1,13 @@
+import sys
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+
 import unittest
-from manager import Course, Skill, Role, Role_Assign, Staff, Skill_Assign
-from db import LJPS_Assignment, LJPS_Course_Assignment
+from backend.routes import Course, Skill, Role, Role_Assign, Staff, Skill_Assign
+from backend.db import LJPS_Assignment, LJPS_Course_Assignment
 
 
 class TestCourse(unittest.TestCase):
@@ -21,14 +28,12 @@ class TestSkill(unittest.TestCase):
     def test_to_dict(self):
         s1 = Skill(Skill_ID= 'BPM020',
             Skill_Name= 'Process Modelling',
-            Skill_Desc= 'RPA and BPM',
-            Date_created='2022-01-21')
+            Skill_Desc= 'RPA and BPM')
         
         self.assertEqual(s1.json(), {
             'Skill_ID': 'BPM020',
             'Skill_Name': 'Process Modelling',
-            'Skill_Desc': 'RPA and BPM',
-            'Date_created' : '2022-01-21' }
+            'Skill_Desc': 'RPA and BPM'}
         )
 
 

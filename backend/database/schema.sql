@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `course` (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `skill` (
-	`Skill_ID` int NOT NULL,
+	`Skill_ID` varchar(255) NOT NULL,
     `Skill_Name` varchar(20)  NOT NULL,
     `Skill_Desc` text(8000)  NULL,
     
@@ -76,11 +76,11 @@ CREATE TABLE IF NOT EXISTS `skill` (
 
 
 CREATE TABLE IF NOT EXISTS `role` (
-	`Role_ID` int NOT NULL,
+	`Role_ID` varchar(255) NOT NULL,
     `Role_Name` varchar(20)  NOT NULL,
     
 	-- extra
-    `Role_Desc` varchar(20)  NOT NULL,
+    `Role_Desc` text(8000)  NOT NULL,
     `Date_Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     
     
@@ -103,23 +103,23 @@ CREATE TABLE IF NOT EXISTS `registration` (
 
 CREATE TABLE IF NOT EXISTS `Skill_Assignment`(
 `Course_ID` varchar(20) NOT NULL,
-`Skill_ID` varchar(20) NOT NULL,
+`Skill_ID` varchar(255) NOT NULL,
 
 PRIMARY KEY (`Course_ID`,`Skill_ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `Role_assignment`(
-`Role_ID` varchar(20) NOT NULL,
-`Skill_ID` varchar(20) NOT NULL,
+`Role_ID` varchar(255) NOT NULL,
+`Skill_ID` varchar(255) NOT NULL,
 
 PRIMARY KEY (`Role_ID`,`Skill_ID`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE IF NOT EXISTS `LJPS_Assignment` (
-	`LJPS_ID` int(20) NOT NULL,
-    `Staff_ID` int(20) NOT NULL,
-    `Role_ID` int(20) NOT NULL,
+	`LJPS_ID` varchar(255) NOT NULL,
+    `Staff_ID` varchar(255) NOT NULL,
+    `Role_ID` varchar(255) NOT NULL,
 
     
     
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `LJPS_Assignment` (
 
 
 CREATE TABLE IF NOT EXISTS `LJPS_Course_Assignment`(
-`LJPS_ID` int(20) NOT NULL,
+`LJPS_ID` varchar(255) NOT NULL,
 `Course_ID` varchar(20) NOT NULL,
 
 PRIMARY KEY (`LJPS_ID`,`Course_ID`)

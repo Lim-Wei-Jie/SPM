@@ -28,7 +28,7 @@ class Registration(db.Model):
   
 
     def json(self):
-        return {"reg_id": self.Reg_ID, "course_id": self.Course_ID , "staff_id": self.Staff_ID, "reg_status": self.Reg_Status, "completion_status":self.Completion_Status}
+        return {"Reg_ID": self.Reg_ID, "Course_ID": self.Course_ID , "Staff_ID": self.Staff_ID, "Reg_Status": self.Reg_Status, "Completion_Status":self.Completion_Status}
     
     
     def __init__(self, Reg_ID, Course_ID, Staff_ID, Reg_Status,Completion_Status):
@@ -44,9 +44,9 @@ class LJPS_Assignment(db.Model):
     __tablename__ = 'LJPS_Assignment'
 
 
-    LJPS_ID = db.Column(db.Integer, nullable=False, primary_key=True)
-    Staff_ID = db.Column(db.Integer, nullable=False, primary_key=True)
-    Role_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+    LJPS_ID = db.Column(db.String(255), nullable=False, primary_key=True)
+    Staff_ID = db.Column(db.String(255), nullable=False, primary_key=True)
+    Role_ID = db.Column(db.String(255), nullable=False, primary_key=True)
 
     def __init__(self,  LJPS_ID ,Staff_ID ,Role_ID):
         
@@ -65,7 +65,7 @@ class LJPS_Course_Assignment(db.Model):
     __tablename__ = 'LJPS_Course_Assignment'
 
 
-    LJPS_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+    LJPS_ID = db.Column(db.String(255), nullable=False, primary_key=True)
     Course_ID = db.Column(db.String(64), nullable=False, primary_key=True)
 
 
@@ -105,17 +105,18 @@ class Staff(db.Model):
 
 class Role(db.Model):
     __tablename__ = 'role'
-    Role_ID = db.Column(db.Integer, primary_key=True)
-    Role_Name = db.Column(db.String(64), nullable=False, unique=True)
-    Role_Desc = db.Column(db.String(512), nullable=False, unique=True)
-    Date_Created = db.Column(db.String(64), nullable=False, unique=True, default=datetime.utcnow)
+    Role_ID = db.Column( db.String(255), nullable=False, primary_key=True, unique=True)
+    Role_Name = db.Column(db.String(64), nullable=False)
+    Role_Desc = db.Column(db.String(512), nullable=False)
+    Date_Created = db.Column(db.String(64), nullable=False, default=datetime.utcnow)
     
 
-    def __init__(self, Role_ID, Role_Name,Role_Desc,Date_Created=datetime.now()):
+    def __init__(self, Role_ID, Role_Name ,Role_Desc, Date_Created=datetime.now()):
         self.Role_ID = Role_ID
         self.Role_Name = Role_Name
         self.Role_Desc = Role_Desc
         self.Date_Created = Date_Created
+
  
     def json(self):
         #return {"Role_ID": self.Role_ID, "Role_Name": self.Role_Name, "Role_Desc": self.Role_Desc, "Date_Created": self.Date_Created} 
@@ -145,9 +146,9 @@ class Course(db.Model):
 
 class Skill(db.Model):
     __tablename__ = 'Skill'
-    Skill_ID = db.Column(db.Integer, primary_key=True)
+    Skill_ID = db.Column(db.String(255), primary_key=True)
     Skill_Name = db.Column(db.String(64), nullable=False)
-    Skill_Desc = db.Column(db.String(255), nullable=False)
+    Skill_Desc = db.Column(db.String(512), nullable=False)
     Date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def json(self):
@@ -166,7 +167,7 @@ class Skill(db.Model):
 class Skill_Assign(db.Model):
     __tablename__ = 'Skill_Assignment'
     Course_ID = db.Column(db.String(64), nullable=False, primary_key=True)
-    Skill_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+    Skill_ID = db.Column(db.String(255), nullable=False, primary_key=True)
 
     def __init__(self, Skill_ID,Course_ID):
         self.Skill_ID = Skill_ID
@@ -177,8 +178,8 @@ class Skill_Assign(db.Model):
 
 class Role_Assign(db.Model):
     __tablename__ = 'Role_Assignment'
-    Role_ID = db.Column(db.Integer, nullable=False, primary_key=True)
-    Skill_ID = db.Column(db.Integer, nullable=False, primary_key=True)
+    Role_ID = db.Column(db.String(255), nullable=False, primary_key=True)
+    Skill_ID = db.Column(db.String(255), nullable=False, primary_key=True)
 
     def __init__(self, Role_ID,Skill_ID):
         self.Role_ID = Role_ID
