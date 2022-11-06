@@ -202,12 +202,13 @@ function handleRemoveSkill(skillName) {
 
 function confirmRemoveSkill(skillName) {
     // store Skill ID/s in an array for API call when submit form
-    const skillID = roleStore.role.coursesBySkillName[skillName].skillID
+    const skillID = (roleStore.role.coursesBySkillName[skillName].skillID).toString()
     // check if skill id in addSkillsIDArr
-    if (addSkillsIDArr.value.includes(skillID.toString())) {
-        addSkillsIDArr.value.pop(skillID)
+    if (addSkillsIDArr.value.includes(skillID)) {
+        const index = addSkillsIDArr.value.indexOf(skillID)
+        addSkillsIDArr.value.splice(index, 1)
     } else {
-        removeSkillsIDArr.value.push(skillID.toString())
+        removeSkillsIDArr.value.push(skillID)
     }
 
     // removing skill key from coursesBySkillName object in pinia store only
@@ -260,10 +261,12 @@ async function confirmAddSkill() {
         }
 
         // check if skill id in removeSkillsIDArr
-        if (removeSkillsIDArr.value.includes((skill.Skill_ID).toString())) {
-            removeSkillsIDArr.value.pop(skill.Skill_ID)
+        const skillID = (skill.Skill_ID).toString()
+        if (removeSkillsIDArr.value.includes(skillID)) {
+            const index = removeSkillsIDArr.value.indexOf(skillID)
+            removeSkillsIDArr.value.splice(index, 1)
         } else {
-            addSkillsIDArr.value.push((skill.Skill_ID).toString())
+            addSkillsIDArr.value.push(skillID)
         }
 
     }

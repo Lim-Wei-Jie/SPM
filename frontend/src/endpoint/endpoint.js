@@ -63,14 +63,24 @@ export function getCoursesBySkill(skillID) {
 }
 
 // Create job role
-export function createRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
-    const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
+export function createRole(roleDetails, addSkillsIDArr) {
     const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
 
-    console.log(roleDetails);
-
-    let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
+    // let createEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role}`
     let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
+
+    return new Promise((resolve, reject) => {
+        Promise.allSettled([
+            axios.put(createEndpoint),
+            axios.post(assignAddEndpoint)
+        ])
+        .then((res) => {
+            resolve(res[0].value.data.data)
+        })
+        .catch((err) => {
+            reject(err)
+        })
+    })
 }
 
 // Update job role
@@ -95,7 +105,6 @@ export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
             reject(err)
         })
     })
-
 }
 
 // Delete job role

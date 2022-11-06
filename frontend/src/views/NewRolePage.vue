@@ -173,7 +173,6 @@ const addModal = reactive({
     selectedSkills: [],
 })
 
-const removeSkillsIDArr = ref(assignSkillsStore.assignSkills.removeSkillsIDArr)
 const addSkillsIDArr = ref(assignSkillsStore.assignSkills.addSkillsIDArr)
 
 const loading = ref(true);
@@ -181,7 +180,6 @@ const error = ref('');
 
 // reset assignSkillsStore when exit edit role page (using back or cancel btn)
 function handleBack() {
-    assignSkillsStore.assignSkills.removeSkillsIDArr = []
     assignSkillsStore.assignSkills.addSkillsIDArr = []
 }
 
@@ -191,12 +189,13 @@ function handleRemoveSkill(skillName) {
 
 function confirmRemoveSkill(skillName) {
     // store Skill ID/s in an array for API call when submit form
-    const skillID = roleStore.role.coursesBySkillName[skillName].skillID
+    const skillID = (roleStore.role.coursesBySkillName[skillName].skillID).toString()
     // check if skill id in addSkillsIDArr
-    if (addSkillsIDArr.value.includes(skillID.toString())) {
-        addSkillsIDArr.value.pop(skillID)
+    if (addSkillsIDArr.value.includes(skillID)) {
+        const index = addSkillsIDArr.value.indexOf(skillID)
+        addSkillsIDArr.value.splice(index, 1)
     } else {
-        removeSkillsIDArr.value.push(skillID.toString())
+        // pass
     }
 
     // removing skill key from coursesBySkillName object in pinia store only
@@ -248,12 +247,8 @@ async function confirmAddSkill() {
             // pass
         }
 
-        // check if skill id in removeSkillsIDArr
-        if (removeSkillsIDArr.value.includes((skill.Skill_ID).toString())) {
-            removeSkillsIDArr.value.pop(skill.Skill_ID)
-        } else {
-            addSkillsIDArr.value.push((skill.Skill_ID).toString())
-        }
+        const skillID = (skill.Skill_ID).toString()
+        addSkillsIDArr.value.push(skillID)
 
     }
 
@@ -263,7 +258,7 @@ async function confirmAddSkill() {
 
 async function handleAddRole() {
     try {
-        // const addedRole = await createRole(roleStore.role, removeSkillsIDArr.value, addSkillsIDArr.value)
+        const addedRole = await createRole(roleStore.role, addSkillsIDArr.value)
         handleBack()
         router.push({
             name: 'manager',
