@@ -23,16 +23,11 @@ def hello():
 
 
 
-#https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
-
-
-
-
 #COURSE ROUTES
 
 #https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
 @app.route("/course")
-def get_all():
+def get_all_course():
     #list
     courselist = Course.query.all()
     if len(courselist):
@@ -57,7 +52,7 @@ def get_all():
     
 
 @app.route("/addcourse", methods=['GET','POST'])
-def create_book():
+def add_course():
     
     
     
@@ -87,7 +82,7 @@ def create_book():
 
 
 @app.route("/deletecourse/<string:Course_Name>", methods=['GET','DELETE'])
-def delete_book(Course_Name):
+def delete_course(Course_Name):
     
     course = Course.query.filter_by(Course_Name=Course_Name).first()
     if course:
@@ -113,7 +108,7 @@ def delete_book(Course_Name):
     
 
 @app.route("/updatecourse/<string:Course_Name>", methods=['GET','PUT'])
-def update_book(Course_Name):
+def update_course(Course_Name):
     course = Course.query.filter_by(Course_Name=Course_Name).first()
     if course:
         course.Course_Name = 'Fintech'
@@ -976,54 +971,6 @@ def role_to_skill_delete(Role_ID,Skill_ID):
 
 
 
-#for skill-course assignment
-@app.route("/skill")
-def get_all_skill():
-    #list
-    Skilllist = Skill.query.all()
-    if len(Skilllist):
-        
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    
-                    #turn python data into javascript object
-                    "books": [Skill.json() for Skill in Skilllist]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no Skills."
-        }
-    ), 404
-    
-#https://teamtreehouse.com/community/what-is-the-difference-between-json-and-jsonparse#:~:text=The%20difference%20is%3A,)%20JavaScript%20object(s).
-@app.route("/course")
-def get_all_course():
-    #list
-    courselist = Course.query.all()
-    if len(courselist):
-        
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    
-                    #turn python data into javascript object
-                    "courses": [course.json() for course in courselist]
-                }
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no courses."
-        }
-    ), 404
-
 @app.route("/searchcourse/<string:Course_Name>",methods=['GET'])
 def find_by_course(Course_Name):
     course = Course.query.filter_by(Course_Name = Course_Name).first()
@@ -1194,7 +1141,6 @@ def skill_to_course_assignment(Skill_ID,Course_ID):
         }
     ), 201 
 
-#delete skills from role
 @app.route("/skill/skilldeletecourse/<string:Skill_ID>/<string:Course_ID>", methods=['GET','POST'])
 def course_to_skill_delete(Skill_ID,Course_ID):
     
@@ -1221,6 +1167,30 @@ def course_to_skill_delete(Skill_ID,Course_ID):
         }
     ), 201 
 
+
+@app.route("/skill")
+def get_all_skill():
+    #list
+    Skilllist = Skill.query.all()
+    if len(Skilllist):
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    
+                    #turn python data into javascript object
+                    "books": [Skill.json() for Skill in Skilllist]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no Skills."
+        }
+    ), 404
+
 @app.route('/skill/delete/<string:Skill_ID>',methods=['GET','DELETE'])
 def delete_skill(Skill_ID):
     skill = Skill.query.filter_by(Skill_ID=Skill_ID).first()
@@ -1241,7 +1211,7 @@ def delete_skill(Skill_ID):
             } ), 404
 
 @app.route('/skill/update/<string:Skill_ID>/<string:Skill_Name>/<string:Skill_Desc>',methods=['PUT'])
-def updateSkill(Skill_ID,Skill_Name,Skill_Desc):
+def update_skill(Skill_ID,Skill_Name,Skill_Desc):
     skill = Skill.query.filter_by(Skill_ID=Skill_ID).first()
 
     if skill:
