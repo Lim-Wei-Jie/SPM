@@ -65,7 +65,7 @@ class TestAddLJ(TestApp):
         d1 = LJPS_Assignment (LJPS_ID= 12, 
             Staff_ID = '130011',
             Role_ID  = 8) 
-        request_body = "/AddLJAssign/" + d1.Staff_ID + "/" + str(d1.Role_ID) + "/" + str(d1.LJPS_ID) 
+        request_body = "/AddLJAssign/" + d1.Staff_ID + "/" + str(d1.Role_ID)
 
         response = self.client.get(request_body) 
         self.assertEqual(response.json, { 
@@ -76,7 +76,7 @@ class TestAddLJ(TestApp):
         
     def test_add_LJ_Fail(self): 
         
-        request_body = "/AddLJAssign/" + "130010" + "/" + "7" + "/" + "27"
+        request_body = "/AddLJAssign/" + "130010" + "/" + "7"
  
         response = self.client.get(request_body) 
  
