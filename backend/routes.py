@@ -366,7 +366,7 @@ def add_LJ_by_Staff(Staff_ID,Role_ID):
         
                         return jsonify(
                                 {
-                                    "code": 201,
+                                    "code": 400,
                                     "message": "learning journey already exist"
                                 }
                             ), 201 
@@ -397,7 +397,8 @@ def add_LJ_by_Staff(Staff_ID,Role_ID):
                         return jsonify(
                             {
                                 "code": 201,
-                                "data": "New learning journey created"
+                                "data": "New learning journey created",
+                                "LJPS_ID" : new_ljps_assignment.LJPS_ID
                             }
                         ), 201 
                         

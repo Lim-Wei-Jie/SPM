@@ -9,7 +9,6 @@ import unittest
 from flask import Flask
 import flask_testing 
 import json 
-#from manager import app, db, Course, Skill,Role,Skill_Assign,Role_Assign
 from backend.routes import app,db, Course, Skill,Role,Skill_Assign,Role_Assign
 import codecs
 codecs.register(lambda name: codecs.lookup('utf8') if name == 'utf8mb4' else None)

@@ -5,7 +5,6 @@ from flask_cors import CORS
 from datetime import datetime
 from sqlalchemy.orm import relationship,backref
 from sqlalchemy import MetaData
-#from skill_assign import skill_assignment
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/lms'
