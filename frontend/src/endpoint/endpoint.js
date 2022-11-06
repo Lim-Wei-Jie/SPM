@@ -88,27 +88,49 @@ export function createRole(roleDetails, addSkillsIDArr) {
 export function updateRole(roleDetails, removeSkillsIDArr, addSkillsIDArr) {
     const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
     const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
+
     return new Promise((resolve, reject) => {
-        if (roleDetails) {
-            let updateEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/update/${roleDetails.roleID}/${roleDetails.roleName}/${roleDetails.roleDesc}`
-            axios
-                .put(updateEndpoint)
-                .then((res) => {
-                    resolve(res.data.data)
-                })
-                .catch((err) => {
-                    reject(err)
-                })
-    
-        } else {
-    
-        }
-        
+        // update role name and desc
+        // if (roleDetails) {
+        //     let updateEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/update/${roleDetails.roleID}/${roleDetails.roleName}/${roleDetails.roleDesc}`
+        //     axios
+        //         .put(updateEndpoint)
+        //         .then((res) => {
+        //             resolve(res.data.data)
+        //         })
+        //         .catch((err) => {
+        //             reject(err)
+        //         })
+        // }
+
+        // // remove skill assignment
+        // if (removeSkills.length > 0) {
+        //     let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
+        //     axios
+        //         .post(assignRemoveEndpoint)
+        //         .then((res) => {
+        //             resolve(res.data)
+        //         })
+        //         .catch((err) => {
+        //             reject(err)
+        //         })
+        // }
+
+        // // add skill assignment
+        // if (addSkills.length > 0) {
+        //     let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
+        //     axios
+        //         .post(assignAddEndpoint)
+        //         .then((res) => {
+        //             resolve(res.data)
+        //         })
+        //         .catch((err) => {
+        //             reject(err)
+        //         })
+        // }
         
     })
     
-    // let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roledeleteskills/${roleDetails.roleID}/${removeSkills}`
-    // let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
 
     // // check if removeSkills and addSkills not empty, then call respectively route
     // return new Promise((resolve, reject) => {

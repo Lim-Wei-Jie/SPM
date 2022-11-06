@@ -267,16 +267,13 @@ async function confirmAddSkill() {
     addModal.selectedSkills = []
 }
 
-const roleDetails = ref(null)
+const fixDesc = roleStore.role.roleDesc
 async function handleEditRole() {
     try {
-        if (roleName != roleStore.role.roleName) {
-            // if edited role name
-            roleDetails.value = roleStore.role
-            const updatedRole = await updateRole(roleDetails.value, removeSkillsIDArr.value, addSkillsIDArr.value)
-
+        if (roleName != roleStore.role.roleName || fixDesc != roleStore.role.roleDesc || removeSkillsIDArr.value || addSkillsIDArr.value) {
+            // if edited role name or edited role desc or remove / assign skills
+            const updatedRole = await updateRole(roleStore.role, removeSkillsIDArr.value, addSkillsIDArr.value)
             handleBack()
-
             router.push({
                 name: 'jobRole',
                 params: {
@@ -285,6 +282,7 @@ async function handleEditRole() {
             })
 
         } else {
+            handleBack()
             router.push({
                 name: 'jobRole',
                 params: {
