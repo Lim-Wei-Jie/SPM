@@ -8,7 +8,7 @@
             <!-- Back button -->
             <div>
                 <RouterLink to="/manager">
-                    <button class="btn btn-circle"  @click="handleBack">
+                    <button class="btn btn-circle" @click="handleBack">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
                         </svg>
@@ -257,6 +257,7 @@ async function confirmAddSkill() {
 }
 
 async function handleAddRole() {
+    // catch error for empty input fields (name, desc, skills)
     try {
         const addedRole = await createRole(roleStore.role, addSkillsIDArr.value)
         handleBack()
@@ -266,6 +267,7 @@ async function handleAddRole() {
     }
     catch (err) {
         // error.value = err
+        // catch error - role already exists
         console.log(err);
     }
 }

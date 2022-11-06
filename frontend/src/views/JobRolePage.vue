@@ -11,7 +11,7 @@
                         <RouterLink to="/login">Home</RouterLink>
                     </li>
                     <li>
-                        <RouterLink to="/manager">Job Role</RouterLink>
+                        <RouterLink to="/manager">Job Roles</RouterLink>
                     </li> 
                     <li>
                         {{roleStore.role.roleName}}

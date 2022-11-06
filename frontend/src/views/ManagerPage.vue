@@ -4,6 +4,29 @@
     <NavBar/>
     <div class="container mx-auto my-8">
         <div v-if="loading">
+            <!-- Breadcrumbs component -->
+            <div class="text-sm breadcrumbs">
+                <ul>
+                    <li>
+                        <RouterLink to="/login">Home</RouterLink>
+                    </li>
+                    <li>
+                        <RouterLink to="/manager">Job Roles</RouterLink>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Back button -->
+            <div class="my-8">
+                <RouterLink to="/login">
+                    <button class="btn btn-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                        </svg>
+                    </button>
+                </RouterLink>
+            </div>
+
             <p class="text-xl font-bold my-4">
                 Current Job Roles ({{numOfJobRoles}})
             </p>
