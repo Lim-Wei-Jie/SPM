@@ -340,7 +340,8 @@ async function handleUpdateRole() {
             }
             if (updateErr.value.length == 0) {
                 // if no duplicate name
-                if (removeSkillsIDArr.value > 0) {
+                // console.log(removeSkillsIDArr.value);
+                if (removeSkillsIDArr.value.length > 0) {
                     try {
                         handleRemoveSkillAPI()
                     }
@@ -348,7 +349,7 @@ async function handleUpdateRole() {
                         console.log(err);
                     }
                 }
-                if (addSkillsIDArr.value > 0) {
+                if (addSkillsIDArr.value.length > 0) {
                     try {
                         handleAddSkillAPI()
                     }
@@ -375,7 +376,7 @@ async function handleUpdateRole() {
         } else {
             // if role name not edited
     
-            if (removeSkillsIDArr.value > 0) {
+            if (removeSkillsIDArr.value.length > 0) {
                 try {
                     handleRemoveSkillAPI()
                 }
@@ -384,7 +385,7 @@ async function handleUpdateRole() {
                 }
             }
     
-            if (addSkillsIDArr.value > 0) {
+            if (addSkillsIDArr.value.length > 0) {
                 try {
                     handleAddSkillAPI()
                 }
@@ -411,11 +412,11 @@ async function handleUpdateRole() {
 
 // helper
 async function handleRemoveSkillAPI() {
-    const removedSkill = await removeSkillAssign(roleStore.role.roleID, removeSkillsIDArr.value)
+    const removedSkill = await removeSkillAssign(roleStore.role.roleID, assignSkillsStore.assignSkills.removeSkillsIDArr)
 }
 // helper
 async function handleAddSkillAPI() {
-    const addedSkill = await addSkillAssign(roleStore.role.roleID, addSkillsIDArr.value)
+    const addedSkill = await addSkillAssign(roleStore.role.roleID, assignSkillsStore.assignSkills.addSkillsIDArr)
 }
 
 

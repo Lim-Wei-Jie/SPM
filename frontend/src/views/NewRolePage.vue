@@ -330,7 +330,7 @@ async function handleCreateRole() {
         }
         if (addErr.value.length == 0) {
             // if no duplicate name
-            if (addSkillsIDArr.value > 0) {
+            if (addSkillsIDArr.value.length > 0) {
                 try {
                     handleAddSkillAPI(addedRole.Role_ID)
                 }
