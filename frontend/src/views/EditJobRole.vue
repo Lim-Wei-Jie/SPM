@@ -124,7 +124,11 @@
                 </div>
                 
                 <!-- Save button -->
-                <button class="btn w-1/5" type="submit">Save Changes</button>
+                <button class="btn w-1/5" type="submit">
+                    <label for="update-role-modal" class="btn">
+                        Save Changes
+                    </label>
+                </button>
                 <!-- Cancel button -->
                 <div>
                     <RouterLink :to="`/jobRole/${roleName}`">
@@ -133,6 +137,31 @@
                         </div>
                     </RouterLink>
                 </div>
+
+                <!-- Error Modal pop-up -->
+                <input type="checkbox" id="update-role-modal" class="modal-toggle"/>
+                <label for="update-role-modal" class="modal cursor-default">
+                    <label class="modal-box relative space-y-8">
+                        <!-- if got error -->
+                        <div v-if="modalErr" class="text-center">
+                            <!-- for loop userErr and updateErr -->
+                            <div v-for="err of userErr">
+                                <section class="text-xl mt-3">
+                                    {{ err }}
+                                </section>
+                            </div>
+                            <div v-for="err of updateErr">
+                                <section class="text-xl mt-3">
+                                    {{ err }}
+                                </section>
+                            </div>
+                            <label for="update-role-modal" class="btn btn-outline btn-error w-1/5 mt-5" @click="resetError">
+                                Close
+                            </label>
+                        </div>
+                        
+                    </label>
+                </label>
 
             </form>
 
@@ -267,13 +296,40 @@ async function confirmAddSkill() {
     addModal.selectedSkills = []
 }
 
+const userErr = ref([])
 const updateErr = ref([])
-async function handleEditRole() {
-    updateErr.value = [ ]
-    try {
-        // if got time, do modal for confirmation of save changes
-        let updatedRole = null
+const modalErr = ref(false)
 
+function resetError() {
+    userErr.value = []
+    updateErr.value = []
+}
+
+function handleEditRole() {
+
+    // if any empty name and skill
+    if (roleStore.role.roleName == '' || Object.keys(roleStore.role.coursesBySkillName).length == 0) {
+        if (roleStore.role.roleName == '') {
+            userErr.value.push('Role name cannot be empty')
+        }
+
+        if (Object.keys(roleStore.role.coursesBySkillName).length == 0) {
+            userErr.value.push('At least 1 skill has to be assigned');
+        }
+
+        modalErr.value = true
+        // alert(userErr.value)
+    } else {
+        modalErr.value = false
+        handleUpdateRole()
+    }
+
+}
+
+// helper
+async function handleUpdateRole() {
+    try {
+        let updatedRole = null
         if (roleName != roleStore.role.roleName) {
             // if role name edited
             try {
@@ -282,54 +338,61 @@ async function handleEditRole() {
             catch (err) {
                 updateErr.value.push(err)
             }
-
-            if (removeSkillsIDArr.value > 0) {
-                try {
-                    handleRemoveSkillAPI()
+            if (updateErr.value == 0) {
+                // if no duplicate name
+                if (removeSkillsIDArr.value > 0) {
+                    try {
+                        handleRemoveSkillAPI()
+                    }
+                    catch (err) {
+                        console.log(err);
+                    }
                 }
-                catch (err) {
-                    updateErr.value.push(err)
+                if (addSkillsIDArr.value > 0) {
+                    try {
+                        handleAddSkillAPI()
+                    }
+                    catch (err) {
+                        console.log(err);
+                    }
                 }
+    
+                handleBack()
+    
+                router.push({
+                    name: 'jobRole',
+                    params: {
+                        jobRoleName: updatedRole.Role_Name
+                    }
+                })
+            } else {
+                // duplicate name
+                modalErr.value = true
+                // alert(updateErr.value)
             }
-
-            if (addSkillsIDArr.value > 0) {
-                try {
-                    handleAddSkillAPI()
-                }
-                catch (err) {
-                    updateErr.value.push(err)
-                }
-            }
-
-            handleBack()
-            router.push({
-                name: 'jobRole',
-                params: {
-                    jobRoleName: updatedRole.Role_Name
-                }
-            })
-
+    
+    
         } else {
             // if role name not edited
-
+    
             if (removeSkillsIDArr.value > 0) {
                 try {
                     handleRemoveSkillAPI()
                 }
                 catch (err) {
-                    updateErr.value.push(err)
+                    console.log(err);
                 }
             }
-
+    
             if (addSkillsIDArr.value > 0) {
                 try {
                     handleAddSkillAPI()
                 }
                 catch (err) {
-                    updateErr.value.push(err)
+                    console.log(err);
                 }
             }
-
+    
             handleBack()
             router.push({
                 name: 'jobRole',
@@ -341,8 +404,8 @@ async function handleEditRole() {
         
     }
     catch (err) {
-        // alert for now, if got time do modal pop up
-        alert(updateErr.value)
+        modalErr.value = true
+        // alert(updateErr.value)
     }
 }
 
@@ -350,7 +413,7 @@ async function handleEditRole() {
 async function handleRemoveSkillAPI() {
     const removedSkill = await removeSkillAssign(roleStore.role.roleID, removeSkillsIDArr.value)
 }
-//helper
+// helper
 async function handleAddSkillAPI() {
     const addedSkill = await addSkillAssign(roleStore.role.roleID, addSkillsIDArr.value)
 }
