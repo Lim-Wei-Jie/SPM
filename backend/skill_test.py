@@ -101,7 +101,7 @@ class TestCreateSkill(TestApp):
                 "message": "Skill already exists."
             }) 
 
-class testCourseListfromSkill(TestApp): 
+class TestCourseListfromSkill(TestApp): 
     def test_get_courselist_from_Skill(self): 
 
         request_body = "/skill/getcourse/7"
@@ -135,7 +135,7 @@ class testCourseListfromSkill(TestApp):
             "message": "There is no course"
         }) 
 
-class testfindCourseByName(TestApp):
+class TestfindCourseByName(TestApp):
     def test_get_course_from_name(self): 
         request_body = "/searchcourse/Test_course 1"
  
@@ -264,10 +264,10 @@ class TestUpdateSkill(TestApp):
                 "data": {'Skill_Desc': 'TEstupdateduiy', 
                     'Skill_ID': "7", 
                     'Skill_Name': 'TEstupdate'},
-                "message": "Role Updated sucessfully"
+                "message": "Skill Updated sucessfully"
             } )
 
-    def test_delete_Skill_fail(self): 
+    def test_update_Skill_fail(self): 
 
         request_body = "/skill/update/90/TEstupdate/TEstupdateduiy"
  
@@ -277,7 +277,7 @@ class TestUpdateSkill(TestApp):
                 "data": {
                     "Skill": "TEstupdate"
                 },
-                "message": "Role does not exist"
+                "message": "Skill does not exist"
             }) 
 if __name__ == '__main__': 
     unittest.main()

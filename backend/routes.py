@@ -1199,7 +1199,7 @@ def update_skill(Skill_ID,Skill_Name,Skill_Desc):
             {
                 "code": 201,
                 "data": skill.json(),
-                "message": "Role Updated sucessfully"
+                "message": "Skill Updated sucessfully"
             } ), 201
     
     return jsonify(
@@ -1208,7 +1208,7 @@ def update_skill(Skill_ID,Skill_Name,Skill_Desc):
                 "data": {
                     "Skill": Skill_Name
                 },
-                "message": "Role does not exist"
+                "message": "Skill does not exist"
             }
         ), 500
 
