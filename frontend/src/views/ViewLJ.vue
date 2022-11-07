@@ -100,7 +100,7 @@ const skillsIdList = []
 // REGISTERED COURSES
 const registeredCourses = ref([])
 const registeredCourses2 = ref([])
-const registeredCourses3 = ref([])
+var registeredCourses3 = ref([])
 const skillsList = ref([])
 
 ;(async() => {
@@ -148,16 +148,14 @@ try {
                 }
             }
         }
-        console.log(registeredCourses3.value[2])
         var regCourses = []
-        for (let i = 0; i < registeredCourses2.value.length; i++) {
+        for (let i = 0; i < registeredCourses3.value.length; i++) {
             if (registeredCourses2.value[i] == skill.Skill_ID) {
-                console.log(i)
-                console.log(registeredCourses.value[i], skill.Skill_ID)
-                console.log(registeredCourses3.value[i])
                 regCourses.push(registeredCourses3.value[i])
+                console.log(registeredCourses3.value[i])
             }
         }
+
 
         var skillDetails = {
                 skill_id: skill.Skill_ID,
