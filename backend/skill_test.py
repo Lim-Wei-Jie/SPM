@@ -267,7 +267,7 @@ class TestUpdateSkill(TestApp):
                 "message": "Skill Updated sucessfully"
             } )
 
-    def test_delete_Skill_fail(self): 
+    def test_update_Skill_fail(self): 
 
         request_body = "/skill/update/90/TEstupdate/TEstupdateduiy"
  
