@@ -410,7 +410,7 @@ export function deleteSkill(skillID) {
 // Mapping skills to role
 export function createLJ2(staffID, roleID) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT_MANAGER}/AddLJAssign/${staffID}/${roleID}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/AddLJAssign/${staffID}/${roleID}`
         axios
             .post(apiEndpoint)
             .then((res) => {
