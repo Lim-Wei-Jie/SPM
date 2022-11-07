@@ -42,7 +42,7 @@
                     <div class="grid grid-cols-4 gap-6 bg-gray-700 rounded-lg my-6 p-8">
                         <!-- Skill -->
                         <div class="flex justify-evenly" v-for="(skillDetails, skillName) in roleStore.role.coursesBySkillName" :key="skillName">
-                            <div class="text-center bg-gray-800 rounded-lg w-11/12 p-3 relative">
+                            <div class="text-center text-white bg-gray-800 rounded-lg w-11/12 p-3 relative">
                                 {{ skillName }}
                                 <!-- Remove skill button -->
                                 <label for="remove-modal" class="btn modal-button btn-xs btn-circle btn-error btn-outline absolute right-0 top-0" @click="handleRemoveSkill(skillName)">
@@ -54,7 +54,7 @@
                                 <input type="checkbox" id="remove-modal" class="modal-toggle"/>
                                 <label for="remove-modal" class="modal cursor-default">
                                     <label class="modal-box relative space-y-8">
-                                        <p class="text-lg">
+                                        <p class="text-lg text-black">
                                             Are you sure you want to remove skill:
                                             <section class="text-xl mt-3">
                                                 {{ removeModal.skillName }}
@@ -80,7 +80,7 @@
 
                         <!-- Add skill button -->
                         <label for="add-modal" class="flex justify-evenly">
-                            <div class="btn btn-outline border-dashed rounded-lg w-11/12 h-full" @click="handleAddSkill">
+                            <div class="btn btn-outline text-white rounded-lg w-11/12 h-full" @click="handleAddSkill">
                                 Add New Skills
                             </div>
                         </label>
@@ -91,10 +91,10 @@
                                 <!-- All skills in checkbox 
                                     (assigned skills not shown) -->
                                 <ul class="space-y-3">
-                                    <li v-for="skill of addModal.skillArr" class="bg-gray-800 hover:shadow-lg hover:bg-black rounded-lg">
+                                    <li v-for="skill of addModal.skillArr" class="bg-slate-300 hover:shadow-lg hover:bg-gray rounded-lg">
                                         <label :for="skill.Skill_ID">
                                             <div class="flex justify-between cursor-pointer p-4">
-                                                <p class="font-medium">
+                                                <p class="font-medium text-black">
                                                     {{skill.Skill_Name}}
                                                 </p>
                                                 <input type="checkbox" class="checkbox" v-model="addModal.selectedSkills"  :value="skill" :id="skill.Skill_ID"/>
