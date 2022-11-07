@@ -761,7 +761,7 @@ def update_role(Role_ID,Role_Name,Role_Desc):
                 "data": {
                     "Role": Role_Name
                 },
-                "message": "Role Name Duplicate"
+                "message": "Role Name already exists"
             } ), 400
 
         Role.query.filter_by(Role_ID=Role_ID).update(dict(Role_Name=Role_Name,Role_Desc=Role_Desc))
@@ -869,13 +869,13 @@ def get_skill_list_by_Role(Role_ID):
         return jsonify(
             {
                 "code": 404,
-                "message": "There is no such skill"
+                "message": "There are no skills assigned"
             }
         ), 404
     return jsonify(
     {
         "code": 404,
-        "message": "There is no such skill"
+        "message": "There are no skills assigned"
     }), 404     
 
 def filter_skillID(list_of_id):
@@ -1028,7 +1028,7 @@ def get_course_list_by_Skill(Skill_ID):
     return jsonify(
         {
             "code": 404,
-            "message": "There is no course"
+            "message": "There are no courses assigned"
         }
     ), 404
 

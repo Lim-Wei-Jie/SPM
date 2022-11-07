@@ -146,7 +146,7 @@ class TestupdateeRole(TestApp):
                 "data": {
                     "Role": "Process Analyst"                
                     },
-                "message": "Role Name Duplicate"
+                "message": "Role Name already exists"
             }) 
 
 
@@ -244,7 +244,7 @@ class TestGetSkillListbyRole(TestApp):
         self.assertEqual(response.json,
             {
                 "code": 404,
-                "message": "There is no such skill"
+                "message": "There are no skills assigned"
             })
 
 class TestAssignSkilltoRole(TestApp): 

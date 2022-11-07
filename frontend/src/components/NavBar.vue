@@ -1,4 +1,5 @@
 <template>
+<!-- eslint-disable -->
     <div class="navbar bg-base-100">
         <div class="navbar-center">
             <btn class="btn btn-ghost normal-case text-xl" @click="home()">LJPS</btn>
