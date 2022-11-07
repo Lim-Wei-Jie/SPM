@@ -441,6 +441,7 @@ export function updateSkill(skillID, skillName, skillDesc) {
 
 // add courses to skill
 export function addCoursesToSkill(skillID, addCourseIDArr) {
+    console.log(skillID);
     return new Promise((resolve, reject) => {
         const addedCourses = JSON.parse(JSON.stringify(addCourseIDArr._rawValue))
         console.log(addCourseIDArr);
@@ -486,7 +487,9 @@ export function createSkill(skillName, skillDesc) {
         axios
         .post(apiEndpoint)
             .then((res) => {
-                resolve(res.data)
+                //console.log(res.data)
+                //console.log(res.data.data.Skill_ID)
+                resolve(res.data.data)
             })
             .catch((err) => {
                 console.log(err.message);
