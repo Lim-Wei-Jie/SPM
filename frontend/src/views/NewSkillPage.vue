@@ -274,7 +274,7 @@
     async function handleAddCourseClick() {
         try {
             const allCourses = await getAllCourses()
-            //console.log(allCourses)
+            console.log(allCourses)
             for (var each of allCourses) {
                 viewAllCourses.value.push(each)
             }
@@ -341,33 +341,35 @@
         
 
         else{
+            let skillID = null;
             try {
-            //getting the skillID 
-            const skillID = ref();
-            const skills = await getAllSkills()
-            for (var each of skills) {
-                if(each.Skill_Name == skillName.value) {
-                    skillID.value = each.Skill_ID
-                }
-            }
-            // const skillID = ref();
-            // const allSkills = await getAllSkills(); 
-            // skillID.value = (allSkills.length) + 1; 
-
-            //first api to update skill name and desc
-            const createdSkill = await createSkill(skillName.value, skillDesc.value);
-
+                //getting the skillID 
+                
+            
+                
+                //first api to update skill name and desc
+                skillID = await createSkill(skillName.value, skillDesc.value);
+                console.log('hi');
+                console.log(skillID.Skill_ID);
+                // const skillID = ref();
+                // const allSkills = await getAllSkills(); 
+                // skillID.value = (allSkills.length) + 1; 
+                
+                
+                
                 //second api to update courses added
                 //if(addCourseIDArr.value.length > 0){
-                    const addCourses = await addCoursesToSkill(skillID.value, addCourseIDArr);
-                //}
-            
+                    
+                const addCourses = await addCoursesToSkill(skillID.Skill_ID, addCourseIDArr);
+                    //}
+                    
             }
             catch (err) {
                 error.value = err;
                 console.log(err);
                 haveError.value = true;
             }
+           
         }
         
         
