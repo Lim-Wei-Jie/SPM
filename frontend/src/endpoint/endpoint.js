@@ -129,13 +129,12 @@ export function deleteRole(roleID) {
     return new Promise((resolve, reject) => {
         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/delete/${roleID}`
         axios
-            .post(apiEndpoint)
+            .delete(apiEndpoint)
             .then((res) => {
                 resolve(res.data)
             })
             .catch((err) => {
-                console.log(err.message);
-                reject('Fail to delete role, check WAMP/MAMP server');
+                reject(err)
             })
     })
 }

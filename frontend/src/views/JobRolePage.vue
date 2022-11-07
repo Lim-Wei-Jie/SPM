@@ -41,11 +41,11 @@
                         <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
                     </button>
                     <!-- Delete button -->
-                    <button @click="handleDeleteRole(roleStore.role.roleID)" class="btn btn-circle">
+                    <label for="delete-modal" @click="handleDeleteRole(roleStore.role.roleID)" class="btn btn-circle">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                         </svg>
-                    </button>
+                    </label>
                 </div>
             </div>
             
@@ -105,6 +105,22 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Delete modal -->
+            <input type="checkbox" id="delete-modal" class="modal-toggle" />
+            <label for="delete-modal" class="modal cursor-default">
+                <label class="modal-box relative">
+                    <div class="text-center">
+                        <section class="text-xl mt-3">
+                            {{ roleStore.role.roleName }} successfully deleted
+                        </section>
+                        <label for="delete-modal" class="btn w-1/5 mt-5" @click="handleRedirect">
+                            Close
+                        </label>
+                    </div>
+                </label>
+            </label>
+
         </div>
 
         <div v-else-if="error !== ''">
@@ -127,7 +143,7 @@ import NavBar from '@/components/Navbar.vue'
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useRoleStore } from '@/store/index.js'
-import { getRoleDetails, getSkillsByRole, getCoursesBySkill } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getSkillsByRole, getCoursesBySkill, deleteRole } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
@@ -221,8 +237,19 @@ function handleCourseClick(skillName, courseName) {
     courseModal.courseDesc = roleStore.role.coursesBySkillName[skillName].courses[courseName].Course_Desc
 }
 
-function handleDeleteRole(roleID) {
-    console.log(roleID);
+async function handleDeleteRole(roleID) {
+    try {
+        const deletedRole = await deleteRole(roleID)
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+function handleRedirect() {
+    router.push({
+        name: 'manager'
+    })
 }
 
 </script>

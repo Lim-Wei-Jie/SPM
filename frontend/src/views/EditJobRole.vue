@@ -186,7 +186,7 @@ import NavBar from '../components/NavBar.vue';
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useRoleStore, useAssignSkillsStore } from '@/store/index.js'
-import { getAllSkills, getCoursesBySkill, updateRole, removeSkillAssign, addSkillAssign, deleteRole } from "@/endpoint/endpoint.js";
+import { getAllSkills, getCoursesBySkill, updateRole, removeSkillAssign, addSkillAssign } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
