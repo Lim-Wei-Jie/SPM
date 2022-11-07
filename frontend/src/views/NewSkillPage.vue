@@ -298,6 +298,26 @@
     }
 
     async function handleCreateSkill(){
+        
+        if(skillName.value.length !== 0){
+            try{
+               //console.log('hi')
+                const skills = await getAllSkills()
+                for (var each of skills) {
+                    if(skillName.value == each.Skill_Name) {
+                        createErrArr.value.push('Skill already exist')
+                        noCreateErr.value = false;
+                    }
+                } 
+            }
+            catch (err) {
+                error.value = err;
+                console.log(err);
+                haveError.value = true;
+            }   
+        }
+        
+
         if(skillName.value.length === 0){
             createErrArr.value.push('Please enter skill name')
             noCreateErr.value = false;

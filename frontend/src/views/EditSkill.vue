@@ -148,12 +148,22 @@
                                                         </RouterLink>
                                                     </div>
                                             </div>
-                                            <div v-if="notEnoughCourses">
+                                            <div v-if="hasUpdateError">
                                                 <p class="text-lg">
-                                                    <section class="text-xl mt-3">
-                                                        You need to have at least 1 course
-                                                    </section>
-                                                </p>   
+                                                    <div v-for="error of updateErrArr">
+                                                        <section class="text-xl mt-3">
+                                                            {{ error }} 
+                                                        </section>
+                                                    </div>
+                                                    <!-- Reset error msg button -->
+                                                    <div class="grid grid-cols-2 gap-6">
+                                                        <div class="flex justify-end">
+                                                            <div class="btn btn-sm btn-error btn-outline w-3/5" @click="resetError()">
+                                                                Ok
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </p>
                                             </div>
                                             <div v-else>
                                                 <p class="text-lg">
@@ -211,7 +221,8 @@
     const removeCourseIDArr = ref([])
     const noErr = ref(true);
     const noUpdateErr = ref(true);
-    const notEnoughCourses = ref(false);
+    const hasUpdateError = ref(false);
+    const updateErrArr = ref([]);
    
 
     // from params
@@ -294,15 +305,40 @@
         }
     }
 
+    function resetError(){
+        updateErrArr.value = [];
+    }
+
     async function handleUpdateSkill(){
         if(Object.keys(store.skill.courses).length === 0){
-            notEnoughCourses.value = true;
+            updateErrArr.value.push('Please select at least 1 course');
+            hasUpdateError.value = true;
             noUpdateErr.value = false;
-            return;
+            
         }
+        if(store.skill.skillName.length === 0){
+            updateErrArr.value.push('Please enter skill name');
+            hasUpdateError.value = true;
+            noUpdateErr.value = false;
+            
+        }
+        if(store.skill.skillName.length > 60){
+            updateErrArr.value.push('Skill name is too long, it cannot exceed 60 characters');
+            hasUpdateError.value = true;
+            noUpdateErr.value = false;
+            
+        }
+        if(store.skill.skillDesc.length === 0){
+            updateErrArr.value.push('Please enter skill description')
+            hasUpdateError.value = true;
+            noUpdateErr.value = false;
+            
+        }
+        
 
         else{
             try {
+                noUpdateErr.value = true;
                 //first api to update skill name and desc
                 const updatedSkill = await updateSkill(store.skill.skillID, store.skill.skillName, store.skill.skillDesc);
 

@@ -152,21 +152,21 @@ export function mapSkillsToJob(skillstoJobRoleData) {
 
 
 // Delete job role
-// export function deleteRole(roleDetailsID) {
+export function deleteRole(roleDetailsID) {
 
-//     return new Promise((resolve, reject) => {
-//         let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/delete/${roleDetailsID}`
-//         axios
-//         .post(apiEndpoint)
-//             .then((res) => {
-//                 resolve(res.data)
-//             })
-//             .catch((err) => {
-//                 console.log(err.message);
-//                 reject('Fail to create role, check WAMP/MAMP server');
-//             })
-//     })
-// }
+    return new Promise((resolve, reject) => {
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/delete/${roleDetailsID}`
+        axios
+        .post(apiEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                console.log(err.message);
+                reject('Fail to create role, check WAMP/MAMP server');
+            })
+    })
+}
 
 
 // Get specific course using course name
