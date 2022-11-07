@@ -338,7 +338,7 @@ async function handleUpdateRole() {
             catch (err) {
                 updateErr.value.push(err)
             }
-            if (updateErr.value == 0) {
+            if (updateErr.value.length == 0) {
                 // if no duplicate name
                 if (removeSkillsIDArr.value > 0) {
                     try {

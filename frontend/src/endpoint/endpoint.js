@@ -63,25 +63,18 @@ export function getCoursesBySkill(skillID) {
 }
 
 // Create job role
-export function createRole(roleDetails, addSkillsIDArr) {
-    const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
-
-    let createEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/create/${roleDetails.roleName}/${roleDetails.roleDesc}`
-    let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${roleDetails.roleID}/${addSkills}`
-
-    // return new Promise((resolve, reject) => {
-    //     Promise.allSettled([
-    //         axios.put(createEndpoint),
-    //         axios.post(assignAddEndpoint)
-    //     ])
-    //     .then((res) => {
-    //         resolve(res[0].value.data.data)
-    //     })
-    //     // need to catch duplicate role name error
-    //     .catch((err) => {
-    //         reject(err)
-    //     })
-    // })
+export function createRole(roleDetails) {
+    return new Promise((resolve, reject) => {
+        let createEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/create/${roleDetails.roleName}/${roleDetails.roleDesc}`
+        axios
+            .post(createEndpoint)
+            .then((res) => {
+                resolve(res.data.data)
+            })
+            .catch((err) => {
+                reject(err.response.data.message)
+            })
+    })
 }
 
 // Update job role

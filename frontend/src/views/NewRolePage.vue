@@ -124,7 +124,11 @@
                 </div>
 
                 <!-- Add button -->
-                <button class="btn w-1/5" type="submit">Add Role</button>
+                <button class="btn w-1/5" type="submit">
+                    <label for="add-role-modal" class="btn">
+                        Add Role
+                    </label>
+                </button>
                 <!-- Cancel button -->
                 <div>
                     <RouterLink to="/manager">
@@ -133,6 +137,31 @@
                         </div>
                     </RouterLink>
                 </div>
+
+                <!-- Error Modal pop-up -->
+                <input type="checkbox" id="add-role-modal" class="modal-toggle"/>
+                <label for="add-role-modal" class="modal cursor-default">
+                    <label class="modal-box relative space-y-8">
+                        <!-- if got error -->
+                        <div v-if="modalErr" class="text-center">
+                            <!-- for loop userErr and addErr -->
+                            <div v-for="err of userErr">
+                                <section class="text-xl mt-3">
+                                    {{ err }}
+                                </section>
+                            </div>
+                            <div v-for="err of addErr">
+                                <section class="text-xl mt-3">
+                                    {{ err }}
+                                </section>
+                            </div>
+                            <label for="add-role-modal" class="btn btn-outline btn-error w-1/5 mt-5" @click="resetError">
+                                Close
+                            </label>
+                        </div>
+                        
+                    </label>
+                </label>
             
             </form>
 
@@ -157,7 +186,7 @@ import NavBar from '@/components/Navbar.vue'
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useRoleStore, useAssignSkillsStore } from '@/store/index.js'
-import { getAllSkills, getCoursesBySkill, createRole } from '@/endpoint/endpoint.js'
+import { getAllSkills, getCoursesBySkill, createRole, addSkillAssign } from '@/endpoint/endpoint.js'
 
 const router = useRouter()
 const route = useRoute()
@@ -256,20 +285,81 @@ async function confirmAddSkill() {
     addModal.selectedSkills = []
 }
 
+const userErr = ref([])
+const addErr = ref([])
+const modalErr = ref(false)
+
+function resetError() {
+    userErr.value = []
+    addErr.value = []
+}
+
 async function handleAddRole() {
-    // catch error for empty input fields (name, desc, skills)
+
+    // if any empty name and desc and skill
+    if (roleStore.role.roleName == '' || roleStore.role.roleDesc == '' || Object.keys(roleStore.role.coursesBySkillName).length == 0) {
+        if (roleStore.role.roleName == '') {
+            userErr.value.push('Role name cannot be empty')
+        }
+
+        if (roleStore.role.roleDesc == '') {
+            userErr.value.push('Role description cannot be empty')
+        }
+
+        if (Object.keys(roleStore.role.coursesBySkillName).length == 0) {
+            userErr.value.push('At least 1 skill has to be assigned');
+        }
+
+        modalErr.value = true
+        // alert(userErr.value)
+    } else {
+        modalErr.value = false
+        handleCreateRole()
+    }
+}
+
+// helper
+async function handleCreateRole() {
     try {
-        const addedRole = await createRole(roleStore.role, addSkillsIDArr.value)
-        handleBack()
-        router.push({
-            name: 'manager',
-        })
+        let addedRole = null
+        try {
+            addedRole = await createRole(roleStore.role)
+        }
+        catch (err) {
+            addErr.value.push(err)
+        }
+        if (addErr.value.length == 0) {
+            // if no duplicate name
+            if (addSkillsIDArr.value > 0) {
+                try {
+                    handleAddSkillAPI(addedRole.Role_ID)
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+
+            handleBack()
+
+            router.push({
+                name: 'manager'
+            })
+        } else {
+            // duplicate name
+            modalErr.value = true
+            // alert(addErr.value)
+        }
+        
     }
     catch (err) {
-        // error.value = err
-        // catch error - role already exists
-        console.log(err);
+        modalErr.value = true
+        // alert(addErr.value)
     }
+}
+
+// helper
+async function handleAddSkillAPI(roleID) {
+    const addedSkill = await addSkillAssign(roleID, addSkillsIDArr.value)
 }
 
 </script>
