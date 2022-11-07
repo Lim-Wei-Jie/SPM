@@ -1,268 +1,425 @@
 <template>
 <!-- eslint-disable -->
-    <div id="app1">
-        <NavBar/>
-        <!-- Hero Container -->
-        <form action="">
-            <div class=" hero px-8 py-2">
-                <div class="auto-row-max space-y-2">
-                    <div id="j-info" class="space-y-2">
-                        <h3 class="font-bold text-xl">Job Title</h3>
-                        <div id="j-title" class="font-bold grid grid-cols-2">
-                            <input type="text" v-bind:id="roleDetailsID" name="job-title" class="text-3xl"  style="width:700px"  v-model="roleDetailsName">
-                            <div class="w-32 place-self-end">
-                                <!-- <input type="submit" value="Save Changes" > -->
-                                <!--there is something wrong with the styling of button-->
-                                <button class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                                    Save Changes
-                                </button>
-                            </div>
-                        </div>
-                        <div id="j-des" class="space-y-2 w-4/6">
-                            
-                            <h3 class="font-bold text-xl">Job Description</h3>
-                            <input type="text" id="job-des" name="job-des" class="text-xl" placeholder="The Software Engineer / Officer (Engineering Procurement) is responsible for
-                            providing administrative support for procurement activities. He/She coordinates
-                            with internal teams to gather requirements for procurement, interfaces with
-                            vendors for managing delivery schedules, and prepares purchase orders. He
-                            maintains documents and reports schedules material purchases and deliveries
-                            and performs verification of current inventory.
-                            He is comfortable in engaging and interacting with internal and external
-                            stakeholders, and is able to multi-task in a fast-paced work environment." style="width:700px"  v-model="new_job_des">
-                            
-                        </div>  
-                    </div>
-                    <div id="s-info" class="space-y-3">
-            
-                        <div id="skills">
-                            <h2 class="font-bold text-2xl">Skills</h2>
-                            <!--need to add a button for add new skills-->
-                            <div class="place-self-end">
-                                <button class="bg-sky-500 hover:bg-sky-700 font-bold btn">
-                                    Add New Skill
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Skills -->
-                        <div class="space-y-3 my-4">
-                            <p class="text-2xl font-medium">
-                                Skills
-                            </p>
-                            <!-- Skills component -->
-                            <div class="bg-gray-700 rounded-lg my-6 p-8" v-for="(courseArr, skill) in coursesBySkillName" :key="skill">
-                                <!-- Skill -->
-                                <div class="font-medium text-lg mb-5">
-                                    {{skill}}
-                                    <!--remove skill -->
-                                    <label for="my-modal" class="btn rounded-md p-2 inline-flex items-end justify-end text-read-400 hover:text-red-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" v-on:click="removeSkill()" v-bind:id="skillID">
-                                        <span class="sr-only">Remove Skill</span>
-                                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </label>
+<div>
+    <NavBar/>
+    <div class="container mx-auto my-8">
+        <div v-if="loading">
 
-                                    <!-- modal pop up to delete skill-->
-                                    <!-- <div v-if="hasRemoveSkill">
-                                        <input type="checkbox" id="my-modal" class="modal-toggle" />
-                                                <div class="modal">
-                                                    <div class="modal-box">
-                                                        <div class="modal-action">
-                                                            <h4>You are deleting {{skillName}}.</h4>
-                                                        <label for="my-modal" class="btn btn-outline btn-error" @click="deleteSkill(skillID)" >Delete Skill</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                    </div> -->
-                                    <!--end of remove skill-->
-                                </div>
-                                <!-- Courses -->
-                                <div class="grid grid-cols-3 gap-6">
-                                    <div class="flex justify-evenly" v-for="course of courseArr">
-                                        <div class="btn bg-gray-800 rounded-lg w-11/12">
-                                            {{course}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Back button -->
+            <div>
+                <RouterLink :to="`/jobRole/${roleName}`">
+                    <button class="btn btn-circle" @click="handleBack">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                        </svg>
+                    </button>
+                </RouterLink>
+            </div>
 
-                        <!--to be commented out-->
-                        <div class="flex flex-col w-full bg-gray-100" v-for="skill in skills">
-                            <div>
-                                <h4 class="font-bold text-l mx-5 mt-3">Skill Name: </h4>
-                                <!--need to insert pop up msg-->
-                                <button type="button" class="rounded-md p-2 inline-flex items-end justify-end text-read-400 hover:text-red-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" v-on:click="removeSkill()" v-bind:id="skill">
-                                    <span class="sr-only">Remove Skill</span>
-                                    <!-- Heroicon name: outline/x -->
-                                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            <p class="text-3xl my-8"> Edit Job Role </p>
+
+            <!-- Form component -->
+            <form class="form-control space-y-6" @submit.prevent="handleEditRole">
+
+                <!-- Role name input -->
+                <div class="space-y-2">
+                    <h3 class="font-medium text-lg">Job Role Name</h3>
+                    <input type="text" v-model="roleStore.role.roleName" class="input input-bordered w-3/6 text-2xl">
+                </div>
+                
+                <!-- Role desc input -->
+                <div class="space-y-2 w-4/6">
+                    <p class="font-medium text-lg">
+                        Job Role Description
+                    </p>
+                    <textarea v-model="roleStore.role.roleDesc" class="textarea text-base input input-bordered w-full h-44"></textarea>
+                </div>
+
+                <!-- Role skills -->
+                <div class="space-y-3">
+                    <p class="font-medium text-lg"> Skills </p>
+                    <!-- Skills component -->
+                    <div class="grid grid-cols-4 gap-6 bg-gray-700 rounded-lg my-6 p-8">
+                        <!-- Skill -->
+                        <div class="flex justify-evenly" v-for="(skillDetails, skillName) in roleStore.role.coursesBySkillName" :key="skillName">
+                            <div class="text-center bg-gray-800 rounded-lg w-11/12 p-3 relative">
+                                {{ skillName }}
+                                <!-- Remove skill button -->
+                                <label for="remove-modal" class="btn modal-button btn-xs btn-circle btn-error btn-outline absolute right-0 top-0" @click="handleRemoveSkill(skillName)">
+                                    <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                     </svg>
-                                </button>
-                            </div>
-                            <!-- <h2 class="font-medium text-xl mx-5 mt-3">{{skill}}</h2> -->
-                            <div class="p-4">
-                                <!--need to check with the structure of json data to get the skill des and course des -->
-                                <!--need to bind with the particular skill des-->
-                                <input type="text"  name="skill" class="text-m  py-2 mx-5 mt-3" v-bind:placeholder="skill.Skill_name" style="width:900px"  v-model="skill.Skill_name" v-bind:id="skill.Skill_name">
-
-                                <h4 class="font-bold text-l mx-5 mt-3">Skill Description: </h4>
-                                <div class="p-4">
-                                    <!--need to check with the structure of json data to get the skill des and course des -->
-                                    <!--need to bind with the particular skill des-->
-        
-                                    <input type="text" id="skill-des" name="skill-des" class="text-m py-2" v-bind:placeholder="skill.Skill_des" style="width:900px"  v-model="skill.Skill_des" v-bind:id="skill.Skill_des">
-                                </div>
-                            </div>
-                            <div class="w-32">
-                            <div class="grid grid-cols-3 gap-4 ml-3 mb-5">
-                                <!--Card #1 -->
-                                <div class="card w-80 bg-base-100 shadow-xl" v-for="course in skill.Skill_courses">
-                                    <div class="card-body">
-                                        <div id="top-card" class="flex-row">
-                                            <h2 class="card-title mb-2">{{course.course_id}}: {{course.course_name}}</h2>
-                                            <h4>{{course.course_desc}}</h4>
-                                            <div class="card-actions justify-start">
-                                                <button class="btn btn-primary" v-on:click="handleRemoveCourse(course_id)">Remove Course</button>
+                                </label>
+                                <!-- Modal pop-up -->
+                                <input type="checkbox" id="remove-modal" class="modal-toggle"/>
+                                <label for="remove-modal" class="modal cursor-default">
+                                    <label class="modal-box relative space-y-8">
+                                        <p class="text-lg">
+                                            Are you sure you want to remove skill:
+                                            <section class="text-xl mt-3">
+                                                {{ removeModal.skillName }}
+                                            </section>
+                                        </p>
+                                        <!-- Confirm + cancel buttons -->
+                                        <div class="grid grid-cols-2 gap-6">
+                                            <div class="flex justify-end">
+                                                <label for="remove-modal" class="btn btn-sm btn-error btn-outline w-3/5" @click="confirmRemoveSkill(removeModal.skillName)">
+                                                    Confirm
+                                                </label>
+                                            </div>
+                                            <div class="flex justify-start">
+                                                <label for="remove-modal" class="btn btn-sm btn-outline w-3/5">
+                                                    Cancel
+                                                </label>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>   
-                            
-
+                                    </label>
+                                </label>
+                            </div>
                         </div>
+
+                        <!-- Add skill button -->
+                        <label for="add-modal" class="flex justify-evenly">
+                            <div class="btn btn-outline border-dashed rounded-lg w-11/12 h-full" @click="handleAddSkill">
+                                Add New Skills
+                            </div>
+                        </label>
+                        <!-- Modal pop-up -->
+                        <input type="checkbox" id="add-modal" class="modal-toggle"/>
+                        <div class="modal">
+                            <div class="modal-box space-y-8">
+                                <!-- All skills in checkbox 
+                                    (assigned skills not shown) -->
+                                <ul class="space-y-3">
+                                    <li v-for="skill of addModal.skillArr" class="bg-gray-800 hover:shadow-lg hover:bg-black rounded-lg">
+                                        <label :for="skill.Skill_ID">
+                                            <div class="flex justify-between cursor-pointer p-4">
+                                                <p class="font-medium">
+                                                    {{skill.Skill_Name}}
+                                                </p>
+                                                <input type="checkbox" class="checkbox" v-model="addModal.selectedSkills"  :value="skill" :id="skill.Skill_ID"/>
+                                            </div>
+                                        </label>
+                                    </li>
+                                </ul>
+                                
+                                <!-- Add + cancel buttons -->
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="flex justify-end">
+                                        <label for="add-modal" class="btn btn-sm w-3/5" @click="confirmAddSkill">
+                                            Add
+                                        </label>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <label for="add-modal" class="btn btn-sm btn-outline w-3/5">
+                                            Cancel
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-                 <!--end of to be commented out-->
+                
+                <!-- Save button -->
+                <button class="btn w-1/5" type="submit">
+                    <label for="update-role-modal" class="btn">
+                        Save Changes
+                    </label>
+                </button>
+                <!-- Cancel button -->
+                <div>
+                    <RouterLink :to="`/jobRole/${roleName}`">
+                        <div class="btn btn-outline btn-error w-1/5" @click="handleBack">
+                            Cancel
+                        </div>
+                    </RouterLink>
+                </div>
 
-                <div class='place-self-end'>
-                <label class="btn" for="my-modal" v-on:click="display()">Delete Job Role</label>
-                <!-- modal pop up to delete job role-->
-                <div v-if="removeJob">
-                    <input type="checkbox" id="my-modal" class="modal-toggle" />
-                            <div class="modal">
-                                <div class="modal-box">
-                                    <div class="modal-action">
-                                        <h4>You are deleting {{roleDetailsName}}.</h4>
-                                    <label for="my-modal" class="btn btn-outline btn-error" @click="deleteJob(roleDetailsID)" >Delete Job Role</label>
-                                    </div>
-                                </div>
+                <!-- Error Modal pop-up -->
+                <input type="checkbox" id="update-role-modal" class="modal-toggle"/>
+                <label for="update-role-modal" class="modal cursor-default">
+                    <label class="modal-box relative space-y-8">
+                        <!-- if got error -->
+                        <div v-if="modalErr" class="text-center">
+                            <!-- for loop userErr and updateErr -->
+                            <div v-for="err of userErr">
+                                <section class="text-xl mt-3">
+                                    {{ err }}
+                                </section>
                             </div>
-                </div>
-                <!-- modal pop up when there is error in delete job role-->
-                <div v-if="hasDeleteError">
-                    <input type="checkbox" id="my-modal" class="modal-toggle" />
-                            <div class="modal">
-                                <div class="modal-box">
-                                    <div class="modal-action">
-                                        <h4>{{deleteError}}</h4>
-                                    <label for="my-modal" class="btn btn-outline btn-error">Ok</label>
-                                    </div>
-                                </div>
+                            <div v-for="err of updateErr">
+                                <section class="text-xl mt-3">
+                                    {{ err }}
+                                </section>
                             </div>
-                </div>
-               
-            </div>
-            </div>
-        </div></div>
-        </form>
+                            <label for="update-role-modal" class="btn btn-outline btn-error w-1/5 mt-5" @click="resetError">
+                                Close
+                            </label>
+                        </div>
+                        
+                    </label>
+                </label>
+
+            </form>
+
+        </div>
+
+        <div v-else-if="error !== ''">
+            {{ error }}
+        </div>
+        
+        <div v-else>
+            <button class="btn loading">loading</button>
+        </div>
+
     </div>
+
+</div>
 
 </template>
 
 <script setup>
 import NavBar from '../components/NavBar.vue';
-import { ref, toRefs,onBeforeMount } from 'vue'
-import { useRouter } from 'vue-router'
-import { getRoleDetails, getSkillsByRole, getCoursesBySkill, deleteRole } from "@/endpoint/endpoint.js";
+import { reactive, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useRoleStore, useAssignSkillsStore } from '@/store/index.js'
+import { getAllSkills, getCoursesBySkill, updateRole, removeSkillAssign, addSkillAssign } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
+const route = useRoute()
+const roleStore = useRoleStore()
+const assignSkillsStore = useAssignSkillsStore()
 
-const props = defineProps({
-    jobRoleName: {
-        type: String
+// from params
+const roleName = route.params.jobRoleName
+
+const removeModal = reactive({
+    skillName: '',
+})
+
+const addModal = reactive({
+    skillArr: [],
+    selectedSkills: [],
+})
+
+const removeSkillsIDArr = ref(assignSkillsStore.assignSkills.removeSkillsIDArr)
+const addSkillsIDArr = ref(assignSkillsStore.assignSkills.addSkillsIDArr)
+
+const loading = ref(true);
+const error = ref('');
+
+// reset assignSkillsStore when exit edit role page (using back or cancel btn)
+function handleBack() {
+    assignSkillsStore.assignSkills.removeSkillsIDArr = []
+    assignSkillsStore.assignSkills.addSkillsIDArr = []
+}
+
+function handleRemoveSkill(skillName) {
+    removeModal.skillName = skillName
+}
+
+function confirmRemoveSkill(skillName) {
+    // store Skill ID/s in an array for API call when submit form
+    const skillID = (roleStore.role.coursesBySkillName[skillName].skillID).toString()
+    // check if skill id in addSkillsIDArr
+    if (addSkillsIDArr.value.includes(skillID)) {
+        const index = addSkillsIDArr.value.indexOf(skillID)
+        addSkillsIDArr.value.splice(index, 1)
+    } else {
+        removeSkillsIDArr.value.push(skillID)
     }
-});
-// props to be use in script setup, break down proxy
-const { jobRoleName } = toRefs(props)
-const roleName = JSON.parse(JSON.stringify(jobRoleName))._object.jobRoleName
 
-// can try reactive()
-const roleDetailsName = ref()
-const roleDetailsID = ref()
-const roleDetailsDesc = ref()
-const skillNames = ref([])
-const coursesBySkillName = ref({}) // key=skillName, value=courseName
-const removeJob = ref(false);
-const deleteError = ref();
-const hasDeleteError = ref(false);
+    // removing skill key from coursesBySkillName object in pinia store only
+    delete roleStore.role.coursesBySkillName[skillName]
+}
 
+async function handleAddSkill() {
+    // get all skills
+    try {
+        const allSkills = await getAllSkills()
+        addModal.skillArr = []
+        for (var skill of allSkills) {
+            if (!(skill.Skill_Name in roleStore.role.coursesBySkillName)) {
+                addModal.skillArr.push(skill)
+            }
+        }
+        // add to roleStore
 
-;(async() => {
-    await Promise.all([
-        // get role name, ID, and description
-        getRoleDetails(roleName)
-        .then((role) => {
-            roleDetailsName.value = role.Role_Name
-            roleDetailsID.value = role.Role_ID
-            roleDetailsDesc.value = role.Role_Desc
+    }
+    catch (err) {
+        // error.value = err
+        console.log(err);
+    }
+}
 
-            // get skills with role ID
-            getSkillsByRole(roleDetailsID.value)
-            .then((data) => {
-                for (var each of data) {
-                    skillNames.value.push(each.Skill_name)
+async function confirmAddSkill() {
+    for (var skill of addModal.selectedSkills) {
+        let skillCourses = null
+        try {
+            skillCourses = await getCoursesBySkill(skill.Skill_ID)
+        }
+        catch (err) {
+            error.value = err
+        }
 
-                    // get courses with skill IDs
-                    const skillID = each.Skill_id
-                    const skillName = each.Skill_name
+        // add skill to role store
+        roleStore.role.coursesBySkillName[skill.Skill_Name] = {
+            'skillID': skill.Skill_ID,
+            'courses': {}
+        }
 
-                    getCoursesBySkill(skillID)
-                    .then((data) => {
-                        for (var each of data) {
-                            // check if skillName exist in object
-                            if (coursesBySkillName.value[skillName]) {
-                                coursesBySkillName.value[skillName].push(each.Course_Name)
-                            } else {
-                                coursesBySkillName.value[skillName] = [each.Course_Name]
-                            }
-                        }
-                    })
-                    .catch((err) => {
+        if (skillCourses) {
+            // if have courses assigned to skill
+            for (var course of skillCourses) {
+                roleStore.role.coursesBySkillName[skill.Skill_Name].courses[course.Course_Name] = course
+            }
+        } else {
+            // if no courses assigned to skill
+            // pass
+        }
+
+        // check if skill id in removeSkillsIDArr
+        const skillID = (skill.Skill_ID).toString()
+        if (removeSkillsIDArr.value.includes(skillID)) {
+            const index = removeSkillsIDArr.value.indexOf(skillID)
+            removeSkillsIDArr.value.splice(index, 1)
+        } else {
+            addSkillsIDArr.value.push(skillID)
+        }
+
+    }
+
+    // reset modal selected skills
+    addModal.selectedSkills = []
+}
+
+const userErr = ref([])
+const updateErr = ref([])
+const modalErr = ref(false)
+
+function resetError() {
+    userErr.value = []
+    updateErr.value = []
+}
+
+function handleEditRole() {
+
+    // if any empty name and skill
+    if (roleStore.role.roleName == '' || Object.keys(roleStore.role.coursesBySkillName).length == 0) {
+        if (roleStore.role.roleName == '') {
+            userErr.value.push('Role name cannot be empty')
+        }
+
+        if (Object.keys(roleStore.role.coursesBySkillName).length == 0) {
+            userErr.value.push('At least 1 skill has to be assigned');
+        }
+
+        modalErr.value = true
+        // alert(userErr.value)
+    } else {
+        modalErr.value = false
+        handleUpdateRole()
+    }
+
+}
+
+// helper
+async function handleUpdateRole() {
+    try {
+        let updatedRole = null
+        if (roleName != roleStore.role.roleName) {
+            // if role name edited
+            try {
+                updatedRole = await updateRole(roleStore.role)
+            } 
+            catch (err) {
+                updateErr.value.push(err)
+            }
+            if (updateErr.value.length == 0) {
+                // if no duplicate name
+                if (removeSkillsIDArr.value > 0) {
+                    try {
+                        handleRemoveSkillAPI()
+                    }
+                    catch (err) {
                         console.log(err);
-                    })
+                    }
                 }
-
+                if (addSkillsIDArr.value > 0) {
+                    try {
+                        handleAddSkillAPI()
+                    }
+                    catch (err) {
+                        console.log(err);
+                    }
+                }
+    
+                handleBack()
+    
+                router.push({
+                    name: 'jobRole',
+                    params: {
+                        jobRoleName: updatedRole.Role_Name
+                    }
+                })
+            } else {
+                // duplicate name
+                modalErr.value = true
+                // alert(updateErr.value)
+            }
+    
+    
+        } else {
+            // if role name not edited
+    
+            if (removeSkillsIDArr.value > 0) {
+                try {
+                    handleRemoveSkillAPI()
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+    
+            if (addSkillsIDArr.value > 0) {
+                try {
+                    handleAddSkillAPI()
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+    
+            handleBack()
+            router.push({
+                name: 'jobRole',
+                params: {
+                    jobRoleName: roleName
+                }
             })
-            .catch((err) => {
-                console.log(err);
-            })
-
-        })
-        .catch((err) => {
-            console.log(err);
-        }),
+        }
         
-    ]);
-})();
-
-function handleRemoveCourse(){
-
+    }
+    catch (err) {
+        modalErr.value = true
+        // alert(updateErr.value)
+    }
 }
 
-function display() {
-    removeJob.value = true;
+// helper
+async function handleRemoveSkillAPI() {
+    const removedSkill = await removeSkillAssign(roleStore.role.roleID, removeSkillsIDArr.value)
+}
+// helper
+async function handleAddSkillAPI() {
+    const addedSkill = await addSkillAssign(roleStore.role.roleID, addSkillsIDArr.value)
 }
 
-// error from deleting job role
-;(async() => {
-    await deleteRole(roleDetailsID)
-    .catch((err) => {
-        hasDeleteError.value = true;
-        deleteError.value = err.message;
-        //"Role already exists."
-        //"An error occurred creating the Role."
-        console.log(err.message);
-    });
-})();
 
 </script>
+
+<style scoped>
+</style>

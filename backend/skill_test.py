@@ -132,7 +132,7 @@ class TestCourseListfromSkill(TestApp):
         response = self.client.get(request_body) 
         self.assertEqual(response.json,{
             "code": 404,
-            "message": "There is no course"
+            "message": "There are no courses assigned"
         }) 
 
 class TestfindCourseByName(TestApp):
