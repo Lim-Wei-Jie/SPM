@@ -57,7 +57,7 @@
             </div>
         </div>
         <!-- send edited data back-->
-        <button class="btn btn-outline btn-success" @click="createRegis(skillsList, selectedCourses, staffID, roleDetailsID)">Create Learning Journey</button>
+        <button class="btn btn-outline btn-success" @click="createRegis(skillsList, selectedCourses, staffID, roleDetailsID, ljpsID)">Create Learning Journey</button>
     </div>
 </template>
 
@@ -65,7 +65,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { onBeforeMount, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getCoursesBySkill, getSkillsByRole, createLJ2, getAllRegistrationNo, getLJs } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getCoursesBySkill, getSkillsByRole, createLJ2, getAllRegistrationNo, getLJs, getAllLJPSNo } from "@/endpoint/endpoint.js";
 
 //route back for breadcrumb
 const router = useRouter()
@@ -93,9 +93,13 @@ const roleDetailsDesc = ref()
 const staffID = ref('130003')
 const skillsList = ref([])
 const selectedCourses = ref([])
+const ljpsID = ref()
 
 ;(async() => {
 try {
+    var res1 = await getAllLJPSNo()
+    ljpsID.value = res1
+
     //ROLE DETAILS
     const role = await getRoleDetails(roleName)
     roleDetailsName.value = role.Role_Name
@@ -155,7 +159,7 @@ onBeforeMount(
     });
 })();
 
-function createRegis(skillsList, selectedCourses, staffID, roleID) {
+function createRegis(skillsList, selectedCourses, staffID, roleID, ljpsID) {
     if (selectedCourses.length == 0) {
         alert('Please select at least one course for each skill.')
     } else {
@@ -182,7 +186,7 @@ function createRegis(skillsList, selectedCourses, staffID, roleID) {
             ;(async() => {
             try {
                 //get LJPS_ID
-                var res = await createLJ2(staffID, roleID)
+                var res = await createLJ2(staffID, roleID, ljpsID)
                 var newLjpsID = res.data.LJPS_ID
                 
 
@@ -192,7 +196,7 @@ function createRegis(skillsList, selectedCourses, staffID, roleID) {
                 }
 
                 for (var courseID of selectedCourses) {
-                    addToLJ(courseID, newLjpsID)
+                    addToLJ(courseID, ljpsID)
                 }
                 
                 //route to staff page

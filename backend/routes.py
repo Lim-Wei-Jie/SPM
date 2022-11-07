@@ -270,24 +270,25 @@ def get_LJ_by_Staff(Staff_ID):
     filtered_list = filter_LJPSID(list_ofID)
     course_list = LJPS_Course_Assignment.query.filter(LJPS_Course_Assignment.LJPS_ID.in_(filtered_list)).all()
     role_list = LJPS_Assignment.query.filter_by(Staff_ID=Staff_ID).all()
-    
+
     
     xz = []
     yz = []
     
     for i in course_list:
         for y in role_list:
+            
             if (y.LJPS_ID == i.LJPS_ID):
                 
                 yz.append(y.LJPS_ID)
                 yz.append(y.Role_ID)
                 yz.append(i.Course_ID)
                 
-            
                 status_c = Registration.query.filter_by(Course_ID=i.Course_ID,Staff_ID=y.Staff_ID).first()
                 if (status_c):
                     yz.append(status_c.Completion_Status)
                     yz.append(status_c.Reg_Status)
+
                 else:
                     yz.append("ERROR")
                
@@ -297,7 +298,7 @@ def get_LJ_by_Staff(Staff_ID):
         xz.append(yz)
         yz=[]
                 
-    
+        
     
     
   
@@ -308,9 +309,11 @@ def get_LJ_by_Staff(Staff_ID):
     keys = range(40)
     values = xz
     for i in keys:
+        
         spare_list=[]
         for j in values:
-            if j[1] == i:
+
+            if int(j[1]) == i:
                 spare_list.append(j)
         dicts[i] = spare_list
     print(dicts)
@@ -354,8 +357,8 @@ def get_ljps_id_by_role(Staff_ID):
     
 
 
-@app.route("/AddLJAssign/<string:Staff_ID>/<string:Role_ID>",methods=['GET','POST'])
-def add_LJ_by_Staff(Staff_ID,Role_ID):
+@app.route("/AddLJAssign/<string:Staff_ID>/<string:Role_ID>/<string:LJPS_ID>",methods=['GET','POST'])
+def add_LJ_by_Staff(Staff_ID,Role_ID, LJPS_ID):
     
 
        
@@ -375,7 +378,7 @@ def add_LJ_by_Staff(Staff_ID,Role_ID):
                     
 
                         
-                        new_ljps_assignment = LJPS_Assignment(str(uuid.uuid1()),Staff_ID,Role_ID)
+                        new_ljps_assignment = LJPS_Assignment(LJPS_ID,Staff_ID,Role_ID)
                         
                         
                         
