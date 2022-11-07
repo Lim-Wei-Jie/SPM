@@ -150,7 +150,7 @@ export function getAllSkills() {
             })
             .catch((err) => {
                 console.log(err);
-                reject('Fail to fetch all skills, check WAMP/MAMP server')
+                reject(err.response.data)
             })
     })
 }
@@ -199,7 +199,7 @@ export function getAllCourses() {
         axios
             .get(apiEndpoint)
             .then((res) => {
-                resolve(res.data.courses)
+                resolve(res.data.data.courses)
             })
             .catch((err) => {
                 console.log(err);
