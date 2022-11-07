@@ -314,6 +314,7 @@ function createRegis(skillsList, selectedCourses, registeredCourses, staffID, lj
 
         
             //route to staff page
+            alert('You have successfully modified your learning journey')
             router.push('/staff') 
         }
     }
@@ -371,6 +372,7 @@ function deleteLJ(staffID, roleID, courseID, ljpsID) {
     ;(async() => {
         await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/DeleteLJAssign/${staffID}/${roleID}/${courseID}/${ljpsID}`)
         .then((res) => {
+            alert('You have successfully removed the learning journey.')
             router.push('/staff')
         }).catch((err) => {
             console.log(err);
