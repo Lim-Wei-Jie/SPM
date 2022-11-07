@@ -267,58 +267,94 @@ async function confirmAddSkill() {
     addModal.selectedSkills = []
 }
 
+const updateErr = ref([])
 async function handleEditRole() {
+    updateErr.value = [ ]
     try {
         // if got time, do modal for confirmation of save changes
         let updatedRole = null
 
         if (roleName != roleStore.role.roleName) {
-            // if edited role name
-            // not updating for some reason (use try catch for each call)
+            // if role name edited
             try {
                 updatedRole = await updateRole(roleStore.role)
             } 
             catch (err) {
-                console.log(err);
+                updateErr.value.push(err)
             }
 
-        } else if (removeSkillsIDArr.value > 0) {
-            // if remove skills
-            const removedSkill = await removeSkillAssign(roleStore.role.roleID, removeSkillsIDArr.value)
+            if (removeSkillsIDArr.value > 0) {
+                try {
+                    handleRemoveSkillAPI()
+                }
+                catch (err) {
+                    updateErr.value.push(err)
+                }
+            }
 
-        } else if (addSkillsIDArr.value > 0) {
-            // if add skills
-            const addedSkill = await addSkillAssign(roleStore.role.roleID, addSkillsIDArr.value)
+            if (addSkillsIDArr.value > 0) {
+                try {
+                    handleAddSkillAPI()
+                }
+                catch (err) {
+                    updateErr.value.push(err)
+                }
+            }
 
-        } else if (updatedRole) {
-            // got edits
-            console.log('got edits');
             handleBack()
             router.push({
                 name: 'jobRole',
                 params: {
-                    jobRoleName: updatedRole.value.Role_Name
+                    jobRoleName: updatedRole.Role_Name
                 }
             })
-            
+
+        } else {
+            // if role name not edited
+
+            if (removeSkillsIDArr.value > 0) {
+                try {
+                    handleRemoveSkillAPI()
+                }
+                catch (err) {
+                    updateErr.value.push(err)
+                }
+            }
+
+            if (addSkillsIDArr.value > 0) {
+                try {
+                    handleAddSkillAPI()
+                }
+                catch (err) {
+                    updateErr.value.push(err)
+                }
+            }
+
+            handleBack()
+            router.push({
+                name: 'jobRole',
+                params: {
+                    jobRoleName: roleName
+                }
+            })
         }
         
-        // if nothing edited
-        handleBack()
-        router.push({
-            name: 'jobRole',
-            params: {
-                jobRoleName: roleName
-            }
-        })
-        
-
     }
     catch (err) {
         // alert for now, if got time do modal pop up
-        alert(err)
+        alert(updateErr.value)
     }
 }
+
+// helper
+async function handleRemoveSkillAPI() {
+    const removedSkill = await removeSkillAssign(roleStore.role.roleID, removeSkillsIDArr.value)
+}
+//helper
+async function handleAddSkillAPI() {
+    const addedSkill = await addSkillAssign(roleStore.role.roleID, addSkillsIDArr.value)
+}
+
 
 </script>
 

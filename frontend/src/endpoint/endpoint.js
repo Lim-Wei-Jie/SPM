@@ -102,35 +102,33 @@ export function updateRole(roleDetails) {
 // Remove skill assignment
 export function removeSkillAssign(roleID, removeSkillsIDArr) {
     const removeSkills = JSON.parse(JSON.stringify(removeSkillsIDArr))
-    console.log(removeSkills);
-    // return new Promise((resolve, reject) => {
-    //     let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roledeleteskills/${roleID}/${removeSkills}`
-    //     axios
-    //         .post(assignRemoveEndpoint)
-    //         .then((res) => {
-    //             resolve(res.data)
-    //         })
-    //         .catch((err) => {
-    //             reject(err)
-    //         })
-    // })
+    return new Promise((resolve, reject) => {
+        let assignRemoveEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roledeleteskills/${roleID}/${removeSkills}`
+        axios
+            .post(assignRemoveEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
 }
 
 // Add skill assignment
 export function addSkillAssign(roleID, addSkillsIDArr) {
     const addSkills = JSON.parse(JSON.stringify(addSkillsIDArr))
-    console.log(addSkills);
-    // return new Promise((resolve, reject) => {
-    //     let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${roleID}/${addSkills}`
-    //     axios
-    //         .post(assignAddEndpoint)
-    //         .then((res) => {
-    //             resolve(res.data)
-    //         })
-    //         .catch((err) => {
-    //             reject(err)
-    //         })
-    // })
+    return new Promise((resolve, reject) => {
+        let assignAddEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/role/roleassignskills/${roleID}/${addSkills}`
+        axios
+            .post(assignAddEndpoint)
+            .then((res) => {
+                resolve(res.data)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
 }
 
 // Delete job role
