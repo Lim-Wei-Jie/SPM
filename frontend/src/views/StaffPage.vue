@@ -1,7 +1,7 @@
 <template>
 <!-- eslint-disable -->
     <NavBar/>
-    <Hero v-if="numOfLJ == undefined" :title="title" :button="button" @click="searchJobRole"/>
+    <Hero v-if="numOfLJ == 0" :title="title" :button="button" @click="searchJobRole"/>
     <div v-else class="container mx-auto my-8">
         <div class="flex justify-between">
             <p class="text-2xl font-bold">

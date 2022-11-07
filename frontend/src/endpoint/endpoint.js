@@ -250,7 +250,7 @@ export function getAllLJPSNo() {
             .then((res) => {
                 var lastLJPS = res.data.data.maps.slice(-1)[0].LJPS_ID
 
-                resolve(lastLJPS + 1)
+                resolve(Number(lastLJPS) + 1)
             })
             .catch((err) => {
                 console.log(err.message);
@@ -408,9 +408,9 @@ export function deleteSkill(skillID) {
 }
 
 // Mapping skills to role
-export function createLJ2(staffID, roleID) {
+export function createLJ2(staffID, roleID, ljpsID) {
     return new Promise((resolve, reject) => {
-        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/AddLJAssign/${staffID}/${roleID}`
+        let apiEndpoint = `${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/AddLJAssign/${staffID}/${roleID}/${ljpsID}`
         axios
             .post(apiEndpoint)
             .then((res) => {
