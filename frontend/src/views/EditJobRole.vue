@@ -275,7 +275,12 @@ async function handleEditRole() {
         if (roleName != roleStore.role.roleName) {
             // if edited role name
             // not updating for some reason (use try catch for each call)
-            updatedRole = await updateRole(roleStore.role)
+            try {
+                updatedRole = await updateRole(roleStore.role)
+            } 
+            catch (err) {
+                console.log(err);
+            }
 
         } else if (removeSkillsIDArr.value > 0) {
             // if remove skills
@@ -296,16 +301,17 @@ async function handleEditRole() {
                 }
             })
             
-        } else {
-            // if nothing edited
-            handleBack()
-            router.push({
-                name: 'jobRole',
-                params: {
-                    jobRoleName: roleName
-                }
-            })
         }
+        
+        // if nothing edited
+        handleBack()
+        router.push({
+            name: 'jobRole',
+            params: {
+                jobRoleName: roleName
+            }
+        })
+        
 
     }
     catch (err) {
