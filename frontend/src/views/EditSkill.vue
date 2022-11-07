@@ -24,39 +24,7 @@
     
                 <div class="grid grid-cols-2 my-8">
                     <p class="text-3xl"> Edit Skill </p>
-                    <!-- Delete button -->
-                    <label for="delete-skill-modal"  @click="handleDeleteSkill()" class="btn btn-circle place-self-end">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                        </svg>
-                    </label>
-                    <!-- Modal pop-up -->
-                    <input type="checkbox" id="delete-skill-modal" class="modal-toggle"/>
-                                    <label for="delete-skill-modal" class="modal cursor-default">
-                                        <label class="modal-box relative space-y-8">
-                                            <div v-if="noErr">
-                                                <!-- Ok button -->
-                                                <p class="text-lg">
-                                                    <RouterLink :to="`/hr`">
-                                                        <section class="text-xl mt-3">
-                                                            {{ store.skill.skillName }} has been deleted
-                                                        </section>
-                                                        <div class="btn btn-sm flex justify-end">    
-                                                            Ok
-                                                        </div> 
-                                                    </RouterLink>
-                                                </p>   
-                                            </div>
-                                            <div v-else>
-                                                <p class="text-lg">
-                                                    <section class="text-xl mt-3">
-                                                        {{ error }} 
-                                                    </section>
-                                                </p>   
-                                            </div>
-                                        </label>
-                                    </label>
-                <!--end of modal pop up-->
+                    
                 </div>
     
                 <!-- Form component -->

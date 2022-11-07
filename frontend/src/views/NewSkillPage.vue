@@ -322,13 +322,20 @@
 
         else{
             try {
-            //getting the latest skillID + 1 
+            //getting the skillID 
             const skillID = ref();
-            const allSkills = await getAllSkills(); 
-            skillID.value = (allSkills.length) + 1; 
+            const skills = await getAllSkills()
+            for (var each of skills) {
+                if(each.Skill_Name == skillName.value) {
+                    skillID.value = each.Skill_ID
+                }
+            }
+            // const skillID = ref();
+            // const allSkills = await getAllSkills(); 
+            // skillID.value = (allSkills.length) + 1; 
 
             //first api to update skill name and desc
-            const createdSkill = await createSkill(skillID.value, skillName.value, skillDesc.value);
+            const createdSkill = await createSkill(skillName.value, skillDesc.value);
 
                 //second api to update courses added
                 //if(addCourseIDArr.value.length > 0){

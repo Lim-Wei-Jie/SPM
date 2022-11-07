@@ -18,7 +18,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="grid grid-cols-2 my-4">
+            <div class="grid grid-cols-3 my-4">
                 <!-- Role Name -->
                 <p class="text-3xl font-bold underline underline-offset-8">
                     {{skill.skillName}}
@@ -27,6 +27,39 @@
                 <button @click="handleEditClick(skill.skillName)" class="btn btn-circle place-self-end">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
                 </button>
+                <!-- Delete button -->
+                <label for="delete-skill-modal"  @click="handleDeleteSkill()" class="btn btn-circle place-self-end">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </label>
+                    <!-- Modal pop-up -->
+                    <input type="checkbox" id="delete-skill-modal" class="modal-toggle"/>
+                                    <label for="delete-skill-modal" class="modal cursor-default">
+                                        <label class="modal-box relative space-y-8">
+                                            <div v-if="noErr">
+                                                <!-- Ok button -->
+                                                <p class="text-lg">
+                                                    <RouterLink :to="`/hr`">
+                                                        <section class="text-xl mt-3">
+                                                            {{ skill.skillName }} has been deleted
+                                                        </section>
+                                                        <div class="btn btn-sm flex justify-end">    
+                                                            Ok
+                                                        </div> 
+                                                    </RouterLink>
+                                                </p>   
+                                            </div>
+                                            <div v-else>
+                                                <p class="text-lg">
+                                                    <section class="text-xl mt-3">
+                                                        {{ error }} 
+                                                    </section>
+                                                </p>   
+                                            </div>
+                                        </label>
+                                    </label>
+                <!--end of modal pop up-->
             </div>
             <!-- Role Desc -->
             <div class="space-y-2 my-4 w-4/6">
@@ -104,7 +137,7 @@ import NavBar from '@/components/Navbar.vue'
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useSkillStore } from '@/store/index.js'
-import { getCoursesBySkill, getAllSkills } from "@/endpoint/endpoint.js";
+import { getCoursesBySkill, getAllSkills,deleteSkill } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
@@ -127,6 +160,7 @@ const courseModal = reactive({
 
 const loading = ref(false)
 const error = ref('')
+const noErr = ref(true);
 
 ;(async() => {
     try {
@@ -171,6 +205,17 @@ function handleCourseClick(courseName) {
     courseModal.courseName = courseName
     courseModal.courseDesc = skill.courses[courseName].Course_Desc
 }
+
+async function handleDeleteSkill() {
+        try {
+        const deletedSkill = await deleteSkill(skill.skillID);
+        }
+        catch (err) {
+            error.value = err
+            console.log(err);
+            noErr.value = false;
+        }
+    }
 
 </script>
 
