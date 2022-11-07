@@ -16,6 +16,9 @@ In the instance where the merging of a branch to the main branch results in a me
 4. If required, conduct a zoom call for better communication
 
 Setup: 
+1. Install global Vue 3 CLI using the following command in Command Prompt
+    ``` npm install -g @vue/cli ```
+2. Restart your VM
 1. Unzip the project folder
 2. Open the project window in visual studio code
 3. Before running the LJPS system please ensure that the following vue libraries are installed.
