@@ -152,7 +152,6 @@ try {
         for (let i = 0; i < registeredCourses3.value.length; i++) {
             if (registeredCourses2.value[i] == skill.Skill_ID) {
                 regCourses.push(registeredCourses3.value[i])
-                console.log(registeredCourses3.value[i])
             }
         }
 

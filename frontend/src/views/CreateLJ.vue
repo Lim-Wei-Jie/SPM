@@ -65,7 +65,7 @@
 import NavBar from '@/components/Navbar.vue'
 import { onBeforeMount, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
-import { getRoleDetails, getCoursesBySkill, getSkillsByRole, createLJ2, getAllRegistrationNo } from "@/endpoint/endpoint.js";
+import { getRoleDetails, getCoursesBySkill, getSkillsByRole, createLJ2, getAllRegistrationNo, getLJs } from "@/endpoint/endpoint.js";
 
 //route back for breadcrumb
 const router = useRouter()
@@ -101,6 +101,15 @@ try {
     roleDetailsName.value = role.Role_Name
     roleDetailsID.value = role.Role_ID
     roleDetailsDesc.value = role.Role_Desc
+
+    const LJ = await getLJs(staffID.value)
+    var x = LJ[roleDetailsID.value]
+    
+    if ( x.length != 0 ){
+        alert('A learning journey was set for this job role. You cannot set more than 1 learning journey for each job role.')
+        router.push('/staff/searchRole') 
+    }
+    
 
     //SKILLS DETAILS
     const skills = await getSkillsByRole(roleDetailsID.value)
