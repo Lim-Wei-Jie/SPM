@@ -146,7 +146,7 @@ class TestupdateeRole(TestApp):
                 "data": {
                     "Role": "Process Analyst"                
                     },
-                "message": "Role Name Duplicate"
+                "message": "Role Name already exists"
             }) 
 
 
