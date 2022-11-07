@@ -139,12 +139,13 @@ import NavBar from '@/components/Navbar.vue'
 // import Breadcrumb from '@/components/Breadcrumb.vue'
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useSkillStore } from '@/store/index.js'
+import { useSkillStore, useSkillCoursesStore } from '@/store/index.js'
 import { getCoursesBySkill, getAllSkills,deleteSkill } from "@/endpoint/endpoint.js";
 
 const router = useRouter()
 const route = useRoute()
 const skillStore = useSkillStore()
+const skillCourseStore = useSkillCoursesStore()
 
 // from params
 const skillName = route.params.skillName;

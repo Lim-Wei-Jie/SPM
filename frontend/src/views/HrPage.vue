@@ -62,12 +62,15 @@ import NavBar from '@/components/Navbar.vue'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getAllSkills } from "@/endpoint/endpoint.js";
+import { useSkillStore, useSkillCoursesStore } from '@/store/index.js'
 
 const router = useRouter()
 const allSkills = ref([])
 const numOfSkills = ref()
 const loading = ref(false);
 const error = ref('');
+const skillStore = useSkillStore()
+const skillCourseStore = useSkillCoursesStore()
 
 // //get all skills
 
@@ -99,6 +102,8 @@ function handleSkillClick(skillName) {
 }
 
 function handleAddNewSkill() {
+    skillStore.skill.courses = {};
+    skillCourseStore.skillCourses.addedCourses = [];
     router.push({
         name: 'newSkill'
     })
