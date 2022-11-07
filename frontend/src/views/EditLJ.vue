@@ -326,7 +326,7 @@ function addReg(regID, courseID, staffID) {
     var regStatus = 'Registered'
     var completionStatus = 'Ongoing'
     ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/Registration/addRegis/${regID}/${courseID}/${staffID}/${regStatus}/${completionStatus}`)
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/Registration/addRegis/${regID}/${courseID}/${staffID}/${regStatus}/${completionStatus}`)
         .then((res) => {
             console.log(res)
 
@@ -338,7 +338,7 @@ function addReg(regID, courseID, staffID) {
 
 function addToLJ(courseID, ljpsID) {
     ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssignCourse/${courseID}/${ljpsID}`)
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/AddLJAssignCourse/${courseID}/${ljpsID}`)
         .then((res) => {
             
         }).catch((err) => {
@@ -355,7 +355,7 @@ function deleteCourse(courseID, ljpsID, skillsList) {
     }
     if (remainingSkillsNo > 1) {
         ;(async() => {
-            await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/DeLJAssignCourse/${courseID}/${ljpsID}`)
+            await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/DeLJAssignCourse/${courseID}/${ljpsID}`)
             .then((res) => {
                 router.go(0)
             }).catch((err) => {
@@ -370,7 +370,7 @@ function deleteCourse(courseID, ljpsID, skillsList) {
 
 function deleteLJ(staffID, roleID, courseID, ljpsID) {
     ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/DeleteLJAssign/${staffID}/${roleID}/${courseID}/${ljpsID}`)
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/DeleteLJAssign/${staffID}/${roleID}/${courseID}/${ljpsID}`)
         .then((res) => {
             alert('You have successfully removed the learning journey.')
             router.push('/staff')

@@ -69,11 +69,11 @@
                 </div>
                 <div v-else class="bg-gray-700 rounded-lg my-6 p-8" v-for="(skillDetails, skillName) in roleStore.role.coursesBySkillName" :key="skillName">
                     <!-- Skill -->
-                    <div class="font-medium text-lg mb-5">
+                    <div class="font-medium text-lg mb-5 text-white">
                         {{skillName}}
                     </div>
                     <!-- Courses -->
-                    <div v-if="Object.keys(roleStore.role.coursesBySkillName[skillName].courses).length === 0">
+                    <div class="text-white" v-if="Object.keys(roleStore.role.coursesBySkillName[skillName].courses).length === 0">
                         {{noCourses}}
                     </div>
                     <div v-else class="grid grid-cols-3 gap-6">

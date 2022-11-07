@@ -211,7 +211,7 @@ function addReg(regID, courseID, staffID) {
     var regStatus = 'Registered'
     var completionStatus = 'Ongoing'
     ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/Registration/addRegis/${regID}/${courseID}/${staffID}/${regStatus}/${completionStatus}`)
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/Registration/addRegis/${regID}/${courseID}/${staffID}/${regStatus}/${completionStatus}`)
         .then((res) => {
             console.log(res)
 
@@ -223,7 +223,7 @@ function addReg(regID, courseID, staffID) {
 
 function addToLJ(courseID, ljpsID) {
     ;(async() => {
-        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT_COURSE}/AddLJAssignCourse/${courseID}/${ljpsID}`)
+        await fetch(`${import.meta.env.VITE_APP_DEV_API_ENDPOINT}/AddLJAssignCourse/${courseID}/${ljpsID}`)
         .then((res) => {
             
         }).catch((err) => {
