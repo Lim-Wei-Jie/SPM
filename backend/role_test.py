@@ -244,7 +244,7 @@ class TestGetSkillListbyRole(TestApp):
         self.assertEqual(response.json,
             {
                 "code": 404,
-                "message": "There is no such skill"
+                "message": "There are no skills assigned"
             })
 
 class TestAssignSkilltoRole(TestApp): 
